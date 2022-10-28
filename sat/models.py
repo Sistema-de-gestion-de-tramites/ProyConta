@@ -33,7 +33,7 @@ class Empleados(models.Model):
 
 
 class Personas(models.Model):
-    persona_id = models.IntegerField(primary_key=True)
+    persona_id = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
     ap_paterno = models.CharField(max_length=25)
     ap_materno = models.CharField(max_length=25)
