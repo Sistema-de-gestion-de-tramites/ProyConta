@@ -1,0 +1,11 @@
+{% extends 'base/index.html' %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <form method="POST">
+        {% csrf_token %}
+        {{ forms.as_p }}
+        <button>Revisar</button>
+    </form>
+</div>
+{% endblock %}
