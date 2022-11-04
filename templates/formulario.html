@@ -4,8 +4,18 @@
 <div class="container-fluid">
     <form method="POST">
         {% csrf_token %}
-        {{ forms.as_p }}
-        <button>Revisar</button>
+        {% for field in forms %}
+        <div class="mb-2 row">
+            <label class="col-sm-5 col-form-label fs-4" for="{{ field.id_for_label }}">{{field.label}}</label>
+            <div class="col-sm-7">
+                {{field}}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="d-grid gap-2 col-3 mx-auto">
+            <button type="submit" class="btn btn-primary btn-lg">Registrar</button>
+        </div>
     </form>
 </div>
 {% endblock %}

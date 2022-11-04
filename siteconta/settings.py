@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #Mis apps
-    'sat',
+    'apps.sat',
+    'apps.clientes',
+    'apps.empleados',
     #Adiciones
 ]
 
