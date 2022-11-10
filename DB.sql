@@ -1,3 +1,18 @@
+------------------- NOTAS A LOS DESARROLLADORES ---------------------------------
+--DOCUMENTAR LOS CAMBIOS A LAS TABLAS MENCIONANDO: AUTOR, FECHA, DESCRIPCIO. EJEMPLO
+CREATE table emp (
+    nombre VARCHAR2(10)
+)
+-- autor: Eric Ibañez       fecha:09/11/22
+-- descripcion: se agrego la columna apellido a la tabla desbido a que
+-- se necesita para un formulario
+ALTER TABLE EMP ADD COLUMN apellido VARCHAR2(10);
+-----------------------------------------------------------------------
+-- ASI TAMBIEN REGISTRAR LA NUEVAS TABLAS EN LA SECCION DE MODIFICACIONES A LA
+-- BASE DE DATOS
+---------------------------------------------------------------------------------
+
+
 DROP DATABASE IF EXISTS ProyectoIS;
 CREATE DATABASE ProyectoIS;
 USE ProyectoIS;
@@ -12,7 +27,7 @@ DROP TABLE IF EXISTS tramite;
 DROP TABLE IF EXISTS tipo_emp;
 DROP TABLE IF EXISTS tipo_clie;
 
------Crear tablas
+-----Crear tablas ---------------------------------- BASE DE DATOS BASE
 USE ProyectoIS;
 
 create table tipo_emp (
@@ -68,6 +83,13 @@ create table empleados (
     permisos_add VARCHAR(20)
 );
 
+-- Autor: Eric Ibañez             fecha: 09/11/22
+-- Descripcion: se agregan las columnas: username y password, para poder iniciar
+-- sesion y validar las credenciales
+alter table empleados add column username varchar(50);
+alter table empleados add column password varchar(50);
+--------------------------------------------------------------------------------
+
 create table asig_emp_clie (
     cliente_id INT(8), CONSTRAINT asig_clie_fk FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id),
     empleado_id INT(8), CONSTRAINT asig_emp_fk FOREIGN KEY (empleado_id) REFERENCES empleados(empleado_id),
@@ -89,3 +111,11 @@ create table tarea (
     fecha_lim DATE,
     fecha_fin DATE
 );
+
+-- BASE DE DATOS BASE FIN -----------------------------------------------------------------------------
+
+-- MODIFICACIONES BASE DE DATOS (NUEVAS TABLAS)--------------------------------------------------------
+
+-- MODIFICACIONES BASE DE DATOS (NUEVAS TABLAS) FIN----------------------------------------------------
+
+

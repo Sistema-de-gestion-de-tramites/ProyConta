@@ -24,6 +24,8 @@ class Empleados(models.Model):
     empleado = models.OneToOneField('Personas', models.DO_NOTHING, primary_key=True)
     tipo_emp = models.ForeignKey('TipoEmp',  blank=True, null=True, on_delete=models.CASCADE)
     permisos_add = models.CharField(max_length=20, blank=True, null=True)
+    username = models.CharField(max_length=50, blank=True, null=True)
+    password = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         managed = False
