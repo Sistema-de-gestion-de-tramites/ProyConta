@@ -96,7 +96,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Clientes',
             fields=[
-                ('cliente', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='api_rest.personas')),
+                ('cliente', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='personas')),
             ],
             options={
                 'db_table': 'clientes',
@@ -106,7 +106,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Empleados',
             fields=[
-                ('empleado', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='api_rest.personas')),
+                ('empleado', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='personas')),
                 ('permisos_add', models.CharField(blank=True, max_length=20, null=True)),
             ],
             options={
@@ -117,7 +117,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AsigEmpClie',
             fields=[
-                ('cliente', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='api_rest.clientes')),
+                ('cliente', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='clientes')),
             ],
             options={
                 'db_table': 'asig_emp_clie',

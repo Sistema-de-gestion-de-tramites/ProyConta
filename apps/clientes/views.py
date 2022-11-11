@@ -12,7 +12,7 @@ ____________________________________________________________________________
 ----------------------------------------------------------------------------
 """
 from django.shortcuts import render, redirect
-from .forms import PersonaForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
+from .forms import PersonaForm, RegistroUsuarioForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
 
 #{----------------------------------------------------------------------------------------}
 def persona_view(request): #{METODO REQUEST DE HTTP}
@@ -29,5 +29,20 @@ def persona_view(request): #{METODO REQUEST DE HTTP}
     return render(request, 'formulario.html', {
         'forms': form
     })
+    
+def registro(request):
+    if request.method == 'GET':
+        form = RegistroUsuarioForm()
+        return render(request,'registro.html',{'form':RegistroUsuarioForm})
+    else:
+        form = RegistroUsuarioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print(request.POST)
+            redirect('index/')
+        else:
+            redirect('registro/')
+    return render(request,'registro.html',{'form':RegistroUsuarioForm})
+
     #{DEVUELVE EL HTML (REQUEST) CREAR DICCIONARIO CON VALORES DEVUELTOS DE FUNCION PERSONAFORM()}
 #{----------------------------------------------------------------------------------------}

@@ -81,9 +81,9 @@ WSGI_APPLICATION = 'siteconta.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'proyectois',
+        'NAME': 'project_ing',
         'USER': 'root',
-        'PASS': '',
+        'PASSWORD': 'oracle',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }
@@ -125,6 +125,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+LOGIN_REDIRECT_URL = 'index'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

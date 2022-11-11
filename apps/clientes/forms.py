@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from apps.clientes.models import Personas
 import datetime
 
@@ -60,3 +62,12 @@ class PersonaForm(forms.ModelForm):
             #'nombre': forms.TextInput(attrs={'class':'form-control'}),
 
         }
+
+class RegistroUsuarioForm(UserCreationForm):
+    email = forms.EmailField()
+    password1: forms.CharField(label="contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    password2: forms.CharField(label="confirmar contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    
+    class meta:
+        model = User
+        fields = ['username','email','password1','password2']
