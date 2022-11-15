@@ -16,7 +16,6 @@ class PersonaForm(forms.ModelForm):
         model = Personas
 
         fields = [
-            'persona_id',
             'nombre',
             'ap_paterno',
             'ap_materno',

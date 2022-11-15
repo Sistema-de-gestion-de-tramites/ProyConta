@@ -81,9 +81,13 @@ WSGI_APPLICATION = 'siteconta.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+
+        },
         'NAME': 'project_ing',
         'USER': 'root',
-        'PASSWORD': 'oracle',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

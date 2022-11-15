@@ -1,39 +1,39 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
-class AsigEmpClie(models.Model):
-    cliente = models.OneToOneField('Clientes', models.DO_NOTHING, primary_key=True)
-    empleado = models.ForeignKey('Empleados', on_delete=models.CASCADE, unique=True)
-
-    class Meta:
-        managed = False
-        db_table = 'asig_emp_clie'
-        unique_together = (('cliente', 'empleado'),)
-
+'''
+    DROP DATABASE project_ing;
+    CREATE DATABASE project_ing;
+'''
 
 class Clientes(models.Model):
     cliente = models.OneToOneField('Personas', models.DO_NOTHING, primary_key=True)
     tipo_clie = models.ForeignKey('TipoClie', blank=True, null=True, on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'clientes'
 
 
 class Empleados(models.Model):
     empleado = models.OneToOneField('Personas', models.DO_NOTHING, primary_key=True)
     tipo_emp = models.ForeignKey('TipoEmp',  blank=True, null=True, on_delete=models.CASCADE)
+    clie_s = models.ManyToManyField(Clientes, through="Emp_Clie_Asig")       #genera una nueva tabla
     permisos_add = models.CharField(max_length=20, blank=True, null=True)
     username = models.CharField(max_length=50, blank=True, null=True)
     password = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'empleados'
 
 
+class Emp_Clie_Asig(models.Model):
+    empleado = models.ForeignKey(Empleados, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE)
+
+
 class Personas(models.Model):
-    persona_id = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
     ap_paterno = models.CharField(max_length=25)
     ap_materno = models.CharField(max_length=25)
@@ -62,15 +62,12 @@ class Personas(models.Model):
     fecha_reg = models.DateField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'personas'
 
-
 class Tarea(models.Model):
-    tarea_id = models.IntegerField(primary_key=True)
-    id_creador = models.ForeignKey(Empleados, db_column='id_creador', on_delete=models.CASCADE)
-    cliente = models.ForeignKey(AsigEmpClie, on_delete=models.CASCADE, related_name="id_emp_asig")
-    id_emp_asig = models.ForeignKey(AsigEmpClie,  db_column='id_emp_asig', to_field='empleado_id', on_delete=models.CASCADE)
+    emp_creador = models.ForeignKey(Empleados, on_delete=models.CASCADE)
+    emp_clie = models.ForeignKey(Emp_Clie_Asig, on_delete=models.CASCADE)
     tramite = models.ForeignKey('Tramite', on_delete=models.CASCADE)
     info_add = models.CharField(max_length=50, blank=True, null=True)
     dir_archivo = models.CharField(max_length=100, blank=True, null=True)
@@ -81,35 +78,32 @@ class Tarea(models.Model):
     fecha_fin = models.DateField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tarea'
 
 
 class TipoClie(models.Model):
-    tipo_clie_id = models.IntegerField(primary_key=True)
     tipo_c = models.CharField(max_length=25, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tipo_clie'
 
 
 class TipoEmp(models.Model):
-    tipo_emp_id = models.IntegerField(primary_key=True)
     tipo_e = models.CharField(max_length=25, blank=True, null=True)
     permisos = models.CharField(max_length=25, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tipo_emp'
 
 
 class Tramite(models.Model):
-    tramite_id = models.IntegerField(primary_key=True)
     tipo = models.CharField(max_length=25, blank=True, null=True)
     descrip = models.CharField(max_length=100, blank=True, null=True)
     requisitos = models.CharField(max_length=25, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tramite'
