@@ -1,0 +1,16 @@
+{% extends 'base/index.html' %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{form.as_p}}
+        {{inlines.as_p}}
+        {{form2.as_p}}
+        <div class="d-grid gap-2 col-3 mx-auto">
+            <button type="submit" class="btn btn-primary btn-lg">Registrar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

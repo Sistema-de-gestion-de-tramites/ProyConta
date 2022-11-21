@@ -1,0 +1,86 @@
+{% extends 'base/index.html' %}
+
+{% load static %}
+
+{% block css_add %}
+<!-- Custom styles for this page -->
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+        For more information about DataTables, please visit the <a target="_blank"
+            href="https://datatables.net">official DataTables documentation</a>.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    {% if object_list %}
+                    {% for obj in object_list %}
+                    {% if forloop.first %}
+                    <thead>
+                        <tr>
+                            {% for key, val in obj.get_fields_and_values %}
+                            <th> {{key}} </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            {% for key, val in obj.get_fields_and_values %}
+                            <th> {{key}} </th>
+                            {% endfor %}
+                        </tr>
+                    </tfoot>
+                    {% endif %}
+
+                    <tbody>
+                        <tr>
+                            {% for key, val in obj.get_fields_and_values %}
+                                <td>{{ val }}</td>
+                            {% endfor %}
+                            <td>
+                                <a class="btn btn-primary" href="{% url 'actualizar_cliente' obj.id %}">Editar</a>
+                                <a class="btn btn-danger" href="{% url 'eliminar_cliente' obj.id %}">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                        <h1>No hay Registros</h1>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascript %}
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+{% endblock %}

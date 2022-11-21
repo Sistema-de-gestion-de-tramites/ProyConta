@@ -14,6 +14,8 @@ class Clientes(models.Model):
         managed = True
         db_table = 'clientes'
 
+    def get_fields_and_values(self):
+        return [(field, field.value_to_string(self)) for field in Clientes._meta.fields]
 
 class Empleados(models.Model):
     empleado = models.OneToOneField('Personas', models.DO_NOTHING, primary_key=True)
@@ -27,11 +29,12 @@ class Empleados(models.Model):
         managed = True
         db_table = 'empleados'
 
+    def get_fields_and_values(self):
+        return [(field, field.value_to_string(self)) for field in Empleados._meta.fields]
 
 class Emp_Clie_Asig(models.Model):
     empleado = models.ForeignKey(Empleados, on_delete=models.CASCADE)
     cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE)
-
 
 class Personas(models.Model):
     nombre = models.CharField(max_length=50)
@@ -65,6 +68,9 @@ class Personas(models.Model):
         managed = True
         db_table = 'personas'
 
+    def get_fields_and_values(self):
+        return [(field, field.value_to_string(self)) for field in Personas._meta.fields]
+
 class Tarea(models.Model):
     emp_creador = models.ForeignKey(Empleados, on_delete=models.CASCADE)
     emp_clie = models.ForeignKey(Emp_Clie_Asig, on_delete=models.CASCADE)
@@ -81,6 +87,8 @@ class Tarea(models.Model):
         managed = True
         db_table = 'tarea'
 
+    def get_fields_and_values(self):
+        return [(field, field.value_to_string(self)) for field in Tarea._meta.fields]
 
 class TipoClie(models.Model):
     tipo_c = models.CharField(max_length=25, blank=True, null=True)
@@ -89,7 +97,6 @@ class TipoClie(models.Model):
         managed = True
         db_table = 'tipo_clie'
 
-
 class TipoEmp(models.Model):
     tipo_e = models.CharField(max_length=25, blank=True, null=True)
     permisos = models.CharField(max_length=25, blank=True, null=True)
@@ -97,7 +104,6 @@ class TipoEmp(models.Model):
     class Meta:
         managed = True
         db_table = 'tipo_emp'
-
 
 class Tramite(models.Model):
     tipo = models.CharField(max_length=25, blank=True, null=True)

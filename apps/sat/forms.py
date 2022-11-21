@@ -1,60 +1,40 @@
-from tkinter import Widget
-from xml.parsers.expat import model
 from django import forms
-from apps.sat.models import Personas
+from apps.sat.models import Tarea, Tramite, Empleados, Personas
 import datetime
 
 #Formulario Persona
 
-class PersonaForm(forms.ModelForm):
-
-    correo = forms.EmailField()
-    fecha_nac = forms.DateField(initial=datetime.date.today)
-    fecha_reg = forms.DateField(initial=datetime.date.today, disabled=True)
+class TareaForm(forms.ModelForm):
+    emp_creador = forms.ChoiceField(choices=[(choice.pk, choice.nombre + ' ' + choice.ap_paterno) for choice in Personas.objects.raw('SELECT * FROM personas, empleados where personas.id=empleados.empleado_id')])
+    tramite = forms.ChoiceField(choices=[(choice.pk, choice.tipo) for choice in Tramite.objects.all()])
+    fecha_ini = forms.DateField(initial=datetime.date.today)
+    fecha_lim = forms.DateField(initial=datetime.date.today)
 
     class Meta:
-        model = Personas
+        model = Tarea
 
         fields = [
-            'nombre',
-            'ap_paterno',
-            'ap_materno',
-            'telefono',
-            'calle',
-            'dir_num',
-            'colonia',
-            'delegacion',
-            'cod_postal',
-            'municipio',
+            'emp_creador',
+            'emp_clie',
+            'tramite',
+            'info_add',
+            'dir_archivo',
             'estado',
-            'pais',
-            'correo',
-            'estado_civil',
-            'fecha_nac',
-            'rfc',
-            'curp',
-            'fecha_reg',
+            'costo',
+            'fecha_ini',
+            'fecha_lim',
         ]
 
         labels = {
-            'nombre': 'Nombre(s):',
-            'ap_paterno': 'Apellido paterno:',
-            'ap_materno': 'Apellido materno:',
-            'telefono': 'Telefono:',
-            'calle': 'Calle:',
-            'dir_num': 'Numero exterior:',
-            'colonia': 'Colonia:',
-            'delegacion': 'Delegación:',
-            'cod_postal': 'Codigo postal:',
-            'municipio': 'Municipio:',
-            'estado': 'Estado:',
-            'pais': 'Pais:',
-            'correo': 'Correo electronico:',
-            'estado_civil': 'Estado civil:',
-            'fecha_nac': 'Fecha de nacimiento:',
-            'rfc': 'RFC:',
-            'curp': 'CURP:',
-            'fecha_reg': 'Fecha de registro:',
+            'emp_creador': 'ID creador:',
+            'emp_clie': 'Empleado-Cliente:',
+            'tramite': 'Tipo de tramite:',
+            'info_add': 'Notas adicionales:',
+            'dir_archivo': 'Dirección del archivo:',
+            'estado': 'Estado del Tramite',
+            'costo': 'Costo del Tramite:',
+            'fecha_ini': 'Fecha de inicio:',
+            'fecha_lim': 'Fecha de Limite',
         }
 
         widgets = {
