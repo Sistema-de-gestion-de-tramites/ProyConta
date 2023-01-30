@@ -1,3 +1,4 @@
+from cProfile import label
 from django.db import models
 from django.core.validators import RegexValidator
 
@@ -15,7 +16,7 @@ class Clientes(models.Model):
         db_table = 'clientes'
 
     def get_fields_and_values(self):
-        return [(field, field.value_to_string(self)) for field in Clientes._meta.fields]
+        return [(field , field.value_to_string(self)) for field in Clientes._meta.fields]
 
 class Empleados(models.Model):
     empleado = models.OneToOneField('Personas', models.DO_NOTHING, primary_key=True)
@@ -71,10 +72,19 @@ class Personas(models.Model):
     def get_fields_and_values(self):
         return [(field, field.value_to_string(self)) for field in Personas._meta.fields]
 
+class Tramite(models.Model):
+    tipo = models.CharField(max_length=25, blank=True, null=True)
+    descrip = models.CharField(max_length=100, blank=True, null=True)
+    requisitos = models.CharField(max_length=25, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'tramite'
+
 class Tarea(models.Model):
     emp_creador = models.ForeignKey(Empleados, on_delete=models.CASCADE)
     emp_clie = models.ForeignKey(Emp_Clie_Asig, on_delete=models.CASCADE)
-    tramite = models.ForeignKey('Tramite', on_delete=models.CASCADE)
+    tramite = models.ForeignKey(Tramite, on_delete=models.CASCADE)
     info_add = models.CharField(max_length=50, blank=True, null=True)
     dir_archivo = models.CharField(max_length=100, blank=True, null=True)
     estado = models.CharField(max_length=10)
@@ -104,12 +114,3 @@ class TipoEmp(models.Model):
     class Meta:
         managed = True
         db_table = 'tipo_emp'
-
-class Tramite(models.Model):
-    tipo = models.CharField(max_length=25, blank=True, null=True)
-    descrip = models.CharField(max_length=100, blank=True, null=True)
-    requisitos = models.CharField(max_length=25, blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'tramite'

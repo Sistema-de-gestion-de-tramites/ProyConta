@@ -30,14 +30,16 @@
                     <thead>
                         <tr>
                             {% for key, val in obj.get_fields_and_values %}
-                            <th> {{key}} </th>
+                            <th>
+                                <div id="{{key.name}}"></div>
+                            </th>
                             {% endfor %}
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             {% for key, val in obj.get_fields_and_values %}
-                            <th> {{key}} </th>
+                            <th> <div id="f_{{key.name}}"></div> </th>
                             {% endfor %}
                         </tr>
                     </tfoot>
@@ -83,4 +85,5 @@
 
 <!-- Page level custom scripts -->
 <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+<script src="{% static 'js/table_labels.js' %}"></script>
 {% endblock %}

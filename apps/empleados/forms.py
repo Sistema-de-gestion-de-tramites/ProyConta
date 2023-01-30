@@ -11,17 +11,12 @@ class EmpleadoForm(forms.ModelForm):
         fields = [
             'tipo_emp_id',
             #'clie_s',
-            'permisos_add',
-            'username',
-            'password',
+            'permisos_add'
 
         ]
 
         labels = {
             'tipo_emp': 'Tipo de empleado:',
             # 'clie_s': '',
-            'permisos_add': 'Permisos adicionales',
-            'username': 'Nombre de usuario:',
-            'password': 'Contraseña:',
-
+            'permisos_add': 'Permisos adicionales'
         }

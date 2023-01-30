@@ -83,8 +83,9 @@ ClienteInlineFormSet = inlineformset_factory(Personas, Clientes, form=ClienteFor
 
 class RegistroUsuarioForm(UserCreationForm):
     email = forms.EmailField()
-    password1: forms.CharField(label="contraseña", max_length=50, required=True, widget=forms.PasswordInput)
-    password2: forms.CharField(label="confirmar contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    username = forms.CharField(label="username", max_length=50, required=True)
+    password1 = forms.CharField(label="contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    password2 = forms.CharField(label="confirmar contraseña", max_length=50, required=True, widget=forms.PasswordInput)
     
     class meta:
         model = User

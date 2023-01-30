@@ -16,15 +16,28 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from .forms import PersonaForm, ClienteForm, RegistroUsuarioForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
-from apps.clientes.models import Personas, Clientes
+from apps.clientes.models import Personas, Clientes, Empleados
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
+def id_emp_sesion(request):
+    empleados = Empleados.objects.all()
+    usernameValue=''
+    for emp in empleados:
+     if emp.username == request.user.username:
+        usernameValue=request.user.username
+        break
+    empleado= Empleados.objects.get(username=usernameValue)
+    id = empleado.empleado_id
+    return id
 
 #{----------------------------------------------------------------------------------------}
 def registro(request):
     if request.method == 'GET':
-        form = RegistroUsuarioForm()
-        return render(request,'registro.html',{'form':form,})
+        print(request.user.username)
+        emp = id_emp_sesion(request)
+        print(emp)
+        form = RegistroUsuarioForm
+        return render(request,'registro.html',{'form':form})
     else:
         form = RegistroUsuarioForm(request.POST)
         if form.is_valid():
@@ -33,11 +46,11 @@ def registro(request):
             redirect('index/')
         else:
             redirect('registro/')
-    return render(request,'registro.html',{'form':RegistroUsuarioForm})
+    return render(request,'registro.html',{'form':form})
 
     #{DEVUELVE EL HTML (REQUEST) CREAR DICCIONARIO CON VALORES DEVUELTOS DE FUNCION PERSONAFORM()}
 #{----------------------------------------------------------------------------------------}
-
+    
 class Cliente_Create(CreateView):
     #model = Clientes
     form_class = ClienteForm
@@ -69,6 +82,7 @@ class Cliente_Listar(ListView):
     queryset = Personas.objects.raw('SELECT * FROM personas, clientes where personas.id=clientes.cliente_id')
     #model = Personas
     template_name = 'tables.html'
+    dic = {'nombre':'hola'}
 
 class Cliente_Update(UpdateView):
     model = Clientes

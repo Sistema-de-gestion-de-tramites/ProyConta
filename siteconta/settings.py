@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -87,7 +88,7 @@ DATABASES = {
         },
         'NAME': 'project_ing',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'oracle',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }
@@ -136,3 +137,7 @@ LOGIN_REDIRECT_URL = 'index'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#contantes para manejo y almacenamiento de archivo (media root)
+MEDIA_URL = '/files/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'files')

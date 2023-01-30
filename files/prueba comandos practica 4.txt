@@ -1,0 +1,44 @@
+ver puertos de base de datos
+netstat -a
+In most cases, the Oracle Database component's port number is listed in the tool used to configure the port. In addition, ports for some Oracle Database applications are listed in the portlist.ini file. This file is located in the $ORACLE_HOME/install directory.
+-------------------------------------------------
+JOB_QUEUE_PROCESSES specifies the maximum number of job slaves per instance that can be created for the execution of DBMS_JOB jobs and Oracle Scheduler (DBMS_SCHEDULER) jobs.
+
+SELECT COUNT(*) FROM V$CONTAINERS
+  WHERE open_mode != 'MOUNTED';
+
+sql comand:
+**alter system set job_queue_processes = 15 scope=MEMORY;
+
+--------------------------------------------------
+bajar base de datos
+**shutdown immediate
+**srvctl stop database -d orcl -o (abort,inmmediate,transactional,normal)
+verificar que no se pude conectar
+**. oraenv
+**orcl
+**sqlplus hr
+subir la base de datos
+startup (nomount, mount, open)
+srvctl start database -d orcl -o (nomount, mount, open)
+---------------------------------------
+mirar el alert log, buscar direccion de archivo
+**select * from v$diag_info;
+ir a la direccion que aparece y buscar
+alert_<sid>.log
+conectar con sys dba
+Use the SHOW PARAMETER command to verify the settings for SGA_MAX_SIZE, 
+DB_CACHE_SIZE, and SHARED_POOL_SIZE. 
+** show parameter __ ;
+-------------------------------------
+ambientar .oraenv
+matar lgwr process
+**ps -ef | grep ora_lgwr_orcl
+**kill -9 (process_id)
+buscar que se inicio otra vez lgwr
+**ps -ef | grep ora_lgwr_orcl (tiene diferente process id)
+verificar el oracle restart
+conectar con sysdba
+ver status de la instancia
+**select status from v$instance;
+--- END
