@@ -86,9 +86,9 @@ DATABASES = {
             'sql_mode': 'traditional',
 
         },
-        'NAME': 'project_ing',
+        'NAME': 'proy_ing',
         'USER': 'root',
-        'PASSWORD': 'oracle',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

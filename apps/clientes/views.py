@@ -16,17 +16,17 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from .forms import PersonaForm, ClienteForm, RegistroUsuarioForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
-from apps.clientes.models import Personas, Clientes, Empleados
+from apps.clientes.models import Personas
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 def id_emp_sesion(request):
-    empleados = Empleados.objects.all()
+    empleados = Personas.objects.all() # Especificar a solo los empleados con el rol = 0
     usernameValue=''
     for emp in empleados:
      if emp.username == request.user.username:
         usernameValue=request.user.username
         break
-    empleado= Empleados.objects.get(username=usernameValue)
+    empleado= Personas.objects.get(username=usernameValue)
     id = empleado.empleado_id
     return id
 
@@ -79,18 +79,18 @@ class Cliente_Create(CreateView):
             return self.render_to_response(self.get_context_data(form=form, form2=form2))
 
 class Cliente_Listar(ListView):
-    queryset = Personas.objects.raw('SELECT * FROM personas, clientes where personas.id=clientes.cliente_id')
+    queryset = Personas.objects.raw('SELECT * FROM personas')   # Especificar a solo los clientes con el rol != 0
     #model = Personas
     template_name = 'tables.html'
     dic = {'nombre':'hola'}
 
 class Cliente_Update(UpdateView):
-    model = Clientes
+    model = Personas    # Especificar a solo los clientes con el rol != 0
     form_class = ClienteForm
     template_name = 'formulario_2.html'
     success_url = reverse_lazy('lista_clientes')
 
 class Cliente_Delete(DeleteView):
-    model = Clientes
+    model = Personas    # Especificar a solo los empleados con el rol != 0
     template_name = 'borrar.html'
     success_url = reverse_lazy('lista_clientes')

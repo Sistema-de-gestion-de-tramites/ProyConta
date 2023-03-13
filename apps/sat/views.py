@@ -23,7 +23,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 #{----------------------------------------------------------------------------------------}
 #{METODO PARA DEPLEGAR EL HTML INDEX (HOME)}
-from apps.sat.models import Tarea
+
 
 
 def index(request): #{METODO REQUEST DE HTTP}

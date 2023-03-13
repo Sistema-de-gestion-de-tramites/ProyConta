@@ -17,13 +17,13 @@ from django.urls import reverse_lazy
 
 from apps.empleados.forms import EmpleadoForm
 from apps.clientes.forms import PersonaForm, RegistroUsuarioForm
-from apps.empleados.models import Personas, Clientes, Empleados
+from apps.empleados.models import Personas
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 #{----------------------------------------------------------------------------------------}
 
 def id_emp_sesion(request):
-    empleados = Empleados.objects.all()
+    empleados = Personas.objects.all()    # Especificar a solo los empleados con el rol = 0
     for emp in empleados:
         if emp.username == request.user.username:
             id=request.user.username
@@ -71,13 +71,13 @@ class Empleado_Listar(ListView):
     template_name = 'tables.html'
 
 class Empleado_Update(UpdateView):
-    model = Empleados
+    model = Personas    # Especificar a solo los empleados con el rol = 0
     form_class = EmpleadoForm
     template_name = 'formulario_2.html'
     success_url = reverse_lazy('lista_empleados')
 
 class Empleado_Delete(DeleteView):
-    model = Empleados
+    model = Personas    # Especificar a solo los empleados con el rol = 0
     template_name = 'borrar.html'
     success_url = reverse_lazy('lista_empleados')
 
