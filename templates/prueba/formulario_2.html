@@ -1,8 +1,8 @@
-{% extends 'base/base.html' %}
+{% extends 'base/index.html' %}
 
-{% block cuerpo %}
+{% block contenido %}
 <div class="container-fluid">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{form.as_p}}

@@ -86,7 +86,7 @@ DATABASES = {
             'sql_mode': 'traditional',
 
         },
-        'NAME': 'proy_ing',
+        'NAME': 'project_ing',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',

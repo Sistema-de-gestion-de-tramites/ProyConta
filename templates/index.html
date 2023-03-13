@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block cuerpo %}
+<p>
+    <a href="{% url 'crear_tramite' %}">crear tramite</a>
+</p><br><br>
+<p>
+    <a href="{% url 'listar_tramites' %}">lista de tramites</a>
+</p><br><br>
+
+
+<p>
+    <a href="{% url 'crear_estado' %}">Crear Estado</a>
+</p>
+<p>
+    <a href="{% url 'listar_estados' %}">Lista de Estados (ver, editar)</a>
+</p><br>
+<p>
+    <a href="{% url 'crear_comentario' %}">Crear Comentario</a>
+</p>
+<p>
+    <a href="{% url 'listar_comentarios' %}">Lista de Comentario (ver, editar)</a>
+</p><br>
+<p>
+    <a href="{% url 'crear_tipo_archivo' %}">Crear Tipo de archivo</a>
+</p>
+<p>
+    <a href="{% url 'listar_tipo_archivos' %}">Lista de Tipos de archivo (ver, editar)</a>
+</p><br>
+<p>
+    <a href="{% url 'crear_rol' %}">Crear rol</a>
+</p>
+<p>
+    <a href="{% url 'listar_roles' %}">Lista de Roles (ver, editar)</a>
+</p><br>
+
+</p>
+<p>
+    <a href="{% url 'crear_tipo_documento' %}">crear documento</a>
+</p>
+<p>
+    <a href="{% url 'listar_tipo_documento' %}">Lista Documentos</a>
+</p>
+
+{% endblock%}

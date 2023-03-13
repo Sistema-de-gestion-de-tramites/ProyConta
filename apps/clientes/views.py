@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
-from .forms import PersonaForm, ClienteForm, RegistroUsuarioForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
+#from .forms import PersonaForm ClienteForm, RegistroUsuarioForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
 from apps.clientes.models import Personas
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
@@ -29,7 +29,7 @@ def id_emp_sesion(request):
     empleado= Personas.objects.get(username=usernameValue)
     id = empleado.empleado_id
     return id
-
+"""
 #{----------------------------------------------------------------------------------------}
 def registro(request):
     if request.method == 'GET':
@@ -50,7 +50,7 @@ def registro(request):
 
     #{DEVUELVE EL HTML (REQUEST) CREAR DICCIONARIO CON VALORES DEVUELTOS DE FUNCION PERSONAFORM()}
 #{----------------------------------------------------------------------------------------}
-    
+
 class Cliente_Create(CreateView):
     #model = Clientes
     form_class = ClienteForm
@@ -94,3 +94,4 @@ class Cliente_Delete(DeleteView):
     model = Personas    # Especificar a solo los empleados con el rol != 0
     template_name = 'borrar.html'
     success_url = reverse_lazy('lista_clientes')
+"""

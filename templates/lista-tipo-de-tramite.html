@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load poll_extras %}
+
+{% block styles %}
+    <style>
+        .ocultar{display: none;}
+        .mostrar{display: grid;}
+    </style>
+{% endblock  %}
+
+{% block cuerpo %}
+{% for tipoTramite in listaTipoDeTramites %}
+
+<br>
+<button type="button" id='botonNombre'><h5>{% get_verbose_name tipoTramite 'nombre' %}: {{tipoTramite.nombre}}</h5></button>
+<br>
+<a href="{% url 'editar_tramite' tipoTramite.id %}">Editar</a>
+<a href="{% url 'eliminar_tipoTramite' tipoTramite.id %}">Eliminar</a>
+<div id='informacion-tramite'>
+<h6>tiempo estimado en dias: {{tipoTramite.tiempo_estimado}}</h6>
+<h6>estado: {{tipoTramite.habilitado}}</h6>
+
+<div>
+
+</div>
+<h6>Roles con permiso: </h6>
+<ol>
+{% for relacionTramiteRol in listaRelacionTramiteRol %}
+    {% if relacionTramiteRol.tramite == tipoTramite %}
+        <li>{{relacionTramiteRol.rol.Rol}}</li>
+    {% endif %}
+{% endfor %}
+</ol>
+</div>
+<br><br>
+</div>
+<h6>Requerimientos de tramite: </h6>
+<ol>
+{% for relacionTramiteDocumento in listaRelacionTramiteDocumentos %}
+    {% if relacionTramiteDocumento.tramite == tipoTramite %}
+        <li>{{relacionTramiteDocumento.documento.nombre}}</li>
+    {% endif %}
+{% endfor %}
+</ol>
+</div>
+
+<br>
+{% endfor %}
+{% endblock%}
+
+{% block scripts %}
+<script src="{% static 'js/js-expDigEst.js' %}"></script>
+{% endblock %}

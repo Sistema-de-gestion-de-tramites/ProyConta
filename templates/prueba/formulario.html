@@ -1,0 +1,26 @@
+{% extends 'base/index.html' %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in forms %}
+        {% if field == 'username'%}
+        <hr>
+        <p> Datos para tipo de registro <p>
+        {% endif %}
+        <div class="mb-2 row">
+            <label class="col-sm-5 col-form-label fs-4" for="{{ field.id_for_label }}">{{field.label}}</label>
+            <div class="col-sm-7">
+                {{field}}
+            </div>
+        </div>
+        
+        {% endfor %}
+
+        <div class="d-grid gap-2 col-3 mx-auto">
+            <button type="submit" class="btn btn-primary btn-lg">Registrar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

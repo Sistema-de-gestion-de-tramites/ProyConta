@@ -1,3 +1,3 @@
 from django.db import models
-from apps.sat.models import Personas, Clientes, Empleados, TipoEmp
+from apps.sat.models import Personas
 # Create your models here.

@@ -3,11 +3,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 
-from apps.clientes.models import Personas, Clientes, TipoClie
+from apps.clientes.models import Personas
 import datetime
 
 #formulario version 2
-
+"""
 class PersonaForm(forms.ModelForm):
     correo = forms.EmailField()
     fecha_nac = forms.DateField(initial=datetime.date.today)
@@ -90,3 +90,5 @@ class RegistroUsuarioForm(UserCreationForm):
     class meta:
         model = User
         fields = ['username','email','password1','password2']
+        
+"""
