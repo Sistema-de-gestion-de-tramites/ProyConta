@@ -14,8 +14,10 @@ ____________________________________________________________________________
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from .models import *
 
-#from .forms import PersonaForm ClienteForm, RegistroUsuarioForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
+from .forms import PersonaForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
+from django.forms.models import model_to_dict
 from apps.clientes.models import Personas
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
@@ -29,6 +31,16 @@ def id_emp_sesion(request):
     empleado= Personas.objects.get(username=usernameValue)
     id = empleado.empleado_id
     return id
+
+class crear_persona(CreateView):
+    model = Personas
+    form_class = PersonaForm
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_personas')
+
+def Listar_Cliente(request):
+    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')   # Especificar a solo los clientes con el rol != 0
+    return render(request, 'plantilla_lista.html', {'object_list': queryset})
 """
 #{----------------------------------------------------------------------------------------}
 def registro(request):

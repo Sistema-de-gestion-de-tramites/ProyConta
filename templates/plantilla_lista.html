@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block css_add %}
+{% endblock %}
+
+{% block cuerpo %}
+{% if object_list %}
+    {% for obj in object_list %}
+        {% for key, val in obj.get_fields_and_values %}
+            {{ key}}: {{ val }}<br>
+        {% empty %}
+            <h1>No hay campos</h1>
+        {% endfor %}
+    <br>
+    {% empty %}
+        <h1>No hay registros</h1>
+    {% endfor %}
+{% else %}
+    <h1>No hay Registros</h1>
+{% endif %}
+{% endblock %}
+

@@ -1,4 +1,4 @@
-{% extends 'base/index.html' %}
+{% extends 'base/base.html' %}
 
 {% load static %}
 
@@ -7,7 +7,7 @@
 <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block contenido %}
+{% block cuerpo %}
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -51,8 +51,8 @@
                                 <td>{{ val }}</td>
                             {% endfor %}
                             <td>
-                                <a class="btn btn-primary" href="{% url 'actualizar_cliente' obj.id %}">Editar</a>
-                                <a class="btn btn-danger" href="{% url 'eliminar_cliente' obj.id %}">Eliminar</a>
+                                <a class="btn btn-primary" href="{# url 'actualizar_cliente' obj.id #}">Editar</a>
+                                <a class="btn btn-danger" href="{# url 'eliminar_cliente' obj.id #}">Eliminar</a>
                             </td>
                         </tr>
                     {% endfor %}

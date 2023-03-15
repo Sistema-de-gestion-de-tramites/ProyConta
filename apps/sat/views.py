@@ -34,12 +34,10 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 #{----------------------------------------------------------------------------------------}
 #{METODO PARA DEPLEGAR EL HTML INDEX (HOME)}
 
-
-
 def index(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'base.html') #{DEVUELVE EL HTML (REQUEST)}
+    return render(request,'index.html') #{DEVUELVE EL HTML (REQUEST)}
 #{----------------------------------------------------------------------------------------}
 # DESCRIPCION: Devuelve el id del empleado que ha iniciado sesion (no se valida que exista una sesion activa)
 def id_emp_sesion(request):
@@ -99,7 +97,6 @@ class Tarea_Delete(DeleteView):
     success_url = reverse_lazy('lista_tareas')
 """
 
-
 #{----------------------------------------------------------------------------------------}
 def publicarRelacionTramiteDocumento(modeloTipoTramite, listaIdDocumento):
     for documentoId in listaIdDocumento:
@@ -110,7 +107,6 @@ def publicarRelacionTramiteDocumento(modeloTipoTramite, listaIdDocumento):
         )
         nuevaRelacionTramiteDocumento.save()
 
-
 def publicarRelacionTramiteRol(modeloTipoTramite, listaIdRoles):
     for rolId in listaIdRoles:
         modeloRol = Rol.objects.get(id=rolId)
@@ -119,7 +115,6 @@ def publicarRelacionTramiteRol(modeloTipoTramite, listaIdRoles):
             rol=modeloRol
         )
         nuevaRelacionTramiteRol.save()
-
 
 def publicarTipoTramite(request):
     nuevoTipoTramite = Tipo_Tramites(
@@ -134,7 +129,6 @@ def publicarTipoTramite(request):
     listaIdDeDocumentos = request.POST.getlist('requerimientos', default=['emptyList'])
     publicarRelacionTramiteDocumento(nuevoTipoTramite, listaIdDeDocumentos)
 
-
 def crearTipoTramite(request):
     if request.method == 'GET':
         contexto = {'form': FormularioTramite}
@@ -143,7 +137,6 @@ def crearTipoTramite(request):
         publicarTipoTramite(request)
         return render(request, 'index.html')
 
-
 def listarTipoDeTramites(request):
     if request.method == 'GET':
         contexto = {'listaTipoDeTramites': Tipo_Tramites.objects.all(),
@@ -151,18 +144,15 @@ def listarTipoDeTramites(request):
                     'listaRelacionTramiteDocumentos': Rel_Tram_Doc.objects.all()}
         return render(request, 'lista-tipo-de-tramite.html', contexto)
 
-
 def eliminarRelacionTramiteRol(modeloTramite):
     relaciones = Rel_Tram_Rol.objects.filter(tramite=modeloTramite)
     for relacion in relaciones:
         relacion.delete()
 
-
 def eliminarRelacionTramiteDocumento(modeloTramite):
     relaciones = Rel_Tram_Doc.objects.filter(tramite=modeloTramite)
     for relacion in relaciones:
         relacion.delete()
-
 
 class editar_tipoTramite(UpdateView):
     model = Tipo_Tramites
@@ -183,12 +173,10 @@ class editar_tipoTramite(UpdateView):
 
         return super(editar_tipoTramite, self).post(request, **kwargs)
 
-
 def eliminar_TipoTramite(request, pk):
     registro = get_object_or_404(Tipo_Tramites, id=pk)
     registro.delete()
     return redirect('listar_tramites')
-
 
 # Create your views here.
 # R: nel
@@ -205,11 +193,9 @@ def crear_Estado(request):
         nuevoRegistro.save()
         return redirect(request, 'listar_estados')
 
-
 def listar_Estados(request):
     lista = Estados.objects.all()
-    return render(request, 'listas/lista-estado.html', {'object_list': lista})
-
+    return render(request, 'plantilla_lista.html', {'object_list': lista})
 
 class editar_Estado(UpdateView):
     model = Estados
@@ -217,12 +203,10 @@ class editar_Estado(UpdateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_estados')
 
-
 def eliminar_Estado(request, pk):
     registro = get_object_or_404(Estados, id=pk)
     registro.delete()
     return redirect('listar_estados')
-
 
 # Vistas de los Comentarios
 def crear_Comentario(request):
@@ -236,11 +220,9 @@ def crear_Comentario(request):
         nuevoRegistro.save()
         return redirect(request, 'listar_comentarios')
 
-
 def listar_Comentarios(request):
     lista = Comentarios.objects.all()
-    return render(request, 'listas/lista-comentario.html', {'object_list': lista})
-
+    return render(request, 'plantilla_lista.html', {'object_list': lista})
 
 class editar_Comentario(UpdateView):
     model = Comentarios
@@ -248,12 +230,10 @@ class editar_Comentario(UpdateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_comentarios')
 
-
 def eliminar_Comentario(request, pk):
     registro = get_object_or_404(Comentarios, id=pk)
     registro.delete()
     return redirect('listar_comentarios')
-
 
 # Vistas de los tipo-archivo
 def crear_Tipo_Archivo(request):
@@ -267,11 +247,9 @@ def crear_Tipo_Archivo(request):
         nuevoRegistro.save()
         return redirect(request, 'listar_tipo_archivos')
 
-
 def listar_Tipo_Archivos(request):
     lista = Tipo_Archivos.objects.all()
-    return render(request, 'listas/lista-tipo-archivo.html', {'object_list': lista})
-
+    return render(request, 'plantilla_lista.html', {'object_list': lista})
 
 class editar_Tipo_Archivo(UpdateView):
     model = Tipo_Archivos
@@ -279,12 +257,10 @@ class editar_Tipo_Archivo(UpdateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipo_archivos')
 
-
 def eliminar_Tipo_Archivo(request, pk):
     registro = get_object_or_404(Tipo_Archivos, id=pk)
     registro.delete()
     return redirect('listar_tipo_archivos')
-
 
 # Vistas de los Roles
 def crear_Rol(request):
@@ -298,11 +274,9 @@ def crear_Rol(request):
         nuevoRegistro.save()
         return redirect('listar_roles')
 
-
 def listar_Roles(request):
     lista = Rol.objects.all()
-    return render(request, 'listas/lista-roles.html', {'object_list': lista})
-
+    return render(request, 'plantilla_lista.html', {'object_list': lista})
 
 class editar_Rol(UpdateView):
     model = Rol
@@ -310,12 +284,10 @@ class editar_Rol(UpdateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_roles')
 
-
 def eliminar_Rol(request, pk):
     registro = get_object_or_404(Rol, id=pk)
     registro.delete()
     return redirect('listar_roles')
-
 
 # vista de documento
 
@@ -327,7 +299,6 @@ def crearTipoDocumento(request):
         publicarTipoDocumento(request)
         return render(request, 'index.html')
 
-
 def publicarTipoDocumento(request):
     extension = Tipo_Archivos.objects.get(id=request.POST['tipo_archivo'])
     nuevoTipoDocumento = Tipo_Documentos(
@@ -337,18 +308,15 @@ def publicarTipoDocumento(request):
     )
     nuevoTipoDocumento.save()
 
-
 def listar_tipoDocumento(request):
     lista = Tipo_Documentos.objects.all()
-    return render(request, 'listas/lista-tipo-documento.html', {'object_list': lista})
-
+    return render(request, 'plantilla_lista.html', {'object_list': lista})
 
 class editar_TipoDocumento(UpdateView):
     model = Tipo_Documentos
     form_class = Formulario_tipoDocumento
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipo_documento')
-
 
 def eliminar_tipoDocumento(request, pk):
     registro = get_object_or_404(Tipo_Documentos, id=pk)

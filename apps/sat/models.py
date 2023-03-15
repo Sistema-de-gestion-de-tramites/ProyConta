@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
-
 # Tablas de personas
 # --------------------------------------------------------------------------
 class Rol(models.Model):
@@ -11,7 +10,10 @@ class Rol(models.Model):
         managed = True
         verbose_name = "Rol"
         verbose_name_plural = "Roles"
+        db_table = "Rol"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Rol._meta.fields]
 
 class Tipo_Usuarios(models.Model):
     descr = models.CharField(max_length=20, verbose_name="Descripción")
@@ -20,7 +22,10 @@ class Tipo_Usuarios(models.Model):
         managed = True
         verbose_name = "Tipo de Usuario"
         verbose_name_plural = "Tipos de Usuarios"
+        db_table = "tipo_usuarios"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Usuarios._meta.fields]
 
 class Personas(models.Model):
     nombre = models.CharField(max_length=50, verbose_name="Nombre")
@@ -33,7 +38,7 @@ class Personas(models.Model):
         ('D', 'DIVORSIADO(A)'),
         ('V', 'VIUDO(A)'),
     ]
-    estado_civil = models.CharField(max_length=1, choices=ESTADO_CIV, default='S')
+    estado_civil = models.CharField(max_length=1, choices=ESTADO_CIV, default='S', verbose_name="Estado civil")
 
     fecha_nac = models.DateField(verbose_name="Fecha de nacimiento")
     rfc = models.CharField(max_length=13, verbose_name="RFC")
@@ -45,7 +50,10 @@ class Personas(models.Model):
         managed = True
         verbose_name = "Persona"
         verbose_name_plural = "Personas"
+        db_table = "personas"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Personas._meta.fields]
 
 class Telefonos(models.Model):
     persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Persona")
@@ -57,7 +65,10 @@ class Telefonos(models.Model):
         managed = True
         verbose_name = "Telefono"
         verbose_name_plural = "Telefonos"
+        db_table = "telefonos"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Telefonos._meta.fields]
 
 class Direcciones(models.Model):
     persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Persona")
@@ -73,7 +84,10 @@ class Direcciones(models.Model):
         managed = True
         verbose_name = "Dirección"
         verbose_name_plural = "Direcciones"
+        db_table = "direcciones"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Direcciones._meta.fields]
 
 class Ext_Direcciones(models.Model):
     direccion = models.ForeignKey(Direcciones, on_delete=models.CASCADE, verbose_name="Dirección")
@@ -83,9 +97,10 @@ class Ext_Direcciones(models.Model):
         managed = True
         verbose_name = "Dirección"
         verbose_name_plural = "Direcciones"
+        db_table = "ext_direcciones"
 
-
-# --------------------------------------------------------------------------
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Ext_Direcciones._meta.fields]
 
 class Estados(models.Model):
     nombre = models.CharField(max_length=10, verbose_name="Nombre")
@@ -96,7 +111,10 @@ class Estados(models.Model):
         managed = True
         verbose_name = "Estado"
         verbose_name_plural = "Estados"
+        db_table = "estados"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Estados._meta.fields]
 
 class Comentarios(models.Model):
     descr = models.CharField(max_length=100, verbose_name="Descripción")  # Descripcion
@@ -105,18 +123,23 @@ class Comentarios(models.Model):
         managed = True
         verbose_name = "Comentario"
         verbose_name_plural = "Comentarios"
+        db_table = "comentarios"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Comentarios._meta.fields]
 
 class Tipo_Archivos(models.Model):
     extension = models.CharField(max_length=5, verbose_name="Extensión")
-
     # Ejemplo: pdf, doc, jpg, png, xml, xlsx
 
     class Meta:
         managed = True
         verbose_name = "Tipo de archivo"
         verbose_name_plural = "Tipos de archivos"
+        db_table = "tipo_archivos"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Archivos._meta.fields]
 
 class Tipo_Tramites(models.Model):
     nombre = models.CharField(max_length=40, verbose_name="Nombre")
@@ -127,7 +150,10 @@ class Tipo_Tramites(models.Model):
         managed = True
         verbose_name = "Tipo de tramite"
         verbose_name_plural = "Tipos de tramites"
+        db_table = "tipo_tramites"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Tramites._meta.fields]
 
 class Tipo_Documentos(models.Model):
     nombre = models.CharField(max_length=40, verbose_name="Nombre")
@@ -137,7 +163,10 @@ class Tipo_Documentos(models.Model):
         managed = True
         verbose_name = "Tipo de documento"
         verbose_name_plural = "Tipos de documentos"
+        db_table = "tipo_documentos"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Documentos._meta.fields]
 
 class Rel_Tram_Doc(models.Model):  # Relacion tramite-documento
     tramite = models.ForeignKey(Tipo_Tramites, on_delete=models.CASCADE, verbose_name="Tramite")
@@ -145,7 +174,10 @@ class Rel_Tram_Doc(models.Model):  # Relacion tramite-documento
 
     class Meta:
         managed = True
+        db_table = "rel_tram_doc"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Rel_Tram_Doc._meta.fields]
 
 class Rel_Tram_Rol(models.Model):  # Relacion tramite-rol
     tramite = models.ForeignKey(Tipo_Tramites, on_delete=models.CASCADE, verbose_name="Tramite")
@@ -153,7 +185,10 @@ class Rel_Tram_Rol(models.Model):  # Relacion tramite-rol
 
     class Meta:
         managed = True
+        db_table = "rel_tram_rol"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Rel_Tram_Rol._meta.fields]
 
 class Rel_Empl_Rol(models.Model):  # Relacion empleado-rol
     empleado = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Empleado")
@@ -161,7 +196,10 @@ class Rel_Empl_Rol(models.Model):  # Relacion empleado-rol
 
     class Meta:
         managed = True
+        db_table = "rel_emp_rol"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Rel_Empl_Rol._meta.fields]
 
 class Rel_Doc_TipoArch(models.Model):  # Relacion Documento-extension
     documento = models.ForeignKey(Tipo_Documentos, on_delete=models.CASCADE, verbose_name="Documento")
@@ -169,7 +207,10 @@ class Rel_Doc_TipoArch(models.Model):  # Relacion Documento-extension
 
     class Meta:
         managed = True
+        db_table = "rel_doc_tiparch"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Rel_Doc_TipoArch._meta.fields]
 
 class Entrega_Doc(models.Model):
     cliente = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Cliente")
@@ -180,7 +221,10 @@ class Entrega_Doc(models.Model):
         managed = True
         verbose_name = "Entrega de documento"
         verbose_name_plural = "Entregas de documentos"
+        db_table = "entrega_documentos"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Entrega_Doc._meta.fields]
 
 class Observ_Doc(models.Model):
     documento = models.ForeignKey(Entrega_Doc, on_delete=models.CASCADE, verbose_name="Documento")
@@ -193,7 +237,10 @@ class Observ_Doc(models.Model):
         managed = True
         verbose_name = "Observación del documento"
         verbose_name_plural = "Observaciones del documento"
+        db_table = "observ_doc"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Observ_Doc._meta.fields]
 
 class Tramite(models.Model):
     cliente = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Cliente")
@@ -203,7 +250,10 @@ class Tramite(models.Model):
         managed = True
         verbose_name = "Tramite"
         verbose_name_plural = "Tramites"
+        db_table = "tramites"
 
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Tramite._meta.fields]
 
 class Observ_Tramite(models.Model):
     tramite = models.ForeignKey(Tramite, on_delete=models.CASCADE, verbose_name="Tramite")
@@ -216,3 +266,7 @@ class Observ_Tramite(models.Model):
         managed = True
         verbose_name = "Observación del tramite"
         verbose_name_plural = "Observaciones del tramite"
+        db_table = "observ_tramites"
+
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Observ_Tramite._meta.fields]

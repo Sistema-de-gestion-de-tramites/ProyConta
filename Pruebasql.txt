@@ -1,0 +1,44 @@
+--- Valores de prueba
+
+--- Tipos de usuario
+INSERT INTO `tipo_usuarios`(`descr`) VALUES ('empleado');
+INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Persona moral');
+INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Persona fisica');
+
+
+-- Estados
+INSERT INTO `estados` (`nombre`) VALUES ('Aceptado');
+INSERT INTO `estados` (`nombre`) VALUES ('Rechazado');
+INSERT INTO `estados` (`nombre`) VALUES ('Pendiente');
+INSERT INTO `estados` (`nombre`) VALUES ('Correccion');
+INSERT INTO `estados` (`nombre`) VALUES ('Prorroga');
+
+
+-- Comentarios
+INSERT INTO `comentarios`(`descr`) VALUES ('Documento ilegible');
+INSERT INTO `comentarios`(`descr`) VALUES ('Documento incorrecto');
+INSERT INTO `comentarios`(`descr`) VALUES ('Falta de firmas y/o sellos');
+INSERT INTO `comentarios`(`descr`) VALUES ('Documento desactualizado');
+
+-- Tipo archivo
+INSERT INTO `tipo_archivos`(`extension`) VALUES ('pdf');
+INSERT INTO `tipo_archivos`(`extension`) VALUES ('docs');
+INSERT INTO `tipo_archivos`(`extension`) VALUES ('jpg');
+INSERT INTO `tipo_archivos`(`extension`) VALUES ('xml');
+
+-- Tipo de documento
+INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Acta de nacimiento','4');
+INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('CURP','4');
+INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Acta','4');
+INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Firma digital','4');
+INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Constancia','4');
+
+-- Tipo de tramite
+INSERT INTO `tipo_tramites`(`nombre`, `tiempo_estimado`, `habilitado`) VALUES ('Alta en el SAT','10',1);
+INSERT INTO `tipo_tramites`(`nombre`, `tiempo_estimado`, `habilitado`) VALUES ('Pago de impuestos','180',1);
+INSERT INTO `tipo_tramites`(`nombre`, `tiempo_estimado`, `habilitado`) VALUES ('Deeclaracion anual','180',1);
+
+-- Roles
+INSERT INTO `rol`(`Rol`) VALUES ('Empleado');
+INSERT INTO `rol`(`Rol`) VALUES ('Gerente');
+INSERT INTO `rol`(`Rol`) VALUES ('Admin');

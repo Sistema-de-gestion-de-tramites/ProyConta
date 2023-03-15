@@ -32,5 +32,7 @@ def id_emp_sesion(request):
 
 #{----------------------------------------------------------------------------------------}
 
-
+def Listar_Empleados(request):
+    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` = 1 ')   # Especificar a solo los clientes con el rol != 0
+    return render(request, 'plantilla_lista.html', {'object_list': queryset})
 
