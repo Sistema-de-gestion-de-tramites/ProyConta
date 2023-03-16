@@ -32,15 +32,41 @@ def id_emp_sesion(request):
     id = empleado.empleado_id
     return id
 
-class crear_persona(CreateView):
+
+
+class Crear_Persona(CreateView):
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_personas')
 
-def Listar_Cliente(request):
-    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')   # Especificar a solo los clientes con el rol != 0
-    return render(request, 'plantilla_lista.html', {'object_list': queryset})
+class Listar_Personas(ListView):
+    queryset = Personas.objects.all()
+    template_name = 'plantilla_lista.html'
+
+class Listar_Clientes(ListView):
+    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')
+    template_name = 'plantilla_lista.html'
+    extra_context={'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente'}
+
+class Cliente_Delete(DeleteView):
+    model = Personas    # Especificar a solo los empleados con el rol != 0
+    template_name = 'borrar.html'
+    success_url = reverse_lazy('listar_clientes')
+
+class Cliente_Update(UpdateView):
+    model = Personas
+    form_class = PersonaForm
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_clientes')
+
+class registrar_telefono(CreateView):
+    model = Personas
+    form_class = PersonaForm
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_telefonos')
+
+
 """
 #{----------------------------------------------------------------------------------------}
 def registro(request):

@@ -1,0 +1,10 @@
+{% extends 'base/base.html' %}
+
+{% block cuerpo %}
+<form method="POST">
+    {% csrf_token %}
+    <h3>¿Deseas eliminar el registro de "{{ object.nombre_principal }}"</h3>
+    <a href="{% url 'index' %}">Cancelar</a>
+    <button type="submit">Borrar</button>
+</form>
+{% endblock %}

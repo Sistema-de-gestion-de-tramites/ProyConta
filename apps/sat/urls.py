@@ -55,3 +55,4 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('eliminar-documento/<pk>', views.eliminar_tipoDocumento, name="eliminar_documento"),
 ]
 #{----------------------------------------------------------------------------------------------}
+# , 'actualizar_url': '', 'borrar_url':''})

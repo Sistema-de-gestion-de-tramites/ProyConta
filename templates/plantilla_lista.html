@@ -13,7 +13,11 @@
         {% empty %}
             <h1>No hay campos</h1>
         {% endfor %}
-    <br>
+        {% if actualizar_url and borrar_url %}
+            <a href="{% url actualizar_url obj.id %}">Editar</a>
+            <a href="{% url borrar_url obj.id %}">Eliminar</a>
+        {% endif %}
+    <br><br>
     {% empty %}
         <h1>No hay registros</h1>
     {% endfor %}

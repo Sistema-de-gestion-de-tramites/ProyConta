@@ -8,13 +8,15 @@ import datetime
 
 #formulario version 3
 
-opciones_usuario = [(choice.id, choice.descr) for choice in Tipo_Usuarios.objects.all()]
+class ChoiceField_tipo_usuario(forms.ModelChoiceField):     # Clase para el formulario de PersonaForm
+    def label_from_instance(self, obj):
+        return obj.descr
 
 class PersonaForm(forms.ModelForm):
     correo = forms.EmailField()
     fecha_nac = forms.DateField(initial=datetime.date.today)
     fecha_reg = forms.DateField(initial=datetime.date.today, disabled=True)
-    tipo_usuario = forms.ModelChoiceField(queryset=Tipo_Usuarios.objects.all()) #forms.ChoiceField(required=True, choices=opciones_usuario)
+    tipo_usuario = ChoiceField_tipo_usuario(queryset=Tipo_Usuarios.objects.all())
 
     class Meta:
         model = Personas
@@ -39,6 +41,16 @@ class PersonaForm(forms.ModelForm):
         }
 
 
+
+class TelefonosForm(forms.ModelForm):
+
+    class Meta:
+        model = Telefonos
+
+        fields = [
+            'descr',
+            'telefono',
+        ]
 """
 class ClienteForm(forms.ModelForm):
     tipo_clie_id = forms.ChoiceField(choices=[(choice.pk, choice.tipo_c) for choice in TipoClie.objects.all()])

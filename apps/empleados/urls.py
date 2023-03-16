@@ -17,10 +17,9 @@ from . import views #{IMPORTAR LAS CLASE DE VIEW DE LA APP EMPLEADOS}
 #{----------------------------------------------------------------------------------------------}
 
 urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
-    #path('empleados/crear_empleado/', views.Empleado_Create.as_view(), name="crear_empleado"),              #{DESPLIEGUE DE FOMULARIO PARA EMPLEADOS}
-    path('empleados/lista_empleados/', views.Listar_Empleados, name="lista_empleados"),            #{DESPLIEGUE DE LISTA DE EMPLEADOS}
-    #path('empleados/actualizar_empleado/<pk>', views.Empleado_Update.as_view(), name="actualizar_empleado"),#{DESPLIEGUE DE FOMULARIO PARA ACTUALIZAR REGISTRO DE EMPLEADO}
-    #path('empleados/eliminar_empleado/<pk>', views.Empleado_Delete.as_view(), name="eliminar_empleado"),    #{PARA ELIMINAR REGISTRO DE EMPLEADO}
+    path('empleados/lista_empleados/', views.Listar_Empleados.as_view(), name="listar_empleados"),
+    path('empleados/actualizar_empleado/<pk>', views.Empleado_Update.as_view(), name="actualizar_empleado"),
+    path('empleados/eliminar_empleado/<pk>', views.Empleado_Delete.as_view(), name="eliminar_empleado"),
 
 ]
 #{----------------------------------------------------------------------------------------------}

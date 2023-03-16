@@ -15,6 +15,9 @@ class Rol(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Rol._meta.fields]
 
+    def nombre_principal(self):
+        return self.Rol
+
 class Tipo_Usuarios(models.Model):
     descr = models.CharField(max_length=20, verbose_name="Descripción")
 
@@ -26,6 +29,9 @@ class Tipo_Usuarios(models.Model):
 
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Usuarios._meta.fields]
+
+    def nombre_principal(self):
+        return self.descr
 
 class Personas(models.Model):
     nombre = models.CharField(max_length=50, verbose_name="Nombre")
@@ -55,6 +61,9 @@ class Personas(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Personas._meta.fields]
 
+    def nombre_principal(self):
+        return self.nombre + " " + self.ap_paterno + " " + self.ap_materno
+
 class Telefonos(models.Model):
     persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Persona")
     descr = models.CharField(max_length=30, verbose_name="Descripción")
@@ -69,6 +78,9 @@ class Telefonos(models.Model):
 
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Telefonos._meta.fields]
+
+    def nombre_principal(self):
+        return self.descr
 
 class Direcciones(models.Model):
     persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Persona")
@@ -116,6 +128,9 @@ class Estados(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Estados._meta.fields]
 
+    def nombre_principal(self):
+        return self.nombre
+
 class Comentarios(models.Model):
     descr = models.CharField(max_length=100, verbose_name="Descripción")  # Descripcion
 
@@ -141,6 +156,9 @@ class Tipo_Archivos(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Archivos._meta.fields]
 
+    def nombre_principal(self):
+        return self.extension
+
 class Tipo_Tramites(models.Model):
     nombre = models.CharField(max_length=40, verbose_name="Nombre")
     tiempo_estimado = models.IntegerField(default=5, verbose_name="Días estimados")  # _______________________
@@ -155,6 +173,9 @@ class Tipo_Tramites(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Tramites._meta.fields]
 
+    def nombre_principal(self):
+        return self.nombre
+
 class Tipo_Documentos(models.Model):
     nombre = models.CharField(max_length=40, verbose_name="Nombre")
     tamano_MB = models.IntegerField(default=4, verbose_name="Tamaño en MB")
@@ -167,6 +188,9 @@ class Tipo_Documentos(models.Model):
 
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Tipo_Documentos._meta.fields]
+
+    def nombre_principal(self):
+        return self.nombre
 
 class Rel_Tram_Doc(models.Model):  # Relacion tramite-documento
     tramite = models.ForeignKey(Tipo_Tramites, on_delete=models.CASCADE, verbose_name="Tramite")

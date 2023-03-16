@@ -16,7 +16,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 #from apps.empleados.forms import EmpleadoForm
-#from apps.clientes.forms import PersonaForm, RegistroUsuarioForm
+from apps.clientes.forms import PersonaForm, RegistroUsuarioForm
 from apps.empleados.models import Personas
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
@@ -32,7 +32,21 @@ def id_emp_sesion(request):
 
 #{----------------------------------------------------------------------------------------}
 
-def Listar_Empleados(request):
-    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` = 1 ')   # Especificar a solo los clientes con el rol != 0
-    return render(request, 'plantilla_lista.html', {'object_list': queryset})
+class Listar_Empleados(ListView):
+    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` = 1 ')
+    template_name = 'plantilla_lista.html'
+    extra_context={'actualizar_url': 'actualizar_empleado', 'borrar_url':'eliminar_empleado'}
+
+class Empleado_Delete(UpdateView):
+    model = Personas
+    form_class = PersonaForm
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_empleados')
+
+class Empleado_Update(UpdateView):
+    model = Personas
+    form_class = PersonaForm
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_empleados')
+
 

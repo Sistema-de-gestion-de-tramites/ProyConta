@@ -195,7 +195,7 @@ def crear_Estado(request):
 
 def listar_Estados(request):
     lista = Estados.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista})
+    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_estado', 'borrar_url':'eliminar_estado'})
 
 class editar_Estado(UpdateView):
     model = Estados
@@ -222,7 +222,7 @@ def crear_Comentario(request):
 
 def listar_Comentarios(request):
     lista = Comentarios.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista})
+    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_comentario', 'borrar_url':'eliminar_comentario'})
 
 class editar_Comentario(UpdateView):
     model = Comentarios
@@ -249,7 +249,7 @@ def crear_Tipo_Archivo(request):
 
 def listar_Tipo_Archivos(request):
     lista = Tipo_Archivos.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista})
+    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_tipo_archivo', 'borrar_url':'eliminar_tipo_archivo'})
 
 class editar_Tipo_Archivo(UpdateView):
     model = Tipo_Archivos
@@ -276,7 +276,7 @@ def crear_Rol(request):
 
 def listar_Roles(request):
     lista = Rol.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista})
+    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_rol', 'borrar_url':'eliminar_rol'})
 
 class editar_Rol(UpdateView):
     model = Rol
@@ -310,7 +310,7 @@ def publicarTipoDocumento(request):
 
 def listar_tipoDocumento(request):
     lista = Tipo_Documentos.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista})
+    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_tipo_documento', 'borrar_url':'eliminar_documento'})
 
 class editar_TipoDocumento(UpdateView):
     model = Tipo_Documentos
