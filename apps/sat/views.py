@@ -39,7 +39,46 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 def index(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'base.html') #{DEVUELVE EL HTML (REQUEST)}
+    return render(request,'inicio.html') #{DEVUELVE EL HTML (REQUEST)}
+
+def inicio(request):  # {METODO REQUEST DE HTTP}
+    if request.user.is_authenticated:  # valida si existe una sesion activa
+        print(request.user.username)
+    return render(request, 'inicio.html')  # {DEVUELVE EL HTML (REQUEST)}
+def roles(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'roles.html') #{DEVUELVE EL HTML (REQUEST)}
+def tramites(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'tramites.html') #{DEVUELVE EL HTML (REQUEST)}
+def documentos(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'documentos.html') #{DEVUELVE EL HTML (REQUEST)}
+def archivos(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'archivos.html') #{DEVUELVE EL HTML (REQUEST)}
+def directorio(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'directorio.html') #{DEVUELVE EL HTML (REQUEST)}
+def tramites(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'tramites.html') #{DEVUELVE EL HTML (REQUEST)}
+def clientes(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'clientes.html') #{DEVUELVE EL HTML (REQUEST)}
+def empleados(request): #{METODO REQUEST DE HTTP}
+    if request.user.is_authenticated: #valida si existe una sesion activa
+        print(request.user.username)
+    return render(request,'empleados.html') #{DEVUELVE EL HTML (REQUEST)}
+
+
 #{----------------------------------------------------------------------------------------}
 # DESCRIPCION: Devuelve el id del empleado que ha iniciado sesion (no se valida que exista una sesion activa)
 def id_emp_sesion(request):
