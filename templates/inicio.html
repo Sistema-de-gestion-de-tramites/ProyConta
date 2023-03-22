@@ -1,0 +1,25 @@
+{% extends 'base/index.html' %}
+{% load static %}
+
+{% block title %}
+<img src="{% static 'img/nav-color/icons8-home-page-100.png' %}" height="40px">
+Inicio
+{% endblock%}
+
+{% block cuerpo %}
+    <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Bienvenido</h1>
+          <p class="lead text-muted">
+            texto
+          <p>
+          <a href="#" class="btn btn-primary my-2">Opción 1</a>
+          <a href="#" class="btn btn-secondary my-2">Opción 2</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+{% endblock%}

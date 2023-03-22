@@ -1,0 +1,22 @@
+{% extends 'base/index.html' %}
+{% load static %}
+
+{% block title %}
+<img src="{% static 'img/nav-color/icons8-client-management-100.png' %}" height="40px">
+Clientes
+{% endblock%}
+
+{% block cuerpo %}
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link disabled link-secondary">Información</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled link-secondary" href="">Lista</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled link-secondary" href="">Crear</a>
+  </li>
+
+</ul>
+{% endblock%}

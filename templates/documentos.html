@@ -1,0 +1,22 @@
+{% extends 'base/index.html' %}
+{% load static %}
+
+{% block title %}
+<img src="{% static 'img/nav-color/icons8-documents-100.png' %}" height="40px">
+Documentos
+{% endblock%}
+
+{% block cuerpo %}
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link disabled link-secondary">Información</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link link-secondary" href="{% url 'listar_tipo_documento' %}">Lista</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link link-secondary" href="{% url 'crear_tipo_documento' %}">Crear</a>
+  </li>
+
+</ul>
+{% endblock%}

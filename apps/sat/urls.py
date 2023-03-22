@@ -18,6 +18,14 @@ from . import views #{IMPORTAR LAS CLASE DE VIEW DE LA APP SAT}
 
 urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('', views.index, name='index'), #{DESPLIEGUE DE INDEX.HTML (HOME PAGE)}
+    path('inicio', views.inicio, name='inicio'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
+    path('roles', views.roles, name='roles'), #{DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
+    path('tramites', views.tramites, name='tramites'), #{DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
+    path('documentos', views.documentos, name='documentos'), #{DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
+    path('archivos', views.archivos, name='archivos'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
+    path('directorio', views.directorio, name='directorio'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
+    path('clientes', views.clientes, name='clientes'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
+    path('empleados', views.empleados, name='empleados'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
 
     #path('tareas/crear_tarea/', views.Tarea_Create.as_view(), name="crear_tarea"),
     #path('tareas/lista_tareas/', views.Tarea_Listar.as_view(), name="lista_tareas"),

@@ -1,0 +1,22 @@
+{% extends 'base/index.html' %}
+{% load static %}
+
+{% block title %}
+<img src="{% static 'img/nav-color/icons8-product-documents-100.png' %}" height="40px">
+Trámites
+{% endblock%}
+
+{% block cuerpo %}
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link link-secondary disabled">Información</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link link-secondary" href="{% url 'listar_tramites' %}">Lista</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link link-secondary" href="{% url 'crear_tramite' %}">Crear</a>
+  </li>
+
+</ul>
+{% endblock%}
