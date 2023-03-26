@@ -12,13 +12,13 @@ ____________________________________________________________________________
 ----------------------------------------------------------------------------
 """
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import *
 
-from .forms import PersonaForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
+from .forms import PersonaForm, TelefonosForm #{IMPORTA LOS METODOS DE LA CLASE FORM}
 from django.forms.models import model_to_dict
-from apps.clientes.models import Personas
+from apps.clientes.models import Personas, Telefonos, Direcciones
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 def id_emp_sesion(request):
@@ -40,14 +40,11 @@ class Crear_Persona(CreateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_personas')
 
-class Listar_Personas(ListView):
-    queryset = Personas.objects.all()
-    template_name = 'plantilla_lista.html'
-
+# Listar solo los clientes
 class Listar_Clientes(ListView):
     queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')
     template_name = 'plantilla_lista.html'
-    extra_context={'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente'}
+    extra_context={'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente', 'telefono_url':'listar_telefonos'}
 
 class Cliente_Delete(DeleteView):
     model = Personas    # Especificar a solo los empleados con el rol != 0
@@ -60,11 +57,48 @@ class Cliente_Update(UpdateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_clientes')
 
-class registrar_telefono(CreateView):
-    model = Personas
-    form_class = PersonaForm
-    template_name = 'formulario.html'
-    success_url = reverse_lazy('listar_telefonos')
+def Registrar_Telefono(request, per_id):
+    persona = get_object_or_404(Personas, pk = per_id)
+    if request.method == 'POST':
+        form = TelefonosForm(request.POST)
+        if form.is_valid():
+            tel = form.save(commit = False)
+            tel.persona_id = persona.pk
+            tel.save()
+            return redirect('listar_telefonos', per_id=per_id)
+    else:
+        contexto = {'form': TelefonosForm(initial={'persona' : persona})}
+        return render(request, 'formulario.html', contexto)
+
+# Directorio
+def Directorio(request):
+    lista = Telefonos.objects.all()
+    print(lista[0].get_fields_and_values())
+    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'actualizar_telefono'})
+
+
+def listar_telefonos(request, per_id):
+    persona = get_object_or_404(Personas, pk=per_id)
+    lista = Telefonos.objects.filter(persona_id=persona)
+    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'actualizar_telefono', 'borrar_url': 'eliminar_telefono', 'crear_url': 'registrar_telefono', 'valor_fk': per_id})
+
+def eliminar_Telefono(request, pk):
+    registro = get_object_or_404(Telefonos, id=pk)
+    per_id = registro.persona_id
+    registro.delete()
+    return redirect('listar_telefonos', per_id=per_id)
+
+def editar_Telefono(request, pk):
+    modelo = get_object_or_404(Telefonos, pk=pk)
+    if request.method == 'POST':
+        formulario = TelefonosForm(request.POST, instance=modelo)
+        if formulario.is_valid():
+            modelo = formulario.save(commit=False)
+            modelo.save()
+            return redirect('listar_telefonos', per_id=modelo.persona_id)
+    else:
+        formulario = TelefonosForm(instance=modelo, initial={'persona' : modelo.persona_id})
+    return render(request, 'formulario.html', {'form': formulario})
 
 
 """

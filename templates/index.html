@@ -2,14 +2,6 @@
 {% load static %}
 {% block cuerpo %}
 <p>
-    <a href="{% url 'crear_tramite' %}">crear tramite</a>
-</p><br><br>
-<p>
-    <a href="{% url 'listar_tramites' %}">lista de tramites</a>
-</p><br><br>
-
-
-<p>
     <a href="{% url 'crear_estado' %}">Crear Estado</a>
 </p>
 <p>
@@ -47,5 +39,11 @@
     <a href="{% url 'listar_clientes' %}">Lista clientes</a><br>
     <a href="{% url 'listar_empleados' %}">Lista empleados</a><br>
 </p><br>
+
+<p>
+    <a href="{% url 'directorio' %}">Directorio</a>
+</p>
+
+
 
 {% endblock%}

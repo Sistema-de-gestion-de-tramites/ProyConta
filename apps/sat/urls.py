@@ -32,10 +32,6 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     #path('tareas/actualizar_tarea/<pk>', views.Tarea_Update.as_view(), name="actualizar_tarea"),
     #path('tareas/eliminar_tarea/<pk>', views.Tarea_Delete.as_view(), name="eliminar_tarea"),
 
-    path('crear-tramite', views.crearTipoTramite, name = 'crear_tramite'),
-    path('lista-tramites', views.listarTipoDeTramites, name = 'listar_tramites'),
-    path('editar-tramite/<pk>',views.editar_tipoTramite.as_view(),name='editar_tramite'),
-    path('eliminar-tipoTramite/<pk>', views.eliminar_TipoTramite, name="eliminar_tipoTramite"),
     # URL del modelo Estado
     path('crear-estado', views.crear_Estado, name="crear_estado"),
     path('editar-estado/<pk>', views.editar_Estado.as_view(), name="editar_estado"),

@@ -9,14 +9,14 @@
 {% if object_list %}
     {% for obj in object_list %}
         {% for key, val in obj.get_fields_and_values %}
-            {{ key}}: {{ val }}<br>
+            {% if key != 'ID' %}{{ key }}: {{ val }}<br>{% endif %}
         {% empty %}
             <h1>No hay campos</h1>
         {% endfor %}
-        {% if actualizar_url and borrar_url %}
-            <a href="{% url actualizar_url obj.id %}">Editar</a>
-            <a href="{% url borrar_url obj.id %}">Eliminar</a>
-        {% endif %}
+        {% if actualizar_url %} <a href="{% url actualizar_url obj.id %}">Editar</a> {% endif %}
+        {% if borrar_url %} <a href="{% url borrar_url obj.id %}">Eliminar</a> {% endif %}
+        {% if telefono_url %} <a href="{% url telefono_url obj.id %}">Telefono(s)</a> {% endif %}
+
     <br><br>
     {% empty %}
         <h1>No hay registros</h1>
@@ -24,5 +24,11 @@
 {% else %}
     <h1>No hay Registros</h1>
 {% endif %}
+
+{% if crear_url and valor_fk %}
+    <a href="{% url crear_url valor_fk %}">Nuevo registro</a>
+{% elif crear_url %}
+    <a href="{% url crear_url %}">Nuevo registro</a> {% endif %}
+
 {% endblock %}
 
