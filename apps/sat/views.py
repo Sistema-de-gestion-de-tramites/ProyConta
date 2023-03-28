@@ -15,8 +15,7 @@ from distutils import extension
 from email.policy import default
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
-from .models import Tipo_Archivos, Tipo_Documentos, Tipo_Tramites, Estados, Rel_Tram_Doc, Rel_Tram_Rol, Rol, \
-    Comentarios, Personas
+from .models import Tipo_Archivos, Tipo_Documentos, Estados, Rol, Comentarios, Personas
 
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
@@ -49,11 +48,11 @@ def roles(request): #{METODO REQUEST DE HTTP}
         print(request.user.username)
     contexto = {'titulo': 'roles'}
     return render(request,'menu.html',contexto) #{DEVUELVE EL HTML (REQUEST)}
-def tramites(request): #{METODO REQUEST DE HTTP}
-    if request.user.is_authenticated: #valida si existe una sesion activa
-        print(request.user.username)
-    contexto = {'titulo': 'tramites'}
-    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
+#def tramites(request): #{METODO REQUEST DE HTTP}
+#    if request.user.is_authenticated: #valida si existe una sesion activa
+#        print(request.user.username)
+#    contexto = {'titulo': 'tramites'}
+#    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def documentos(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
@@ -145,89 +144,6 @@ class Tarea_Delete(DeleteView):
 """
 
 #{----------------------------------------------------------------------------------------}
-def publicarRelacionTramiteDocumento(modeloTipoTramite, listaIdDocumento):
-    for documentoId in listaIdDocumento:
-        modeloTipoDocumento = Tipo_Documentos.objects.get(id=documentoId)
-        nuevaRelacionTramiteDocumento = Rel_Tram_Doc(
-            tramite=modeloTipoTramite,
-            documento=modeloTipoDocumento
-        )
-        nuevaRelacionTramiteDocumento.save()
-
-def publicarRelacionTramiteRol(modeloTipoTramite, listaIdRoles):
-    for rolId in listaIdRoles:
-        modeloRol = Rol.objects.get(id=rolId)
-        nuevaRelacionTramiteRol = Rel_Tram_Rol(
-            tramite=modeloTipoTramite,
-            rol=modeloRol
-        )
-        nuevaRelacionTramiteRol.save()
-
-def publicarTipoTramite(request):
-    nuevoTipoTramite = Tipo_Tramites(
-        nombre=request.POST['nombre'],
-        tiempo_estimado=request.POST['tiempo_estimado'],
-        habilitado=True if request.POST['habilitado'] == "on" else False
-    )
-    nuevoTipoTramite.save()
-
-    listaIdDeRoles = request.POST.getlist('rolesPermitidos', default=['emptyList'])
-    publicarRelacionTramiteRol(nuevoTipoTramite, listaIdDeRoles)
-    listaIdDeDocumentos = request.POST.getlist('requerimientos', default=['emptyList'])
-    publicarRelacionTramiteDocumento(nuevoTipoTramite, listaIdDeDocumentos)
-
-def crearTipoTramite(request):
-    if request.method == 'GET':
-        contexto = {'titulo' : 'tramites','form': FormularioTramite}
-        return render(request, 'formulario.html', contexto)
-    else:
-        publicarTipoTramite(request)
-        return render(request, 'index.html')
-
-def listarTipoDeTramites(request):
-    if request.method == 'GET':
-        contexto = {'titulo':'tramites',
-                    'listaTipoDeTramites': Tipo_Tramites.objects.all(),
-                    'listaRelacionTramiteRol': Rel_Tram_Rol.objects.all(),
-                    'listaRelacionTramiteDocumentos': Rel_Tram_Doc.objects.all()}
-        return render(request, 'lista-tipo-de-tramite.html', contexto)
-
-def eliminarRelacionTramiteRol(modeloTramite):
-    relaciones = Rel_Tram_Rol.objects.filter(tramite=modeloTramite)
-    for relacion in relaciones:
-        relacion.delete()
-
-def eliminarRelacionTramiteDocumento(modeloTramite):
-    relaciones = Rel_Tram_Doc.objects.filter(tramite=modeloTramite)
-    for relacion in relaciones:
-        relacion.delete()
-
-class editar_tipoTramite(UpdateView):
-    model = Tipo_Tramites
-    form_class = FormularioTramite
-    template_name = 'formulario.html'
-    success_url = reverse_lazy('listar_tramites')
-
-    def post(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-
-        eliminarRelacionTramiteRol(self.object)
-        listaIdDeRoles = request.POST.getlist('rolesPermitidos', default=['emptyList'])
-        publicarRelacionTramiteRol(self.object, listaIdDeRoles)
-
-        eliminarRelacionTramiteDocumento(self.object)
-        listaIdDeDocumentos = request.POST.getlist('requerimientos', default=['emptyList'])
-        publicarRelacionTramiteDocumento(self.object, listaIdDeDocumentos)
-
-        return super(editar_tipoTramite, self).post(request, **kwargs)
-
-def eliminar_TipoTramite(request, pk):
-    registro = get_object_or_404(Tipo_Tramites, id=pk)
-    registro.delete()
-    return redirect('listar_tramites')
-
-# Create your views here.
-# R: nel
 
 # Vistas de los Estados
 def crear_Estado(request):
@@ -371,3 +287,23 @@ def eliminar_tipoDocumento(request, pk):
     registro = get_object_or_404(Tipo_Documentos, id=pk)
     registro.delete()
     return redirect('listar_tipo_documento')
+
+
+# Buscador
+def buscar(request):
+    busqueda = request.GET.get('q')
+
+    titulo_1 = 'Documentos'
+    lista_1 = Tipo_Documentos.objects.all()
+    titulo_2 = 'Usuarios'
+    lista_2 = Personas.objects.all()
+
+    if busqueda:
+        lista_1 = Tipo_Documentos.objects.filter(nombre__icontains=busqueda)
+        lista_2 = Personas.objects.filter(nombre__icontains=busqueda)
+
+    contexto = [{'object_list': lista_1, 'titulo': titulo_1},
+                {'object_list': lista_2, 'titulo': titulo_2},
+                ]
+
+    return render(request, 'buscador.html', {'contexto': contexto})

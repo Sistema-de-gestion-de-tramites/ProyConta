@@ -18,6 +18,7 @@
             <div class="ms-2 me-auto">
 
                 {% for key, val in obj.get_fields_and_values %}
+                    {% if key != 'ID' %}
                     <span class="d-block ">
                         <div class="d-inline  ">
                             <strong>{{ key}}:</strong>
@@ -26,24 +27,27 @@
                             {{ val }}
                         </div>
                     </span>
+                    {% endif %}
                 {% empty %}
                     <strong>No hay campos</strong>
                 {% endfor %}
 
             </div>
-        {% if actualizar_url and borrar_url %}
             <p class="pb-3 mb-0 small lh-sm ">
+        {% if actualizar_url  %}
             <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
                 <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
                 Editar
             </a>
+        {% endif %}
+        {% if borrar_url %}
              <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.id %}">
                 <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
                 Eliminar
             </a>
-            </p>
         {% endif %}
-
+        {% if telefono_url %} <a href="{% url telefono_url obj.id %}">Telefono(s)</a> {% endif %}
+            </p>
     <br><br>
     {% empty %}
          <div class="pt-3">
@@ -64,5 +68,11 @@
         </div>
     </div>
 {% endif %}
+
+{% if crear_url and valor_fk %}
+    <a href="{% url crear_url valor_fk %}">Nuevo registro</a>
+{% elif crear_url %}
+    <a href="{% url crear_url %}">Nuevo registro</a> {% endif %}
+
 {% endblock %}
 

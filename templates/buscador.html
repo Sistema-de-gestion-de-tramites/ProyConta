@@ -1,0 +1,21 @@
+{% extends 'base/index.html' %}
+{% load static %}
+
+{% block cuerpo %}
+
+{% if contexto.0.object_list %}
+    {% for lista in contexto %}
+        {% if lista.object_list %}
+            {% if lista.titulo %} <h2>{{ lista.titulo }}</h2>{% endif %}
+            {% for val in lista.object_list %}
+                <p>{{ val.nombre_principal }}</p>
+            {% empty %}
+                <p>Sin registros</p>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <p>Sin resultados</p>
+{% endif %}
+
+{% endblock%}
