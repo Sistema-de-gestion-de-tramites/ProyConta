@@ -33,11 +33,6 @@ INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Acta','4');
 INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Firma digital','4');
 INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Constancia','4');
 
--- Tipo de tramite
-INSERT INTO `tipo_tramites`(`nombre`, `tiempo_estimado`, `habilitado`) VALUES ('Alta en el SAT','10',1);
-INSERT INTO `tipo_tramites`(`nombre`, `tiempo_estimado`, `habilitado`) VALUES ('Pago de impuestos','180',1);
-INSERT INTO `tipo_tramites`(`nombre`, `tiempo_estimado`, `habilitado`) VALUES ('Deeclaracion anual','180',1);
-
 -- Roles
 INSERT INTO `rol`(`Rol`) VALUES ('Empleado');
 INSERT INTO `rol`(`Rol`) VALUES ('Gerente');
