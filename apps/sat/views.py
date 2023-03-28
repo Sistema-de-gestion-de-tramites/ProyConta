@@ -15,8 +15,7 @@ from distutils import extension
 from email.policy import default
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
-from .models import Tipo_Archivos, Tipo_Documentos, Tipo_Tramites, Estados, Rel_Tram_Doc, Rel_Tram_Rol, Rol, \
-    Comentarios, Personas
+from .models import Tipo_Archivos, Tipo_Documentos, Estados, Rol, Comentarios, Personas
 
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
@@ -49,11 +48,6 @@ def roles(request): #{METODO REQUEST DE HTTP}
         print(request.user.username)
     contexto = {'titulo': 'roles'}
     return render(request,'menu.html',contexto) #{DEVUELVE EL HTML (REQUEST)}
-def tramites(request): #{METODO REQUEST DE HTTP}
-    if request.user.is_authenticated: #valida si existe una sesion activa
-        print(request.user.username)
-    contexto = {'titulo': 'tramites'}
-    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def documentos(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
@@ -140,6 +134,7 @@ class Tarea_Delete(DeleteView):
 """
 
 #{----------------------------------------------------------------------------------------}
+
 # Vistas de los Estados
 def crear_Estado(request):
     if request.method == 'GET':
@@ -282,3 +277,23 @@ def eliminar_tipoDocumento(request, pk):
     registro = get_object_or_404(Tipo_Documentos, id=pk)
     registro.delete()
     return redirect('listar_tipo_documento')
+
+
+# Buscador
+def buscar(request):
+    busqueda = request.GET.get('q')
+
+    titulo_1 = 'Documentos'
+    lista_1 = Tipo_Documentos.objects.all()
+    titulo_2 = 'Usuarios'
+    lista_2 = Personas.objects.all()
+
+    if busqueda:
+        lista_1 = Tipo_Documentos.objects.filter(nombre__icontains=busqueda)
+        lista_2 = Personas.objects.filter(nombre__icontains=busqueda)
+
+    contexto = [{'object_list': lista_1, 'titulo': titulo_1},
+                {'object_list': lista_2, 'titulo': titulo_2},
+                ]
+
+    return render(request, 'buscador.html', {'contexto': contexto})

@@ -6,7 +6,7 @@ import datetime
 
 from django import forms
 from .templatetags.poll_extras import get_verbose_name
-from .models import Tipo_Tramites, Rol, Tipo_Documentos, Estados, Comentarios, Tipo_Archivos
+from .models import Rol, Tipo_Documentos, Estados, Comentarios, Tipo_Archivos
 #Formulario Persona
 """
 #{--------------------------------------------------------------------------------}
@@ -68,22 +68,6 @@ class TareaForm(forms.ModelForm):
 """
 
 #{--------------------------------------------------------------------------------}
-
-class FormularioTramite(forms.ModelForm):
-    opcionesRoles = [(choice.pk, choice.Rol) for choice in Rol.objects.all()]
-    rolesPermitidos = forms.MultipleChoiceField(label="Roles con permisos", required=True, choices=opcionesRoles,
-                                                widget=forms.CheckboxSelectMultiple)
-    opcionesDocumentos = [(choice.pk, choice.nombre) for choice in Tipo_Documentos.objects.all()]
-    requerimientos = forms.MultipleChoiceField(label="Documentos requeridos para tramite", required=True,
-                                               choices=opcionesDocumentos, widget=forms.CheckboxSelectMultiple)
-
-    class Meta:
-        model = Tipo_Tramites
-
-        fields = [
-            'nombre', 'tiempo_estimado', 'habilitado'
-        ]
-
 
 class Formulario_Estado(forms.ModelForm):
     nombre = forms.CharField(required=True, label=get_verbose_name(Estados, 'nombre'))

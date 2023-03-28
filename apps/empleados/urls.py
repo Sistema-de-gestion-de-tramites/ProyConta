@@ -21,5 +21,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('empleados/actualizar_empleado/<pk>', views.Empleado_Update.as_view(), name="actualizar_empleado"),
     path('empleados/eliminar_empleado/<pk>', views.Empleado_Delete.as_view(), name="eliminar_empleado"),
 
+    path('lista_personas/', views.Listar_Personas.as_view(), name="listar_personas"),
+
 ]
 #{----------------------------------------------------------------------------------------------}

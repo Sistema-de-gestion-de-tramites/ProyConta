@@ -56,6 +56,8 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('listar-documentos', views.listar_tipoDocumento, name="listar_tipo_documento"),
     path('editar-tipo-documento/<pk>', views.editar_TipoDocumento.as_view(), name="editar_tipo_documento"),
     path('eliminar-documento/<pk>', views.eliminar_tipoDocumento, name="eliminar_documento"),
+
+    path('busqueda/', views.buscar, name="busqueda"),
 ]
 #{----------------------------------------------------------------------------------------------}
 # , 'actualizar_url': '', 'borrar_url':''})
