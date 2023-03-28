@@ -277,3 +277,23 @@ def eliminar_tipoDocumento(request, pk):
     registro = get_object_or_404(Tipo_Documentos, id=pk)
     registro.delete()
     return redirect('listar_tipo_documento')
+
+
+# Buscador
+def buscar(request):
+    busqueda = request.GET.get('q')
+
+    titulo_1 = 'Documentos'
+    lista_1 = Tipo_Documentos.objects.all()
+    titulo_2 = 'Usuarios'
+    lista_2 = Personas.objects.all()
+
+    if busqueda:
+        lista_1 = Tipo_Documentos.objects.filter(nombre__icontains=busqueda)
+        lista_2 = Personas.objects.filter(nombre__icontains=busqueda)
+
+    contexto = [{'object_list': lista_1, 'titulo': titulo_1},
+                {'object_list': lista_2, 'titulo': titulo_2},
+                ]
+
+    return render(request, 'buscador.html', {'contexto': contexto})

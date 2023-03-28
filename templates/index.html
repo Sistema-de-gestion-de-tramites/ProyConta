@@ -1,6 +1,10 @@
 {% extends 'base/index.html' %}
 {% load static %}
 {% block cuerpo %}
+<form action="{% url 'busqueda' %}" method="GET">
+    <input type="text" name="q" placeholder="Buscar">
+    <button type="submit">Buscar</button>
+</form>
 <p>
     <a href="{% url 'crear_estado' %}">Crear Estado</a>
 </p>

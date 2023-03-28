@@ -73,9 +73,7 @@ def Registrar_Telefono(request, per_id):
 # Directorio
 def Directorio(request):
     lista = Telefonos.objects.all()
-    print(lista[0].get_fields_and_values())
     return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'actualizar_telefono'})
-
 
 def listar_telefonos(request, per_id):
     persona = get_object_or_404(Personas, pk=per_id)
