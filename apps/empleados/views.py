@@ -32,12 +32,6 @@ def id_emp_sesion(request):
 
 #{----------------------------------------------------------------------------------------}
 
-# Listar todos los registros
-class Listar_Personas(ListView):
-    queryset = Personas.objects.all()
-    template_name = 'plantilla_lista.html'
-
-# Listar solo los empleados
 class Listar_Empleados(ListView):
     queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` = 1 ')
     template_name = 'plantilla_lista.html'

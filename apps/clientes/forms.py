@@ -43,7 +43,6 @@ class PersonaForm(forms.ModelForm):
 
 
 class TelefonosForm(forms.ModelForm):
-    persona = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
 
     class Meta:
         model = Telefonos

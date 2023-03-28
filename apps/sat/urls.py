@@ -20,7 +20,6 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('', views.index, name='index'), #{DESPLIEGUE DE INDEX.HTML (HOME PAGE)}
     path('inicio', views.inicio, name='inicio'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
     path('roles', views.roles, name='roles'), #{DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
-    #path('tramites', views.tramites, name='tramites'), #{DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
     path('documentos', views.documentos, name='documentos'), #{DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
     path('archivos', views.archivos, name='archivos'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
     path('directorio', views.directorio, name='directorio'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
@@ -57,8 +56,6 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('listar-documentos', views.listar_tipoDocumento, name="listar_tipo_documento"),
     path('editar-tipo-documento/<pk>', views.editar_TipoDocumento.as_view(), name="editar_tipo_documento"),
     path('eliminar-documento/<pk>', views.eliminar_tipoDocumento, name="eliminar_documento"),
-
-    path('busqueda/', views.buscar, name="busqueda"),
 ]
 #{----------------------------------------------------------------------------------------------}
 # , 'actualizar_url': '', 'borrar_url':''})

@@ -1,10 +1,8 @@
 {% extends 'base/index.html' %}
 {% load static %}
 {% block cuerpo %}
-<form action="{% url 'busqueda' %}" method="GET">
-    <input type="text" name="q" placeholder="Buscar">
-    <button type="submit">Buscar</button>
-</form>
+
+
 <p>
     <a href="{% url 'crear_estado' %}">Crear Estado</a>
 </p>
@@ -43,11 +41,5 @@
     <a href="{% url 'listar_clientes' %}">Lista clientes</a><br>
     <a href="{% url 'listar_empleados' %}">Lista empleados</a><br>
 </p><br>
-
-<p>
-    <a href="{% url 'directorio' %}">Directorio</a>
-</p>
-
-
 
 {% endblock%}
