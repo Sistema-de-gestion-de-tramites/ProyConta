@@ -1,0 +1,184 @@
+{% extends 'base/index.html' %}
+{% load static %}
+
+{% block title %}
+
+  {% if titulo == 'inicio' %}
+    <img src="{% static 'img/nav-color/icons8-home-page-100.png' %}" height="40px">
+    Inicio
+  {% endif %}
+
+  {% if titulo == 'roles' %}
+    <img src="{% static 'img/nav-color/icons8-security-lock-100.png' %}" height="40px" >
+    Roles
+
+  {% endif %}
+
+  {% if titulo == 'tramites' %}
+    <img src="{% static 'img/nav-color/icons8-product-documents-100.png' %}" height="40px">
+    Trámites
+  {% endif %}
+
+  {% if titulo == 'documentos' %}
+    <img src="{% static 'img/nav-color/icons8-documents-100.png' %}" height="40px">
+    Documentos
+  {% endif %}
+
+  {% if titulo == 'archivos' %}
+    <img src="{% static 'img/nav-color/icons8-file-100.png' %}" height="40px">
+    Archivos
+  {% endif %}
+
+   {% if titulo == 'directorio' %}
+    <img src="{% static 'img/nav-color/icons8-address-book-100.png' %}" height="40px">
+    Directorio
+   {% endif %}
+
+   {% if titulo == 'clientes' %}
+    <img src="{% static 'img/nav-color/icons8-client-management-100.png' %}" height="40px">
+    Clientes
+   {% endif %}
+
+   {% if titulo == 'empleados' %}
+    <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="40px">
+    Empleados
+   {% endif %}
+
+{% endblock%}
+
+{% block cuerpo %}
+   {% if titulo == 'inicio' %}
+       <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+          <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Bienvenido</h1>
+              <p class="lead text-muted">
+                texto
+              <p>
+              <a href="#" class="btn btn-primary my-2">Opción 1</a>
+              <a href="#" class="btn btn-secondary my-2">Opción 2</a>
+            </p>
+          </div>
+        </div>
+      </section>
+  {% endif %}
+  {% if titulo == 'roles' %}
+    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+      <li class="nav-item ">
+        <a class="nav-link link-secondary" href="{% url 'listar_roles' %}">Lista</a>
+      </li>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
+        <div class="btn-toolbar mb-2 mb-md-0 ">
+          <div class="btn-group me-2 ">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill " href="{% url 'crear_rol' %}">
+                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Crear
+            </a>
+          </div>
+        </div>
+        </div>
+    </ul>
+  {% endif %}
+
+  {% if titulo == 'tramites' %}
+    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+      <li class="nav-item ">
+        <a class="nav-link link-secondary" href="{% url 'listar_tramites' %}">Lista</a>
+      </li>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
+        <div class="btn-toolbar mb-2 mb-md-0 ">
+          <div class="btn-group me-2 ">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill " href="{% url 'crear_tramite' %}">
+                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Crear
+            </a>
+          </div>
+        </div>
+        </div>
+    </ul>
+
+  {% endif %}
+
+  {% if titulo == 'documentos' %}
+    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+      <li class="nav-item ">
+        <a class="nav-link link-secondary" href="{% url 'listar_tipo_documento' %}">Lista</a>
+      </li>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
+        <div class="btn-toolbar mb-2 mb-md-0 ">
+          <div class="btn-group me-2 ">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill " href="{% url 'crear_tipo_documento' %}">
+                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Crear
+            </a>
+          </div>
+        </div>
+        </div>
+    </ul>
+
+  {% endif %}
+
+  {% if titulo == 'archivos' %}
+    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+      <li class="nav-item ">
+        <a class="nav-link link-secondary" href="{% url 'listar_tipo_archivos' %}">Lista</a>
+      </li>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
+        <div class="btn-toolbar mb-2 mb-md-0 ">
+          <div class="btn-group me-2 ">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill "  href="{% url 'crear_tipo_archivo' %}">
+                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Crear
+            </a>
+          </div>
+        </div>
+        </div>
+    </ul>
+
+    {% endif %}
+
+   {% if titulo == 'directorio' %}
+
+   {% endif %}
+
+   {% if titulo == 'clientes' %}
+    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+      <li class="nav-item ">
+        <a class="nav-link link-secondary" >Lista</a>
+      </li>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
+        <div class="btn-toolbar mb-2 mb-md-0 ">
+          <div class="btn-group me-2 ">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill" href="{% url 'registrar_persona' %}">
+                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Crear
+            </a>
+          </div>
+        </div>
+        </div>
+    </ul>
+
+   {% endif %}
+
+   {% if titulo == 'empleados' %}
+    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+      <li class="nav-item ">
+        <a class="nav-link link-secondary" >Lista</a>
+      </li>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
+        <div class="btn-toolbar mb-2 mb-md-0 ">
+          <div class="btn-group me-2 ">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill" href="{% url 'registrar_persona' %}">
+                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Crear
+            </a>
+          </div>
+        </div>
+        </div>
+    </ul>
+   {% endif %}
+    {% block contenido %}
+    {% endblock %}
+{% endblock%}
+
+

@@ -1,4 +1,4 @@
-{% extends 'base/index.html' %}
+{% extends 'menu.html' %}
 {% load static %}
 {% load poll_extras %}
 
@@ -9,44 +9,71 @@
     </style>
 {% endblock  %}
 
-{% block cuerpo %}
-{% for tipoTramite in listaTipoDeTramites %}
-
+{% block contenido %}
 <br>
-<button type="button" id='botonNombre'><h5>{% get_verbose_name tipoTramite 'nombre' %}: {{tipoTramite.nombre}}</h5></button>
-<br>
-<a href="{% url 'editar_tramite' tipoTramite.id %}">Editar</a>
-<a href="{% url 'eliminar_tipoTramite' tipoTramite.id %}">Eliminar</a>
-<div id='informacion-tramite'>
-<h6>tiempo estimado en dias: {{tipoTramite.tiempo_estimado}}</h6>
-<h6>estado: {{tipoTramite.habilitado}}</h6>
+<div class="container">
+  <div class="row row-cols-2 row-eq-height">
+    {% for tipoTramite in listaTipoDeTramites %}
+    <div class="col mb-3" style="height: 300px;">
+          <div class=" list-group rounded-5 h-100 " style="background-color: #e2e3e5; " >
+          <div class="list-group-item rounded-top-5 text-dark h-20" aria-current="true" style="background-color: #e2e3e5;">
+            <div class="d-flex w-100 justify-content-between px-2">
+               <h5 class="fw-semibold ">{{tipoTramite.nombre}}</h5>
+              <small>
+                  {% if tipoTramite.habilitado == True %}
+                        <span class="badge rounded-pill text-bg-success">Activo</span>
+                    {% endif %}
+                    {% if tipoTramite.habilitado == False %}
+                        <span class="badge rounded-pill text-bg-danger">Inactivo</span>
+                    {% endif %}
+              </small>
+            </div>
+          </div>
+            <div class="h-60 overflow-scroll">
+          <div  class="list-group-item">
+            Tiempo:
+            <small class="text-body-secondary">{{tipoTramite.tiempo_estimado}} dias</small>
+          </div>
+                
+          <div class="list-group-item">
+            <p class="mb-1">Roles</p>
+            <small class="text-body-secondary">
+                {% for relacionTramiteRol in listaRelacionTramiteRol %}
+                    {% if relacionTramiteRol.tramite == tipoTramite %}
+                        <li>{{relacionTramiteRol.rol.Rol}}</li>
+                    {% endif %}
+                {% endfor %}
+            </small>
+          </div>
+          <div class="list-group-item">
+            <p class="mb-1">Documentos</p>
+            <small class="text-body-secondary">
+                {% for relacionTramiteDocumento in listaRelacionTramiteDocumentos %}
+                    {% if relacionTramiteDocumento.tramite == tipoTramite %}
+                        <li>{{relacionTramiteDocumento.documento.nombre}}</li>
+                    {% endif %}
+                {% endfor %}
+            </small>
+          </div>
+         </div>
+          <div  class="list-group-item rounded-bottom-5 h-20" style="background-color: #e2e3e5;">
 
-<div>
+               <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url 'editar_tramite' tipoTramite.id %}">
+                             <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                             Editar
+                         </a>
+                        <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url 'eliminar_tipoTramite' tipoTramite.id %}">
+                            <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                            Eliminar
+                        </a>
 
-</div>
-<h6>Roles con permiso: </h6>
-<ol>
-{% for relacionTramiteRol in listaRelacionTramiteRol %}
-    {% if relacionTramiteRol.tramite == tipoTramite %}
-        <li>{{relacionTramiteRol.rol.Rol}}</li>
-    {% endif %}
-{% endfor %}
-</ol>
-</div>
-<br><br>
-</div>
-<h6>Requerimientos de tramite: </h6>
-<ol>
-{% for relacionTramiteDocumento in listaRelacionTramiteDocumentos %}
-    {% if relacionTramiteDocumento.tramite == tipoTramite %}
-        <li>{{relacionTramiteDocumento.documento.nombre}}</li>
-    {% endif %}
-{% endfor %}
-</ol>
-</div>
+          </div>
 
-<br>
-{% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+ </div>
+</div>
 {% endblock%}
 
 {% block scripts %}

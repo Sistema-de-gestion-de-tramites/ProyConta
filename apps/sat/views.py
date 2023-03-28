@@ -42,39 +42,48 @@ def index(request): #{METODO REQUEST DE HTTP}
 def inicio(request):  # {METODO REQUEST DE HTTP}
     if request.user.is_authenticated:  # valida si existe una sesion activa
         print(request.user.username)
-    return render(request, 'inicio.html')  # {DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'inicio'}
+    return render(request, 'menu.html', contexto)  # {DEVUELVE EL HTML (REQUEST)}
 def roles(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'roles.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'roles'}
+    return render(request,'menu.html',contexto) #{DEVUELVE EL HTML (REQUEST)}
 def tramites(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'tramites.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'tramites'}
+    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def documentos(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'documentos.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'documentos'}
+    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def archivos(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'archivos.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'archivos'}
+    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def directorio(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'directorio.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'directorio'}
+    return render(request, 'directorio.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def tramites(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'tramites.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'tramites'}
+    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def clientes(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'clientes.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'clientes'}
+    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def empleados(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    return render(request,'empleados.html') #{DEVUELVE EL HTML (REQUEST)}
+    contexto = {'titulo': 'empleados'}
+    return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 
 #{----------------------------------------------------------------------------------------}
 # DESCRIPCION: Devuelve el id del empleado que ha iniciado sesion (no se valida que exista una sesion activa)
@@ -157,8 +166,8 @@ def publicarRelacionTramiteRol(modeloTipoTramite, listaIdRoles):
 def publicarTipoTramite(request):
     nuevoTipoTramite = Tipo_Tramites(
         nombre=request.POST['nombre'],
-        tiempo_estimado=request.POST['tiempo_estimado_dias'],
-        habilitado=request.POST['estado']
+        tiempo_estimado=request.POST['tiempo_estimado'],
+        habilitado=True if request.POST['habilitado'] == "on" else False
     )
     nuevoTipoTramite.save()
 
@@ -169,7 +178,7 @@ def publicarTipoTramite(request):
 
 def crearTipoTramite(request):
     if request.method == 'GET':
-        contexto = {'form': FormularioTramite}
+        contexto = {'titulo' : 'tramites','form': FormularioTramite}
         return render(request, 'formulario.html', contexto)
     else:
         publicarTipoTramite(request)
@@ -177,7 +186,8 @@ def crearTipoTramite(request):
 
 def listarTipoDeTramites(request):
     if request.method == 'GET':
-        contexto = {'listaTipoDeTramites': Tipo_Tramites.objects.all(),
+        contexto = {'titulo':'tramites',
+                    'listaTipoDeTramites': Tipo_Tramites.objects.all(),
                     'listaRelacionTramiteRol': Rel_Tram_Rol.objects.all(),
                     'listaRelacionTramiteDocumentos': Rel_Tram_Doc.objects.all()}
         return render(request, 'lista-tipo-de-tramite.html', contexto)
@@ -276,7 +286,7 @@ def eliminar_Comentario(request, pk):
 # Vistas de los tipo-archivo
 def crear_Tipo_Archivo(request):
     if request.method == 'GET':
-        contexto = {'form': Formulario_Tipo_Archivo}
+        contexto = {'titulo' : 'archivos','form': Formulario_Tipo_Archivo}
         return render(request, 'formulario.html', contexto)
     else:
         nuevoRegistro = Tipo_Archivos(
@@ -287,7 +297,7 @@ def crear_Tipo_Archivo(request):
 
 def listar_Tipo_Archivos(request):
     lista = Tipo_Archivos.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_tipo_archivo', 'borrar_url':'eliminar_tipo_archivo'})
+    return render(request, 'plantilla_lista.html', {'titulo': 'archivos','object_list': lista, 'actualizar_url': 'editar_tipo_archivo', 'borrar_url':'eliminar_tipo_archivo'})
 
 class editar_Tipo_Archivo(UpdateView):
     model = Tipo_Archivos
@@ -303,7 +313,8 @@ def eliminar_Tipo_Archivo(request, pk):
 # Vistas de los Roles
 def crear_Rol(request):
     if request.method == 'GET':
-        contexto = {'form': Formulario_Rol}
+        contexto = {'form': Formulario_Rol,
+                    'titulo': 'roles'}
         return render(request, 'formulario.html', contexto)
     else:
         nuevoRegistro = Rol(
@@ -314,7 +325,7 @@ def crear_Rol(request):
 
 def listar_Roles(request):
     lista = Rol.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_rol', 'borrar_url':'eliminar_rol'})
+    return render(request, 'plantilla_lista.html', {'titulo': 'roles','object_list': lista, 'actualizar_url': 'editar_rol', 'borrar_url':'eliminar_rol'})
 
 class editar_Rol(UpdateView):
     model = Rol
@@ -331,7 +342,7 @@ def eliminar_Rol(request, pk):
 
 def crearTipoDocumento(request):
     if request.method == 'GET':
-        contexto = {'form': Formulario_tipoDocumento}
+        contexto = {'titulo' : 'documentos','form': Formulario_tipoDocumento}
         return render(request, 'formulario.html', contexto)
     else:
         publicarTipoDocumento(request)
@@ -348,7 +359,7 @@ def publicarTipoDocumento(request):
 
 def listar_tipoDocumento(request):
     lista = Tipo_Documentos.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'editar_tipo_documento', 'borrar_url':'eliminar_documento'})
+    return render(request, 'plantilla_lista.html', {'titulo': 'documentos','object_list': lista, 'actualizar_url': 'editar_tipo_documento', 'borrar_url':'eliminar_documento'})
 
 class editar_TipoDocumento(UpdateView):
     model = Tipo_Documentos

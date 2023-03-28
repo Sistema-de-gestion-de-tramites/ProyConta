@@ -1,28 +1,68 @@
-{% extends 'base/base.html' %}
+{% extends 'menu.html' %}
 
 {% load static %}
 
 {% block css_add %}
 {% endblock %}
 
-{% block cuerpo %}
+{% block contenido %}
 {% if object_list %}
+
+
+    <br>
+
+    <ul class="list-group">
     {% for obj in object_list %}
-        {% for key, val in obj.get_fields_and_values %}
-            {{ key}}: {{ val }}<br>
-        {% empty %}
-            <h1>No hay campos</h1>
-        {% endfor %}
+        <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-2" style="background-color: #e2e3e5;">
+            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#808080"></rect><text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text></svg>
+            <div class="ms-2 me-auto">
+
+                {% for key, val in obj.get_fields_and_values %}
+                    <span class="d-block ">
+                        <div class="d-inline  ">
+                            <strong>{{ key}}:</strong>
+                        </div>
+                        <div class="d-inline ">
+                            {{ val }}
+                        </div>
+                    </span>
+                {% empty %}
+                    <strong>No hay campos</strong>
+                {% endfor %}
+
+            </div>
         {% if actualizar_url and borrar_url %}
-            <a href="{% url actualizar_url obj.id %}">Editar</a>
-            <a href="{% url borrar_url obj.id %}">Eliminar</a>
+            <p class="pb-3 mb-0 small lh-sm ">
+            <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
+                <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                Editar
+            </a>
+             <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.id %}">
+                <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                Eliminar
+            </a>
+            </p>
         {% endif %}
+
     <br><br>
     {% empty %}
-        <h1>No hay registros</h1>
+         <div class="pt-3">
+        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+            <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+            No hay registros
+        </div>
+        </div>
     {% endfor %}
+        </li>
+    </ul>
+
 {% else %}
-    <h1>No hay Registros</h1>
+    <div class="pt-3">
+        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+            <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+            No hay registros
+        </div>
+    </div>
 {% endif %}
 {% endblock %}
 

@@ -1,15 +1,22 @@
-{% extends 'base/index.html' %}
+{% extends 'menu.html' %}
 
-{% block cuerpo %}
-<div class="container-fluid">
-    <form method="POST">
+{% block contenido %}
+<div class="my-3 p-3 bg-body rounded-4 shadow-sm">
+    <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5">Añadir {{titulo}}</h1>
+    </div>
+    <div class="d-flex text-muted pt-3">
+        <form method="POST">
         {% csrf_token %}
 
         {{form.as_p}}
 
         <div class="d-grid gap-2 col-3 mx-auto">
-            <button type="submit" class="btn btn-primary btn-lg">Registrar</button>
+            <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
         </div>
-    </form>
-</div>
+        </form>
+    </div>
+
+  </div>
+
 {% endblock %}

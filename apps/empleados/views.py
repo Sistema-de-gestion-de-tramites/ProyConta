@@ -35,7 +35,7 @@ def id_emp_sesion(request):
 class Listar_Empleados(ListView):
     queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` = 1 ')
     template_name = 'plantilla_lista.html'
-    extra_context={'actualizar_url': 'actualizar_empleado', 'borrar_url':'eliminar_empleado'}
+    extra_context={'titulo':'empleados','actualizar_url': 'actualizar_empleado', 'borrar_url':'eliminar_empleado'}
 
 class Empleado_Delete(UpdateView):
     model = Personas

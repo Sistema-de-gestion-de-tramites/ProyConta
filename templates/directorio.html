@@ -1,11 +1,83 @@
-{% extends 'base/index.html' %}
+{% extends 'menu.html' %}
+
 {% load static %}
 
-{% block title %}
-<img src="{% static 'img/nav-color/icons8-address-book-100.png' %}" height="40px">
-Directorio
-{% endblock%}
+{% block css_add %}
+{% endblock %}
 
-{% block cuerpo %}
+{% block contenido %}
 
-{% endblock%}
+
+
+<div class=" rounded-5 pt-5 pb-5" style="background-color: #e2e3e5;">
+    <table class="table table-secondary table-striped align-middle mb-0 ">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Teléfono</th>
+      <th>Persona</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <div class="d-flex align-items-center">
+          <img src="{% static 'img/icons8-male-user-100.png' %}" alt="" style="width: 45px; height: 45px" class="rounded-circle"/>
+          <div class="ms-3">
+            <p class="fw-bold mb-1">José Gerardo Lopez Arroyo</p>
+            <p class=" mb-0">l19140285@queretaro.tecnm.mx</p>
+          </div>
+        </div>
+      </td>
+      <td>
+        <p class="fw-normal mb-1">4421234567</p>
+      </td>
+      <td>
+       <span class="badge rounded-pill text-bg-dark">Fisica</span>
+      </td>
+      <td>
+         <a type="button" class="btn btn-secondary btn-sm rounded-pill" >
+                <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                Editar
+            </a>
+             <a type="button" class="btn btn-danger btn-sm rounded-pill" >
+                <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                Eliminar
+            </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="d-flex align-items-center">
+          <img src="{% static 'img/icons8-male-user-100.png' %}" alt="" style="width: 45px; height: 45px" class="rounded-circle"/>
+          <div class="ms-3">
+            <p class="fw-bold mb-1">José Gerardo Lopez Arroyo</p>
+            <p class=" mb-0">l19140285@queretaro.tecnm.mx</p>
+          </div>
+        </div>
+      </td>
+      <td>
+        <p class="fw-normal mb-1">4421234567</p>
+      </td>
+      <td>
+       <span class="badge rounded-pill text-bg-dark">Moral</span>
+      </td>
+      <td>
+         <a type="button" class="btn btn-secondary btn-sm rounded-pill" >
+                <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                Editar
+            </a>
+             <a type="button" class="btn btn-danger btn-sm rounded-pill" >
+                <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                Eliminar
+            </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+{% endblock %}
+

@@ -38,16 +38,18 @@ class Crear_Persona(CreateView):
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
+    extra_context = {'titulo': 'clientes'}
     success_url = reverse_lazy('listar_personas')
 
 class Listar_Personas(ListView):
     queryset = Personas.objects.all()
+    extra_context = {'titulo': 'clientes'}
     template_name = 'plantilla_lista.html'
 
 class Listar_Clientes(ListView):
     queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')
     template_name = 'plantilla_lista.html'
-    extra_context={'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente'}
+    extra_context={'titulo':'clientes','actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente'}
 
 class Cliente_Delete(DeleteView):
     model = Personas    # Especificar a solo los empleados con el rol != 0

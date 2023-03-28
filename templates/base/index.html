@@ -80,7 +80,7 @@
 
   <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow ">
     <a class="navbar justify-content-center col-md-4 col-lg-2 me-0 px-3 fs-6 link-light text-decoration-none" href="#">
-      <b class="h3 text-light">SA-TRA</b>
+      <b class="h3 text-light ">SA-TRA</b>
       <img class="px-2" src="{% static 'img/icons8-task-100.png' %}" height="30p">
     </a>
 
@@ -114,28 +114,28 @@
           </li>
 
           <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'roles' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
+            <a href="{% url 'listar_roles' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-security-lock-100.png' %}" height="20px" class="px-1">
               Roles
             </a>
           </li>
 
           <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'tramites' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
+            <a href="{% url 'listar_tramites' %}"class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-product-documents-100.png' %}" height="20px" class="px-1">
               Trámites
             </a>
           </li>
 
           <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'documentos' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
+            <a href="{% url 'listar_tipo_documento' %}" class="nav-link link-light rounded-pill " style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-documents-100.png' %}" height="20px" class="px-1">
               Documentos
             </a>
           </li>
 
           <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'archivos' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
+            <a href="{% url 'listar_tipo_archivos' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-file-100.png' %}" height="20px" class="px-1">
               Archivos
             </a>
@@ -151,14 +151,14 @@
           </li>
 
            <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'clientes' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
+            <a href="{% url 'listar_clientes' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-client-management-100.png' %}" height="20px" class="px-1">
               Clientes
             </a>
           </li>
 
           <li class="nav-item px-3 mb-2 h5 ">
-            <a href="{% url 'empleados' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
+            <a href="{% url 'listar_empleados' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="20px" class="px-1">
               Empleados
             </a>
@@ -182,7 +182,7 @@
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
-      <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 " >
+      <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-2 " >
 
         <b class="display-6 fw-normal">
           {% block title %}
