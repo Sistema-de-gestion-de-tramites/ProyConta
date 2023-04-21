@@ -18,6 +18,7 @@ from .forms import *
 from .models import Tipo_Archivos, Tipo_Documentos, Estados, Rol, Comentarios, Personas
 
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 """   #Antiguas importaciones 
 from django.http import HttpResponseRedirect
@@ -145,7 +146,7 @@ def crear_Estado(request):
             nombre=request.POST['nombre']
         )
         nuevoRegistro.save()
-        return redirect(request, 'listar_estados')
+        return redirect('listar_estados')
 
 def listar_Estados(request):
     lista = Estados.objects.all()
@@ -172,7 +173,7 @@ def crear_Comentario(request):
             descr=request.POST['descr']
         )
         nuevoRegistro.save()
-        return redirect(request, 'listar_comentarios')
+        return redirect('listar_comentarios')
 
 def listar_Comentarios(request):
     lista = Comentarios.objects.all()
@@ -191,15 +192,19 @@ def eliminar_Comentario(request, pk):
 
 # Vistas de los tipo-archivo
 def crear_Tipo_Archivo(request):
-    if request.method == 'GET':
-        contexto = {'titulo' : 'archivos','form': Formulario_Tipo_Archivo}
-        return render(request, 'formulario.html', contexto)
-    else:
+    if request.method=='GET':
+        contexto = {'form': Formulario_Tipo_Archivo}
+        return render(request,'formulario.html',contexto)
+    elif request.method=='POST':
         nuevoRegistro = Tipo_Archivos(
-            extension=request.POST['extension']
+            extension = request.POST['extension']
         )
-        nuevoRegistro.save()
-        return redirect(request, 'listar_tipo_archivos')
+        if(Tipo_Archivos.objects.filter(extension= request.POST['extension']).exists()):
+         messages.add_message(request=request,level=messages.ERROR,message="Error el tipo de archivo ya existe",extra_tags='danger')
+         return redirect('crear_tipo_archivos')
+        else:
+         nuevoRegistro.save()
+         return redirect('listar_tipo_archivos')
 
 def listar_Tipo_Archivos(request):
     lista = Tipo_Archivos.objects.all()
@@ -247,34 +252,52 @@ def eliminar_Rol(request, pk):
 # vista de documento
 
 def crearTipoDocumento(request):
-    if request.method == 'GET':
-        contexto = {'titulo' : 'documentos','form': Formulario_tipoDocumento}
-        return render(request, 'formulario.html', contexto)
+    if request.method=='POST':
+        form = Formulario_tipoDocumento(request.POST)
+        if form.is_valid():
+            nuevoTipoArchivo = form.save(commit=False)
+            nuevoTipoArchivo.save()
+            form.save_m2m()
+            return redirect('listar_tipo_documento')
+        else:
+         mensajeErrorFormulario ="Complete correctamente el formulario"
+         messages.add_message(request=request,level=messages.ERROR,message=mensajeErrorFormulario,extra_tags='danger')
+         return redirect('crear_tipo_documento')
     else:
-        publicarTipoDocumento(request)
-        return render(request, 'index.html')
-
-def publicarTipoDocumento(request):
-    extension = Tipo_Archivos.objects.get(id=request.POST['tipo_archivo'])
-    nuevoTipoDocumento = Tipo_Documentos(
-        nombre=request.POST['nombre'],
-        tamano_MB=request.POST['tamano_MB'],
-        tipo_arch=extension
-    )
-    nuevoTipoDocumento.save()
+        contexto = {'form': Formulario_tipoDocumento}
+    if(Tipo_Archivos.objects.all().count()==0):
+        mensajeErrorFormulario= "No existen tipos de archivos registrados, por favor crearlos primero"
+        messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
+        contexto.update({'listaFieldsM2M': [('archivos','crear_tipo_archivos')]})
+    return render(request,'formulario.html',contexto)
 
 def listar_tipoDocumento(request):
-    lista = Tipo_Documentos.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo': 'documentos','object_list': lista, 'actualizar_url': 'editar_tipo_documento', 'borrar_url':'eliminar_documento'})
+   lista = Tipo_Documentos.objects.all()
+   contexto =  {'object_list' : lista,
+                'titulo': 'documentos',
+                'editar_url': 'editar_tipo_documento',
+                'eliminar_url':'eliminar_tipo_documento'}
+   return render(request, 'plantilla_lista.html', contexto)
 
-class editar_TipoDocumento(UpdateView):
+def detalle_tipoDocumento(request, pk):
+    objeto = Tipo_Documentos.objects.get(id=pk)
+    lista_1 = objeto.archivos.all()
+    context = {
+        'obj': objeto,
+        'titulo_1': 'Extensiones validas',
+        'lista_1': lista_1,
+        'editar_url':'editar_tipo_documento',
+    }
+    return render(request, 'plantilla_detalle.html', context)
+
+class editar_tipoDocumento(UpdateView):
     model = Tipo_Documentos
     form_class = Formulario_tipoDocumento
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipo_documento')
 
-def eliminar_tipoDocumento(request, pk):
-    registro = get_object_or_404(Tipo_Documentos, id=pk)
+def eliminar_TipoDocumento(request, pk):
+    registro = get_object_or_404(Rol, id=pk)
     registro.delete()
     return redirect('listar_tipo_documento')
 

@@ -42,7 +42,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('listar-comentarios', views.listar_Comentarios, name="listar_comentarios"),
     path('eliminar-comentario/<pk>', views.eliminar_Comentario, name="eliminar_comentario"),
     # URL del modelo Tipo de archivo
-    path('crear-tipo-archivo', views.crear_Tipo_Archivo, name="crear_tipo_archivo"),
+   path('crear-tipo-archivos', views.crear_Tipo_Archivo, name="crear_tipo_archivos"),
     path('editar-tipo-archivo/<pk>', views.editar_Tipo_Archivo.as_view(), name="editar_tipo_archivo"),
     path('listar-tipo-archivos', views.listar_Tipo_Archivos, name="listar_tipo_archivos"),
     path('eliminar-tipo_archivo/<pk>', views.eliminar_Tipo_Archivo, name="eliminar_tipo_archivo"),
@@ -54,8 +54,9 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     # URL del modelo tipo documento
     path('crear-documento', views.crearTipoDocumento, name="crear_tipo_documento"),
     path('listar-documentos', views.listar_tipoDocumento, name="listar_tipo_documento"),
-    path('editar-tipo-documento/<pk>', views.editar_TipoDocumento.as_view(), name="editar_tipo_documento"),
-    path('eliminar-documento/<pk>', views.eliminar_tipoDocumento, name="eliminar_documento"),
+    path('detalle-tipo-tramite/<pk>', views.detalle_tipoDocumento, name="detalle_tipo_tramite"),
+    path('editar-tipo-documento/<pk>', views.editar_tipoDocumento.as_view(), name="editar_tipo_documento"),
+    path('eliminar-documento/<pk>', views.eliminar_TipoDocumento, name="eliminar_tipo_documento"),
 
     path('busqueda/', views.buscar, name="busqueda"),
 ]

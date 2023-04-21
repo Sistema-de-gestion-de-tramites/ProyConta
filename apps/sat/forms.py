@@ -114,17 +114,21 @@ class Formulario_Rol(forms.ModelForm):
 
 
 class Formulario_tipoDocumento(forms.ModelForm):
-    nombre = forms.CharField(required=True, label=get_verbose_name(Tipo_Documentos, 'nombre'))
-    tamano_MB = forms.IntegerField(required=True, label=get_verbose_name(Tipo_Documentos, 'tamano_MB'))
-    listaExtensiones = [(choice.pk, choice.extension) for choice in Tipo_Archivos.objects.all()]
-    tipo_archivo = forms.ChoiceField(label="Extension del documento", required=True, choices=listaExtensiones)
-
-    class Meta:
+   archivos= forms.ModelMultipleChoiceField(Tipo_Archivos.objects.all(), widget=forms.CheckboxSelectMultiple,required=True)
+   
+   
+   def archivosVacio():
+       if (Tipo_Archivos.objects.all().count()==0):
+        return True
+       return False
+   
+   class Meta:
         model = Tipo_Documentos
 
         fields = [
             'nombre',
             'tamano_MB',
+            'archivos'
         ]
 
 

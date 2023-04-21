@@ -70,15 +70,3 @@ class ClienteForm(forms.ModelForm):
 
 ClienteInlineFormSet = inlineformset_factory(Personas, Clientes, form=ClienteForm, can_delete=False)
 """
-
-
-class RegistroUsuarioForm(UserCreationForm):
-    email = forms.EmailField()
-    username = forms.CharField(label="username", max_length=50, required=True)
-    password1 = forms.CharField(label="contraseña", max_length=50, required=True, widget=forms.PasswordInput)
-    password2 = forms.CharField(label="confirmar contraseña", max_length=50, required=True, widget=forms.PasswordInput)
-
-    class meta:
-        model = User
-        fields = ['username','email','password1','password2']
-

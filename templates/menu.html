@@ -80,41 +80,23 @@
     </ul>
   {% endif %}
 
-  {% if titulo == 'tramites' %}
-    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
-      <li class="nav-item ">
-        <a class="nav-link link-secondary" href="{% url 'listar_tramites' %}">Lista</a>
-      </li>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
-        <div class="btn-toolbar mb-2 mb-md-0 ">
-          <div class="btn-group me-2 ">
-            <a type="button" class="btn btn-sm btn-dark rounded-pill " href="{% url 'crear_tramite' %}">
-                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
-                Crear
-            </a>
-          </div>
-        </div>
-        </div>
-    </ul>
-
-  {% endif %}
-
   {% if titulo == 'documentos' %}
-    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
-      <li class="nav-item ">
-        <a class="nav-link link-secondary" href="{% url 'listar_tipo_documento' %}">Lista</a>
-      </li>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
-        <div class="btn-toolbar mb-2 mb-md-0 ">
-          <div class="btn-group me-2 ">
-            <a type="button" class="btn btn-sm btn-dark rounded-pill " href="{% url 'crear_tipo_documento' %}">
-                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
-                Crear
-            </a>
-          </div>
+  <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+    <li class="nav-item ">
+      <a class="nav-link link-secondary" href="{% url 'listar_tipo_documento' %}">Lista</a>
+    </li>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
+      <div class="btn-toolbar mb-2 mb-md-0 ">
+        <div class="btn-group me-2 ">
+          <a type="button" class="btn btn-sm btn-dark rounded-pill "  href="{% url 'crear_tipo_documento' %}">
+               <img src="{% static 'img/icons8-add.png' %}" height="20px">
+              Crear
+          </a>
         </div>
-        </div>
-    </ul>
+      </div>
+      </div>
+  </ul>
+
 
   {% endif %}
 
@@ -126,7 +108,7 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
         <div class="btn-toolbar mb-2 mb-md-0 ">
           <div class="btn-group me-2 ">
-            <a type="button" class="btn btn-sm btn-dark rounded-pill "  href="{% url 'crear_tipo_archivo' %}">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill "  href="{% url 'crear_tipo_archivos' %}">
                  <img src="{% static 'img/icons8-add.png' %}" height="20px">
                 Crear
             </a>
