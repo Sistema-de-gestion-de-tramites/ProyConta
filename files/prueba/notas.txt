@@ -1,6 +1,0 @@
-entradas
-salidas
-interaccone interface eexternas
-archivos internos
-(Puntos de funcion)
-categoria!! cantidad total !! Simples !! promedio !! complejos !! puntos de funcion

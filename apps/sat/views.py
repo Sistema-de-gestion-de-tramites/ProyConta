@@ -13,9 +13,11 @@ ____________________________________________________________________________
 """
 from distutils import extension
 from email.policy import default
+
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
-from .models import Tipo_Archivos, Tipo_Documentos, Estados, Rol, Comentarios, Personas
+from .models import *
 
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -139,7 +141,9 @@ class Tarea_Delete(DeleteView):
 # Vistas de los Estados
 def crear_Estado(request):
     if request.method == 'GET':
-        contexto = {'form': Formulario_Estado}
+        contexto = {
+            'titulo' : "Estados",
+            'form': Formulario_Estado}
         return render(request, 'formulario.html', contexto)
     else:
         nuevoRegistro = Estados(
@@ -166,7 +170,9 @@ def eliminar_Estado(request, pk):
 # Vistas de los Comentarios
 def crear_Comentario(request):
     if request.method == 'GET':
-        contexto = {'form': Formulario_Comentario}
+        contexto = {
+            'titulo':"Comentarios",
+            'form': Formulario_Comentario}
         return render(request, 'formulario.html', contexto)
     else:
         nuevoRegistro = Comentarios(
@@ -252,7 +258,7 @@ def eliminar_Rol(request, pk):
 # vista de documento
 
 def crearTipoDocumento(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         form = Formulario_tipoDocumento(request.POST)
         if form.is_valid():
             nuevoTipoArchivo = form.save(commit=False)
@@ -270,6 +276,9 @@ def crearTipoDocumento(request):
         messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
         contexto.update({'listaFieldsM2M': [('archivos','crear_tipo_archivos')]})
     return render(request,'formulario.html',contexto)
+#    else:
+#        contexto = {'titulo' : 'documentos','form': Formulario_tipoDocumento}
+#    return render(request, 'formulario.html', contexto)
 
 def listar_tipoDocumento(request):
    lista = Tipo_Documentos.objects.all()
@@ -310,13 +319,24 @@ def buscar(request):
     lista_1 = Tipo_Documentos.objects.all()
     titulo_2 = 'Usuarios'
     lista_2 = Personas.objects.all()
+    lista_3 = Telefonos.objects.all()
+
 
     if busqueda:
         lista_1 = Tipo_Documentos.objects.filter(nombre__icontains=busqueda)
-        lista_2 = Personas.objects.filter(nombre__icontains=busqueda)
+        lista_2 = Personas.objects.filter(
+            Q(nombre__icontains=busqueda) |
+            Q(ap_paterno__icontains=busqueda) |
+            Q(ap_materno__icontains=busqueda)
+        )
+        lista_3 = Telefonos.objects.filter(
+            Q(descr__icontains=busqueda) |
+            Q(telefono__icontains=busqueda)
+        )
 
     contexto = [{'object_list': lista_1, 'titulo': titulo_1},
                 {'object_list': lista_2, 'titulo': titulo_2},
+                {'object_list': lista_3, 'titulo': 'telefonos'},
                 ]
 
     return render(request, 'buscador.html', {'contexto': contexto})
