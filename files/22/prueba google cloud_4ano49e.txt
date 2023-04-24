@@ -1,3 +1,0 @@
-student-02-46806c4b1d41@qwiklabs.net -username
-BhaNWzuxpdKP -pass
-qwiklabs-gcp-03-827a9008ae1e -GCP proy ID

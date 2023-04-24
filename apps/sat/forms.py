@@ -81,7 +81,7 @@ class Formulario_Estado(forms.ModelForm):
 
 
 class Formulario_Comentario(forms.ModelForm):
-    descr = forms.CharField(required=True, label=get_verbose_name(Comentarios, 'descr'))
+    #descr = forms.CharField(required=True, label=get_verbose_name(Comentarios, 'descr'))
 
     class Meta:
         model = Comentarios
@@ -92,7 +92,7 @@ class Formulario_Comentario(forms.ModelForm):
 
 
 class Formulario_Tipo_Archivo(forms.ModelForm):
-    extension = forms.CharField(required=True, label=get_verbose_name(Tipo_Archivos, 'extension'))
+    #extension = forms.CharField(required=True, label=get_verbose_name(Tipo_Archivos, 'extension'))
 
     class Meta:
         model = Tipo_Archivos
@@ -103,7 +103,7 @@ class Formulario_Tipo_Archivo(forms.ModelForm):
 
 
 class Formulario_Rol(forms.ModelForm):
-    Rol = forms.CharField(required=True, label=get_verbose_name(Rol, 'Rol'))
+    #Rol = forms.CharField(required=True, label=get_verbose_name(Rol, 'Rol'))
 
     class Meta:
         model = Rol
@@ -116,8 +116,7 @@ class Formulario_Rol(forms.ModelForm):
 class Formulario_tipoDocumento(forms.ModelForm):
     nombre = forms.CharField(required=True, label=get_verbose_name(Tipo_Documentos, 'nombre'))
     tamano_MB = forms.IntegerField(required=True, label=get_verbose_name(Tipo_Documentos, 'tamano_MB'))
-    listaExtensiones = [(choice.pk, choice.extension) for choice in Tipo_Archivos.objects.all()]
-    tipo_archivo = forms.ChoiceField(label="Extension del documento", required=True, choices=listaExtensiones)
+    tipo_archivo = forms.ModelMultipleChoiceField(Tipo_Archivos.objects.all(), widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model = Tipo_Documentos

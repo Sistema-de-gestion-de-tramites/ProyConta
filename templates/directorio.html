@@ -8,6 +8,22 @@
 {% block contenido %}
 
 
+{% for obj in object_list %}
+    {% for key, val in obj.get_fields_and_values %}
+             {% if key != 'ID' %}
+                 {{ key}}:
+                 {{ val }}
+             {% endif %}
+         {% empty %}
+             No hay campos
+         {% endfor %}
+    {% empty %}
+        No hay registros
+    {% endfor %}
+
+
+
+
 
 <div class=" rounded-5 pt-5 pb-5" style="background-color: #e2e3e5;">
     <table class="table table-secondary table-striped align-middle mb-0 ">

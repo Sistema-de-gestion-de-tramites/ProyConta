@@ -3,8 +3,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 
-from apps.clientes.models import Personas, Tipo_Usuarios, Telefonos, Direcciones, Ext_Direcciones
+from apps.sat.templatetags.poll_extras import get_verbose_name
+from apps.clientes.models import *
 import datetime
+from django.db.models import Q
 
 #formulario version 3
 
@@ -14,8 +16,8 @@ class ChoiceField_tipo_usuario(forms.ModelChoiceField):     # Clase para el form
 
 class PersonaForm(forms.ModelForm):
     correo = forms.EmailField()
-    fecha_nac = forms.DateField(initial=datetime.date.today)
-    fecha_reg = forms.DateField(initial=datetime.date.today, disabled=True)
+    fecha_nac = forms.DateField(initial=datetime.date.today, label="Fecha de nacimiento")
+    fecha_reg = forms.DateField(initial=datetime.date.today, label="Fecha de registro", disabled=True)
     tipo_usuario = ChoiceField_tipo_usuario(queryset=Tipo_Usuarios.objects.all())
 
     class Meta:
@@ -43,15 +45,52 @@ class PersonaForm(forms.ModelForm):
 
 
 class TelefonosForm(forms.ModelForm):
-    persona = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    nombre = forms.CharField(label='Nombre', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    persona = forms.HiddenInput()
 
     class Meta:
         model = Telefonos
 
         fields = [
+            'nombre',
             'descr',
             'telefono',
         ]
+
+class DireccionesForm(forms.ModelForm):
+    nombre = forms.CharField(label='Nombre', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    persona = forms.HiddenInput()
+
+    class Meta:
+        model = Direcciones
+
+        fields = [
+            'nombre',
+            'num_ext',
+            'calle',
+            'colonia',
+            'cod_postal',
+            'municipio',
+            'estado',
+        ]
+
+class Formulario_Documento(forms.ModelForm):
+    empleado = forms.HiddenInput()
+    fecha = forms.DateField(disabled=True, initial=datetime.date.today)
+
+    class Meta:
+        model = Entrega_Doc
+
+        fields = [
+            'cliente',
+            'empleado',
+            'tipo_doc',
+            'estado',
+            'comentario',
+            'fecha',
+            'direccion',
+        ]
+
 """
 class ClienteForm(forms.ModelForm):
     tipo_clie_id = forms.ChoiceField(choices=[(choice.pk, choice.tipo_c) for choice in TipoClie.objects.all()])

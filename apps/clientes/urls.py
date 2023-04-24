@@ -34,5 +34,18 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('clientes/eliminar_telefono/<pk>', views.eliminar_Telefono, name="eliminar_telefono"),
 
     path('clientes/directorio/', views.Directorio, name="directorio"),
+
+    path('clientes/registrar_direccion/<per_id>', views.Registrar_Direccion, name="registrar_direccion"),
+    path('clientes/lista_direcciones/<per_id>', views.listar_Direcciones, name="listar_direcciones"),
+    path('clientes/actualizar_direccion/<pk>', views.editar_Direccion, name="actualizar_direccion"),
+    path('clientes/eliminar_direccion/<pk>', views.eliminar_Direccion, name="eliminar_direccion"),
+
+    path('clientes/subir_documento', views.subir_archivo.as_view(), name="subir_documento"),
+    path('clientes/lista_documento/', views.listar_archivos, name="listar_todos_documentos"),
+    path('clientes/lista_documento/<clie_id>', views.busqueda_archivos, name="listar_documentos"),
+    path('clientes/actualizar_documento/<pk>', views.editar_archivo.as_view(), name="actualizar_documento"),
+    path('clientes/eliminar_documento/<pk>', views.eliminar_archivo, name="eliminar_documento"),
+    path('files/<pk>/', views.view_file, name="media"),
+
 ]
 #{----------------------------------------------------------------------------------------------}
