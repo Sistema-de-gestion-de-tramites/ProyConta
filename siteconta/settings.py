@@ -88,7 +88,7 @@ DATABASES = {
         },
         'NAME': 'project_ing',
         'USER': 'root',
-        'PASSWORD': 'oracle',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

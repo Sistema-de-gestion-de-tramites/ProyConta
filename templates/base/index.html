@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="SA-TRA">
-    <meta name="generator" content="Hugo 0.108.0">
+    <meta name="generator">
     <title>SA-TRA</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
@@ -71,8 +71,6 @@
 
     </style>
 
-
-    <!-- Custom styles for this template -->
     <link href="{% static 'dashboard/dashboard.css' %}" rel="stylesheet">
   </head>
 
@@ -88,7 +86,15 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="w-100 d-flex justify-content-center">
-      <input class="form-control form-control  w-50 rounded-5 border-0" style="height:35px" type="text" placeholder="Buscar" aria-label="Buscar">
+
+      <form action="{% url 'busqueda' %}" method="GET" class="w-50 d-flex bg-secondary rounded-5">
+        <input class="form-control form-control rounded-5 border-0 p-2" type="text" name="q" placeholder="Buscar">
+        <button class="btn rounded-pill text-bg-secondary ms-1" type="submit" >
+           <img src="{% static 'img/icons8-search-100.png' %}" height="20px">
+        </button>
+
+      </form>
+
     </div>
 
     <div class="navbar-nav fs-6">
@@ -154,6 +160,12 @@
             <a href="{% url 'listar_empleados' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="20px" class="px-1">
               Empleados
+            </a>
+          </li>
+           <li class="nav-item px-3 mb-2 h5 ">
+            <a href="{% url 'listar_empleados' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
+            <img src="{% static 'img/nav-color/icons8-comments-100.png' %}" height="20px" class="px-1">
+              Comentarios
             </a>
           </li>
           <div class="position-absolute bottom-0">

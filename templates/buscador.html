@@ -4,18 +4,75 @@
 {% block cuerpo %}
 
 {% if contexto.0.object_list %}
+    <b class="display-6 fw-normal">
+    Resultados
+    </b>
+
     {% for lista in contexto %}
+    <div class="rounded-5 my-3 p-3" style="background-color: #e2e3e5;">
         {% if lista.object_list %}
-            {% if lista.titulo %} <h2>{{ lista.titulo }}</h2>{% endif %}
+        {% if lista.titulo %}
+        <h6 class="text-dark-emphasis fw-semibold border-bottom pb-2 mb-0">
+            {% if titulo == 'Roles' %}
+                <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-security-lock-100.png' %}" height="25px" >
+            {% endif %}
+
+            {% if lista.titulo == 'Tramites' %}
+                <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-product-documents-100.png' %}" height="25px">
+            {% endif %}
+
+            {% if lista.titulo == 'Documentos' %}
+                <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-documents-100.png' %}" height="25px">
+            {% endif %}
+
+            {% if lista.titulo == 'Archivos' %}
+                <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-file-100.png' %}" height="25px">
+            {% endif %}
+
+            {% if lista.titulo == 'Directorio' %}
+                <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-address-book-100.png' %}" height="25px">
+            {% endif %}
+
+            {% if lista.titulo == 'Clientes' %}
+                <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-client-management-100.png' %}" height="25px">
+            {% endif %}
+
+            {% if lista.titulo == 'Usuarios' %}
+                <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="25px">
+            {% endif %}
+
+            {{ lista.titulo }}
+
+        </h6>
+
+        {% endif %}
+
+        <table class="table table-secondary align-middle mb-0 ">
+            <tbody>
             {% for val in lista.object_list %}
-                <p>{{ val.nombre_principal }}</p>
+            <tr>
+                <td>
+                   <div class="d-flex">
+                        <p class="mb-0">{{ val.nombre_principal }}</p>
+                    </div>
+                  </td>
             {% empty %}
                 <p>Sin registros</p>
+             </tr>
             {% endfor %}
         {% endif %}
+            </tbody>
+        </table>
+        <small class="d-block text-end mt-3">
+        <a href="#">Opcion</a>
+        </small>
+    </div>
     {% endfor %}
 {% else %}
-    <p>Sin resultados</p>
+        <div class="alert rounded shadow-sm bg-secondary text-light rounded-5">
+            <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+           Sin resultados
+        </div>
 {% endif %}
 
 {% endblock%}
