@@ -177,6 +177,11 @@
           <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style="">
             <li><a class="dropdown-item" href="#">Configuración</a></li>
             <li><a class="dropdown-item" href="#">Perfil</a></li>
+            {% if user.is_authenticated %}
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesion</a></li>
+            {% else %}
+            <li><a class="dropdown-item" href="{% url 'login' %}">Iniciar Sesion</a></li>
+            {% endif %}
           </ul>
           </div>
         </div>

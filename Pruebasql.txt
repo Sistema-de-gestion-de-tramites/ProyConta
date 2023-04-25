@@ -1,7 +1,7 @@
 --- Valores de prueba
 
 --- Tipos de usuario
-INSERT INTO `tipo_usuarios`(`descr`) VALUES ('empleado');
+INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Empleado');
 INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Persona moral');
 INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Persona fisica');
 

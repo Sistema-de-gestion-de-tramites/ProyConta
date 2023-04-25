@@ -28,7 +28,9 @@
                 {% empty %}
                     <strong>No hay campos</strong>
                 {% endfor %}
-
+                {% if obj.direccion  %}
+                    <a href="{% url 'media' obj.pk %}" target='_blank'>Examinar</a>
+                {% endif %}
             </div>
             <p class="pb-3 mb-0 small lh-sm ">
         {% if actualizar_url  %}
@@ -44,6 +46,7 @@
             </a>
         {% endif %}
         {% if telefono_url %} <a href="{% url telefono_url obj.id %}">Telefono(s)</a> {% endif %}
+        {% if direccion_url %} <a href="{% url direccion_url obj.id %}">Direcion(es)</a> {% endif %}
             </p>
     <br><br>
     {% empty %}

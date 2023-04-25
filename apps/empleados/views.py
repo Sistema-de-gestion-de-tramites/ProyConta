@@ -14,9 +14,11 @@ ____________________________________________________________________________
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 #from apps.empleados.forms import EmpleadoForm
-from apps.clientes.forms import PersonaForm, RegistroUsuarioForm
+from apps.clientes.forms import PersonaForm
+from apps.empleados.forms import RegistroUsuarioForm
 from apps.empleados.models import Personas
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
@@ -54,5 +56,22 @@ class Empleado_Update(UpdateView):
     form_class = PersonaForm
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_empleados')
+    
+def registro(request):
+    if request.method == 'GET':
+        form = RegistroUsuarioForm
+        return render(request,'formulario.html',{'form':form})
+    else:
+        form = RegistroUsuarioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print(request.POST)
+            messages.add_message(request=request,level=messages.SUCCESS,message="Registro Exitoso")
+            redirect('registro/')
+        else:
+            messages.add_message(request=request,level=messages.SUCCESS,message="Datos invalidos")
+            redirect('registro/')
+    return render(request,'formulario.html',{'form':form})
+
 
 

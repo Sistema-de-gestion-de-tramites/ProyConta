@@ -236,9 +236,13 @@ class Comentarios(models.Model):
         return [(field.verbose_name, field.value_to_string(self)) for field in Comentarios._meta.fields]
 
 class Entrega_Doc(models.Model):
-    cliente = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Cliente")
+    cliente = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="cliente", verbose_name="Cliente")
+    empleado = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="empleado", verbose_name="Empleado")
     tipo_doc = models.ForeignKey(Tipo_Documentos, on_delete=models.CASCADE, verbose_name="Tipo de documento")
-    direccion = models.CharField(max_length=100, verbose_name="Dirección del archivo")
+    estado = models.ForeignKey(Estados, on_delete=models.CASCADE, verbose_name="Estado")
+    comentario = models.CharField(max_length=100, verbose_name="Comentario")
+    fecha = models.DateTimeField(verbose_name="Fecha")
+    direccion = models.FileField(verbose_name="Documento")
 
     class Meta:
         managed = True
@@ -247,20 +251,13 @@ class Entrega_Doc(models.Model):
         db_table = "entrega_documentos"
 
     def get_fields_and_values(self):
-        return [(field.verbose_name, field.value_to_string(self)) for field in Entrega_Doc._meta.fields]
+        fields = []
+        for field in self._meta.fields:
+            if isinstance(field, ForeignKey):
+                related_obj = getattr(self, field.name)
+                if related_obj is not None:
+                    fields.append((field.verbose_name,related_obj.nombre_principal()))
+            else:
+                fields.append((field.verbose_name, getattr(self, field.name)))
+        return fields
 
-class Observ_Doc(models.Model):
-    documento = models.ForeignKey(Entrega_Doc, on_delete=models.CASCADE, verbose_name="Documento")
-    supervisor = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Supervisor")
-    estado = models.ForeignKey(Estados, on_delete=models.CASCADE, verbose_name="Estado")
-    comentario = models.CharField(max_length=100, verbose_name="Comentario")
-    fecha = models.DateTimeField(verbose_name="Fecha")
-
-    class Meta:
-        managed = True
-        verbose_name = "Observación del documento"
-        verbose_name_plural = "Observaciones del documento"
-        db_table = "observ_doc"
-
-    def get_fields_and_values(self):
-        return [(field.verbose_name, field.value_to_string(self)) for field in Observ_Doc._meta.fields]

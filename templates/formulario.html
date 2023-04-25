@@ -1,15 +1,34 @@
 {% extends 'menu.html' %}
 
 {% block contenido %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <div class="my-3 p-3 bg-body rounded-4 shadow-sm">
     <div class="modal-header border-bottom-0">
         <h1 class="modal-title fs-5">Añadir {{titulo}}</h1>
     </div>
     <div class="d-flex text-muted pt-3">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{form.as_p}}
+        {% for field in form %}
+        <p>
+         {% if listaFieldsM2M and  field.widget_type == 'checkboxselectmultiple'%}
+            {% for fieldName,URL in listaFieldsM2M %}
+                {% if fieldName == field.name %}
+                {{field.label}} : <a href="{% url URL %}" class="btn btn-warning btn-sm">Crear</a>
+                {% endif %}
+            {% endfor %}
+         {% else %}
+         {{field.label}} : {{field}}
+         {% endif %}
+        </p>
+        {% endfor %}
 
         <div class="d-grid gap-2 col-3 mx-auto">
             <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>

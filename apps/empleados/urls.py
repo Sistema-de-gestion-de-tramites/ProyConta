@@ -12,16 +12,19 @@ ____________________________________________________________________________
 ----------------------------------------------------------------------------
 """
 from django.urls import path #{LIBRERIA URLS DE DJANGO}
+from django.contrib.auth.views import LoginView, LogoutView
 from . import views #{IMPORTAR LAS CLASE DE VIEW DE LA APP EMPLEADOS}
 
 #{----------------------------------------------------------------------------------------------}
 
 urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
-    path('empleados/lista_empleados/', views.Listar_Empleados.as_view(), name="listar_empleados"),
-    path('empleados/actualizar_empleado/<pk>', views.Empleado_Update.as_view(), name="actualizar_empleado"),
-    path('empleados/eliminar_empleado/<pk>', views.Empleado_Delete.as_view(), name="eliminar_empleado"),
-
+    path('lista_empleados/', views.Listar_Empleados.as_view(), name="listar_empleados"),
+    path('actualizar_empleado/<pk>', views.Empleado_Update.as_view(), name="actualizar_empleado"),
+    path('eliminar_empleado/<pk>', views.Empleado_Delete.as_view(), name="eliminar_empleado"),
     path('lista_personas/', views.Listar_Personas.as_view(), name="listar_personas"),
+    path('login/',LoginView.as_view(template_name='login.html'),name="login"),
+    path('logout/',LogoutView.as_view(template_name='login.html'),name="logout"),
+    path('registro/',views.registro,name='registro')
 
 ]
 #{----------------------------------------------------------------------------------------------}
