@@ -53,7 +53,23 @@ class Crear_Persona(CreateView):
 class Listar_Clientes(ListView):
     queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')
     template_name = 'plantilla_lista.html'
-    extra_context={'titulo':'clientes', 'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente', 'telefono_url':'listar_telefonos', 'direccion_url':'listar_direcciones'}
+    extra_context={'titulo':'clientes', 'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente', 'telefono_url':'listar_telefonos', 'direccion_url':'listar_direcciones', 'detalle_url':'detalle_persona'}
+
+def detalle_Persona(request, pk):
+    objeto = Personas.objects.get(id=pk)
+    titulo_1 = 'Direccion'
+    lista_1 = Direcciones.objects.filter(persona_id=pk)
+    titulo_2 = 'Telefonos'
+    lista_2 = Telefonos.objects.filter(persona_id=pk)
+
+    context = {
+        'obj': objeto,
+        'listas_extra': [{'titulo': titulo_1, 'lista': lista_1},
+                         {'titulo': titulo_2, 'lista': lista_2},
+                        ],
+        'editar_url': 'editar_tipo_documento',
+    }
+    return render(request, 'plantilla_detalle.html', context)
 
 class Cliente_Delete(DeleteView):
     model = Personas    # Especificar a solo los empleados con el rol != 0

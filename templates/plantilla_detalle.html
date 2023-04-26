@@ -1,0 +1,33 @@
+{% extends 'menu.html' %}
+
+{% load static %}
+
+{% block css_add %}
+{% endblock %}
+
+{% block contenido %}
+
+{% if obj %}
+    {% for key, val in obj.get_fields_and_values %}
+        {% if key != 'ID' %}{{ key}}: {{ val }}<br>{% endif %}
+    {% empty %}
+        <h1>No hay campos</h1>
+    {% endfor %}
+
+    {% if listas_extra %}
+        {% for lis_ext in listas_extra %}
+            {{ lis_ext.titulo }}: <br>
+            <ul>
+            {% for val in lis_ext.lista %}
+                <li>{{val}}</li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+    {% endif %}
+
+    {% if editar_url %}<a href="{% url editar_url obj.id %}">Editar</a>{% endif %}
+{% else %}
+    <h1>No hay Registros</h1>
+{% endif %}
+
+{% endblock %}

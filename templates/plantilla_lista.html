@@ -47,6 +47,8 @@
         {% endif %}
         {% if telefono_url %} <a href="{% url telefono_url obj.id %}">Telefono(s)</a> {% endif %}
         {% if direccion_url %} <a href="{% url direccion_url obj.id %}">Direcion(es)</a> {% endif %}
+        {% if detalle_url %} <a href="{% url detalle_url obj.id %}">Mas info</a> {% endif %}
+
             </p>
     <br><br>
     {% empty %}

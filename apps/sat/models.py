@@ -28,6 +28,7 @@ class Tipo_Archivos(models.Model):
 class Tipo_Documentos(models.Model):
     nombre = models.CharField(max_length=40, verbose_name="Nombre")
     tamano_MB = models.IntegerField(default=4, verbose_name="Tamaño en MB")
+    archivos = models.ManyToManyField(Tipo_Archivos, related_name="archivos", verbose_name="Archivos")
 
     class Meta:
         managed = True
@@ -142,6 +143,8 @@ class Telefonos(models.Model):
 
 
         #return [(field.verbose_name, field.value_to_string(self)) for field in Telefonos._meta.fields]
+    def __str__(self):
+        return self.telefono
 
     def nombre_principal(self):
         return self.descr
@@ -173,6 +176,9 @@ class Direcciones(models.Model):
             else:
                 fields.append((field.verbose_name, getattr(self, field.name)))
         return fields
+
+    def __str__(self):
+        return self.calle
 
 class Ext_Direcciones(models.Model):
     direccion = models.ForeignKey(Direcciones, on_delete=models.CASCADE, verbose_name="Dirección")
