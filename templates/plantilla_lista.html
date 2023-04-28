@@ -29,7 +29,7 @@
                     <strong>No hay campos</strong>
                 {% endfor %}
                 {% if obj.direccion  %}
-                    <a href="{% url 'media' obj.pk %}" target='_blank'>Examinar</a>
+                    <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
                 {% endif %}
             </div>
             <p class="pb-3 mb-0 small lh-sm ">
