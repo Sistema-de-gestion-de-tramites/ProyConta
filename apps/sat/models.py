@@ -28,7 +28,8 @@ class Tipo_Archivos(models.Model):
 class Tipo_Documentos(models.Model):
     nombre = models.CharField(max_length=40, verbose_name="Nombre")
     tamano_MB = models.IntegerField(default=4, verbose_name="Tamaño en MB")
-
+    archivos = models.ManyToManyField(Tipo_Archivos, related_name="archivos", verbose_name="Archivos")
+    
     class Meta:
         managed = True
         verbose_name = "Tipo de documento"

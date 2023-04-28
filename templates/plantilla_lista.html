@@ -29,13 +29,42 @@
                     </span>
                     {% endif %}
                 {% empty %}
+                {% if rol %}
+                    <span class="d-block ">
+                        <div class="d-inline  ">
+                            <strong>Nombre:</strong>
+                        </div>
+                        <div class="d-inline ">
+                            {{ obj.name }}
+                        </div>
+                    </span>
+                {% else %}
                     <strong>No hay campos</strong>
+                {% endif %}
                 {% endfor %}
                 {% if obj.direccion  %}
                     <a href="{% url 'media' obj.pk %}" target='_blank'>Examinar</a>
                 {% endif %}
             </div>
             <p class="pb-3 mb-0 small lh-sm ">
+        {% if titulo == 'roles' %}
+            {% if obj.name != 'Administrador' %}
+            {% if actualizar_url  %}
+            <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
+                <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                Editar
+            </a>
+            {% endif %}
+            {% if borrar_url %}
+             <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.id %}">
+                <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                Eliminar
+            </a>
+            {% endif %}
+            {% else %}
+            !Rol por defecto del sistema. ADVERTENCIA: Este rol tiene todos los permisos¡
+            {% endif %}
+        {% else %}
         {% if actualizar_url  %}
             <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
                 <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
@@ -47,6 +76,7 @@
                 <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
                 Eliminar
             </a>
+        {% endif %}
         {% endif %}
         {% if telefono_url %} <a href="{% url telefono_url obj.id %}">Telefono(s)</a> {% endif %}
         {% if direccion_url %} <a href="{% url direccion_url obj.id %}">Direcion(es)</a> {% endif %}

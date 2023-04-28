@@ -25,6 +25,13 @@
                 {% endif %}
             {% endfor %}
          {% else %}
+         <!-- Tags para roles -->
+         {% if esRoles %}
+            {% if field.widget_type == 'checkboxselectmultiple' %}
+                {{field.label}} : {{field}}
+            {% endif %}
+         {% endif %}
+         <!-- -->
          {{field.label}} : {{field}}
          {% endif %}
         </p>

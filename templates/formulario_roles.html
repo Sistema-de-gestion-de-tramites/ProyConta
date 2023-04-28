@@ -1,0 +1,53 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="my-3 p-3 bg-body rounded-4 shadow-sm">
+    <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5">Añadir {{titulo}}</h1>
+    </div>
+    <div class="d-flex text-muted pt-3">
+        <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{form.as_p}}
+        <p>Permisos sobre documento: </p>
+        {% for documento in  permisosDocumentos%}
+        <div>
+            &emsp;{{documento}}:&emsp;
+            {% if "doc_edicion_"|add:documento in seleccionados %}
+                <label for="id_permiso_editar_{{documento}}"><input type="checkbox" name="doc_edicion_{{documento}}" value="1" id="id_permiso_editar_{{documento}}" checked>
+                Editar</label>&nbsp;
+            {% else %}
+                <label for="id_permiso_editar_{{documento}}"><input type="checkbox" name="doc_edicion_{{documento}}" value="1" id="id_permiso_editar_{{documento}}">
+                Editar</label>&nbsp;
+            {% endif %}
+            {% if "doc_ver_"|add:documento in seleccionados %}
+                <label for="id_permiso_ver_{{documento}}"><input type="checkbox" name="doc_ver_{{documento}}" value="1" id="id_permiso_editar_{{documento}}" checked>
+                Ver</label>
+            {% else %}
+                <label for="id_permiso_ver_{{documento}}"><input type="checkbox" name="doc_ver_{{documento}}" value="1" id="id_permiso_editar_{{documento}}">
+                Ver</label>
+            {% endif %}
+        </div>
+        {% empty %}
+            No hay documentos registrados
+            <br><br>
+        {% endfor %}
+
+        <div class="d-grid gap-2 col-3 mx-auto">
+            <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
+            <a  class="btn btn-sm btn-danger btn-lg" href="{% url 'listar_roles' %}">Cancelar</a>
+        </div>
+        </form>
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -4,8 +4,11 @@ from apps.sat.models import Tarea, Tramite, Empleados, Personas
 import datetime
 """
 
+from cProfile import label
 from django import forms
 from .templatetags.poll_extras import get_verbose_name
+from django.contrib.auth.models import Group,Permission
+
 from .models import Rol, Tipo_Documentos, Estados, Comentarios, Tipo_Archivos
 #Formulario Persona
 """
@@ -102,27 +105,18 @@ class Formulario_Tipo_Archivo(forms.ModelForm):
         ]
 
 
-class Formulario_Rol(forms.ModelForm):
-    #Rol = forms.CharField(required=True, label=get_verbose_name(Rol, 'Rol'))
-
-    class Meta:
-        model = Rol
-
-        fields = [
-            'Rol',
-        ]
+class Formulario_Rol(forms.Form):
+    nombre = forms.CharField(required=True, label="Nombre")
+    opciones = [(choice.pk, choice.name) for choice in Permission.objects.filter(codename__contains="dev_")]
+    permisos = forms.MultipleChoiceField(choices=opciones, widget=forms.CheckboxSelectMultiple, required=True)
 
 
 class Formulario_tipoDocumento(forms.ModelForm):
-#   archivos= forms.ModelMultipleChoiceField(Tipo_Archivos.objects.all(), widget=forms.CheckboxSelectMultiple,required=True)
     nombre = forms.CharField(required=True, label=get_verbose_name(Tipo_Documentos, 'nombre'))
     tamano_MB = forms.IntegerField(required=True, label=get_verbose_name(Tipo_Documentos, 'tamano_MB'))
     archivos = forms.ModelMultipleChoiceField(Tipo_Archivos.objects.all(), widget=forms.CheckboxSelectMultiple, required=True)
 
-    #def archivosVacio():
-    #    if (Tipo_Archivos.objects.all().count() == 0):
-    #        return True
-    #    return False
+   
 
     class Meta:
         model = Tipo_Documentos

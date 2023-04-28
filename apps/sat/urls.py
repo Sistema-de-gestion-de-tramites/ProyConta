@@ -12,6 +12,7 @@ ____________________________________________________________________________
 ----------------------------------------------------------------------------
 """
 from django.urls import path #{LIBRERIA URLS DE DJANGO}
+
 from . import views #{IMPORTAR LAS CLASE DE VIEW DE LA APP SAT}
 
 #{----------------------------------------------------------------------------------------------}
@@ -25,7 +26,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('directorio', views.directorio, name='directorio'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
     path('clientes', views.clientes, name='clientes'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
     path('empleados', views.empleados, name='empleados'),  # {DESPLIEGUE DE ROLES.HTML (ROLES PAGE)}
-
+    
     #path('tareas/crear_tarea/', views.Tarea_Create.as_view(), name="crear_tarea"),
     #path('tareas/lista_tareas/', views.Tarea_Listar.as_view(), name="lista_tareas"),
     #path('tareas/actualizar_tarea/<pk>', views.Tarea_Update.as_view(), name="actualizar_tarea"),
@@ -48,7 +49,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('eliminar-tipo_archivo/<pk>', views.eliminar_Tipo_Archivo, name="eliminar_tipo_archivo"),
     # URL del modelo Rol
     path('crear-rol', views.crear_Rol, name="crear_rol"),
-    path('editar-rol/<pk>', views.editar_Rol.as_view(), name="editar_rol"),
+    path('editar-rol/<pk>', views.editar_Rol, name="editar_rol"),
     path('listar-roles', views.listar_Roles, name="listar_roles"),
     path('eliminar-rol/<pk>', views.eliminar_Rol, name="eliminar_rol"),
     # URL del modelo tipo documento
