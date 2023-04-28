@@ -200,7 +200,7 @@ class subir_archivo(CreateView):
 
         # Establece el nombre del archivo en el modelo antes de guardarlo
         instancia = form.save(commit=False)
-        instancia.direccion = nombre_archivo
+        instancia.direccion = 'carp_' + str(cliente_id) + '/' + str(nombre_archivo)
         instancia.save()
 
         return super().form_valid(form)
@@ -235,14 +235,13 @@ class editar_archivo(UpdateView):
             nombre_archivo = base + extension
             # Define el sistema de archivos para guardar el archivo
             cliente_id = self.request.POST.get('cliente')
-            carpeta = str(settings.MEDIA_ROOT) + '/carp_' + str(cliente_id)
-            fs = FileSystemStorage(location=carpeta)
+            fs = FileSystemStorage()
             # Borrar archivo anterior
 
-            file_path = os.path.join(settings.MEDIA_ROOT, 'carp_' + str(cliente_id) + '/' + str(self.old_value))
+            file_path = os.path.join(settings.MEDIA_ROOT, str(self.old_value))
             print(file_path)
             default_storage.delete(file_path)
-
+            fs.location = str(settings.MEDIA_ROOT) + '/carp_' + str(cliente_id)
             # Si el archivo ya existe, agrega un sufijo numérico al nombre para evitar colisiones
             i = 0
             while fs.exists(nombre_archivo):
@@ -254,7 +253,7 @@ class editar_archivo(UpdateView):
 
             # Establece el nombre del archivo en el modelo antes de guardarlo
             instancia = form.save(commit=False)
-            instancia.direccion = nombre_archivo
+            instancia.direccion = 'carp_' + str(cliente_id) + '/' + str(nombre_archivo)
         else:
             instancia = form.save(commit=False)
 
@@ -262,12 +261,12 @@ class editar_archivo(UpdateView):
 
         return super().form_valid(form)
 
-def view_file(request, pk):
-    registro = get_object_or_404(Entrega_Doc, id=pk)
-    file_path = os.path.join(settings.MEDIA_ROOT, 'carp_' + str(registro.cliente_id) + '/' + str(registro.direccion))
-    if os.path.exists(file_path):
-        return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
-    raise Http404
+# def view_file(request, pk):
+#     registro = get_object_or_404(Entrega_Doc, id=pk)
+#     file_path = os.path.join(settings.MEDIA_ROOT, 'carp_' + str(registro.cliente_id) + '/' + str(registro.direccion))
+#     if os.path.exists(file_path):
+#         return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+#     raise Http404
 
 def eliminar_archivo(request, pk):
     registro = get_object_or_404(Entrega_Doc, id=pk)
