@@ -2,16 +2,28 @@
 
 {% block contenido %}
 {% if messages %}
-<ul class="messages">
+<div class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</li>
+    <p {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{ message }}</p>
     {% endfor %}
-</ul>
+</div>
 {% endif %}
 <form method="POST">
     {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">registrar</button>
+    {% for field in form %}
+        <p>
+        {% if field.name == form.roles.name %}
+        [Advertencia si seleccionas Administrador el usuario obtendra todos los permisos]
+        <br><br>
+        {{field.label}} : {{field}} 
+        {% else %}
+        {{field.label}} : {{field}}
+        {% endif %}
+        </p>
+    {% endfor %}
+    <div class="d-grid gap-2 col-3 mx-auto">
+        <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
+    </div>
 </form>
 
 {% endblock %}

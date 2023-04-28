@@ -119,13 +119,16 @@
             </a>
           </li>
 
+          {% if user.is_staff %}
           <li class="nav-item px-3 mb-2 h5">
             <a href="{% url 'listar_roles' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-security-lock-100.png' %}" height="20px" class="px-1">
               Roles
             </a>
           </li>
+          {% endif %}
 
+          {% if user.is_staff %}
           <li class="nav-item px-3 mb-2 h5">
             <a href="{% url 'listar_tipo_archivos' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
             <img src="{% static 'img/nav-color/icons8-file-100.png' %}" height="20px" class="px-1">
@@ -139,6 +142,7 @@
               Documentos
             </a>
           </li>
+          {% endif %}
 
           <li class="nav-item px-3 mb-2 h5 ">
             <a href="{% url 'listar_comentarios' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
@@ -152,7 +156,8 @@
               Estados o status
             </a>
           </li>
-
+          {% endif %}
+          
           <hr>
 
           <li class="nav-item px-3 mb-2 h5">

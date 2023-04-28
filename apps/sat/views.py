@@ -13,15 +13,20 @@ ____________________________________________________________________________
 """
 from distutils import extension
 from email.policy import default
+from tokenize import group
 
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
+from ..empleados.views import guardarPermisosDeUsuario
 
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.contrib.auth.models import Permission, Group,User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.decorators import login_required,permission_required
 """   #Antiguas importaciones 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect #{LIBRERIA PARA DESPLEGAR(RENDER) LOS HTML}
@@ -40,6 +45,7 @@ def index(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
     return render(request,'index.html') #{DEVUELVE EL HTML (REQUEST)}
+
 
 def inicio(request):  # {METODO REQUEST DE HTTP}
     if request.user.is_authenticated:  # valida si existe una sesion activa
@@ -229,41 +235,117 @@ def eliminar_Tipo_Archivo(request, pk):
 
 # Vistas de los Roles
 def crear_Rol(request):
-    if request.method == 'GET':
-        contexto = {'form': Formulario_Rol,
-                    'titulo': 'roles'}
-        return render(request, 'formulario.html', contexto)
+    if request.method == 'POST':
+        form = Formulario_Rol(request.POST)
+        if form.is_valid():
+            if(Group.objects.filter(name= request.POST['nombre']).exists()):
+                messages.add_message(request=request,level=messages.ERROR,message="Error el rol ya existe",extra_tags='danger')
+                return redirect('crear_rol')
+            else:
+                nuevoRol = Group(name=request.POST['nombre'])
+                nuevoRol.save()
+                guardarPermisos(nuevoRol,request.POST)
+                return redirect('listar_roles')
+        else:
+         mensajeErrorFormulario ="Complete correctamente el formulario"
+         messages.add_message(request=request,level=messages.ERROR,message=mensajeErrorFormulario,extra_tags='danger')
+         return redirect('crear_rol')
     else:
-        nuevoRegistro = Rol(
-            Rol=request.POST['Rol']
-        )
-        nuevoRegistro.save()
-        return redirect('listar_roles')
+        permisosDocumentos = list(Tipo_Documentos.objects.all().values_list('nombre',flat=True))
+        contexto = {'form': Formulario_Rol,
+                    'permisosDocumentos':permisosDocumentos}
+    if(Permission.objects.filter(codename__contains="dev_").count()==0):
+        mensajeErrorFormulario= "No existen permisos registrados, por favor crearlos primero"
+        messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
+        contexto.update({'listaFieldsM2M': [('permissions','permisos')]})
+    return render(request,'formulario_roles.html',contexto)
+
+
+def guardarPermisos(modeloGroup,post):
+    rol = Group.objects.get(id=modeloGroup.id)
+    permisos = []
+    for campo in post:
+        if(post[campo]=='1'):
+            permisos.append(Permission.objects.get(codename=campo))
+        elif(campo=='permisos'):
+            for permisoID in post.getlist(campo, default=[]):
+                permisos.append(Permission.objects.get(id=permisoID))
+    rol.permissions.set(permisos)
+    modeloGroup.save()
 
 def listar_Roles(request):
-    lista = Rol.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo': 'roles','object_list': lista, 'actualizar_url': 'editar_rol', 'borrar_url':'eliminar_rol'})
+    lista = Group.objects.all()
+    contexto = {'titulo': 'roles',
+                'object_list': lista,
+                'actualizar_url': 'editar_rol',
+                'borrar_url':'eliminar_rol',
+                'rol':True}
+    return render(request, 'plantilla_lista.html', contexto)
 
-class editar_Rol(UpdateView):
-    model = Rol
-    form_class = Formulario_Rol
-    template_name = 'formulario.html'
-    success_url = reverse_lazy('listar_roles')
+def editar_Rol(request,pk):
+    rol = Group.objects.get(id=pk)
+    if request.method == 'POST':
+        form = Formulario_Rol(request.POST)
+        if form.is_valid():
+            if(Group.objects.filter(name= request.POST['nombre']).exists() and rol.name != request.POST['nombre']):
+                messages.add_message(request=request,level=messages.ERROR,message="Error el rol ya existe",extra_tags='danger')
+                return redirect('editar_rol',pk)
+            else:
+                rol.name=request.POST['nombre']
+                rol.permissions.clear()
+                rol.save()
+                guardarPermisos(rol,request.POST)
+                editarPermisosDeRolesEnUsuarios(rol)
+                return redirect('listar_roles')
+        else:
+         mensajeErrorFormulario ="Complete correctamente el formulario"
+         messages.add_message(request=request,level=messages.ERROR,message=mensajeErrorFormulario,extra_tags='danger')
+         return redirect('editar_rol',pk)
+    else:
+        permisos = list(rol.permissions.filter(codename__contains="dev_").values_list('pk',flat=True))
+        initialValues = {'nombre':rol.name,'permisos':permisos}
+        permisosDocumentos = list(Tipo_Documentos.objects.all().values_list('nombre',flat=True))
+        permisosDocumentosSelecionados = list(rol.permissions.filter(codename__contains="doc_").values_list('codename',flat=True))
+        contexto = {'form': Formulario_Rol(initial=initialValues),
+                    'permisosDocumentos':permisosDocumentos,
+                    'seleccionados':permisosDocumentosSelecionados,}
+    if(Permission.objects.filter(codename__contains="dev_").count()==0):
+        mensajeErrorFormulario= "No existen permisos registrados, por favor crearlos primero"
+        messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
+        contexto.update({'listaFieldsM2M': [('permissions','permisos')]})
+    return render(request,'formulario_roles.html',contexto)
+    
 
 def eliminar_Rol(request, pk):
-    registro = get_object_or_404(Rol, id=pk)
-    registro.delete()
+    registro = get_object_or_404(Group, id=pk)
+    if registro.name != 'Administrador':
+        registro.delete()
     return redirect('listar_roles')
 
+def editarPermisosDeRolesEnUsuarios(rol):
+    usuarios = User.objects.filter(groups=rol)
+    for usuario in usuarios:
+        usuario.groups.remove(rol)
+        guardarPermisosDeUsuario(usuario,[rol.id])
+        
 # vista de documento
 
 def crearTipoDocumento(request):
     if request.method == 'POST':
         form = Formulario_tipoDocumento(request.POST)
         if form.is_valid():
-            nuevoTipoArchivo = form.save(commit=False)
-            nuevoTipoArchivo.save()
-            form.save_m2m()
+            if(Tipo_Documentos.objects.filter(nombre= request.POST['nombre']).exists()):
+                messages.add_message(request=request,level=messages.ERROR,message="Error el documento ya existe",extra_tags='danger')
+                return redirect('crear_tipo_documento')
+            else:
+                nuevoTipoArchivo = form.save(commit=False)
+                nuevoTipoArchivo.save()
+                form.save_m2m()
+                cont_type = ContentType.objects.get(id=1)
+                permisoEditar = Permission(name="Edicion "+request.POST['nombre'],codename="doc_edicion_"+request.POST['nombre'],content_type=cont_type)
+                permisoEditar.save()
+                permisoVer = Permission(name="Ver "+request.POST['nombre'],codename="doc_ver_"+request.POST['nombre'],content_type=cont_type)
+                permisoVer.save()
             return redirect('listar_tipo_documento')
         else:
          mensajeErrorFormulario ="Complete correctamente el formulario"
@@ -276,9 +358,6 @@ def crearTipoDocumento(request):
         messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
         contexto.update({'listaFieldsM2M': [('archivos','crear_tipo_archivos')]})
     return render(request,'formulario.html',contexto)
-#    else:
-#        contexto = {'titulo' : 'documentos','form': Formulario_tipoDocumento}
-#    return render(request, 'formulario.html', contexto)
 
 def listar_tipoDocumento(request):
    lista = Tipo_Documentos.objects.all()
@@ -308,8 +387,11 @@ class editar_tipoDocumento(UpdateView):
     success_url = reverse_lazy('listar_tipo_documento')
 
 def eliminar_TipoDocumento(request, pk):
-    registro = get_object_or_404(Rol, id=pk)
+    registro = get_object_or_404(Tipo_Documentos, id=pk)
     registro.delete()
+    nombre= registro.nombre
+    permisos = Permission.objects.filter(codename__contains=nombre)
+    permisos.delete()
     return redirect('listar_tipo_documento')
 
 

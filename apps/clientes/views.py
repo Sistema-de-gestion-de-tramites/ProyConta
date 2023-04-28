@@ -18,6 +18,9 @@ from .models import *
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.text import slugify
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import permission_required,login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .forms import *   #{IMPORTA LOS METODOS DE LA CLASE FORM}
 import os
@@ -42,7 +45,9 @@ def id_emp_sesion(request):
 
 Empleado_id = 1
 
-class Crear_Persona(CreateView):
+class Crear_Persona(PermissionRequiredMixin,CreateView):
+    permission_required = 'editor.dev_crear_empleados'
+    permission_required = 'editor.dev_crear_clientes'
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
@@ -50,7 +55,8 @@ class Crear_Persona(CreateView):
     success_url = reverse_lazy('listar_personas')
 
 # Listar solo los clientes
-class Listar_Clientes(ListView):
+class Listar_Clientes(PermissionRequiredMixin,ListView):
+    permission_required = 'editor.dev_ver_clientes'
     queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')
     template_name = 'plantilla_lista.html'
     extra_context={'titulo':'clientes', 'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente', 'telefono_url':'listar_telefonos', 'direccion_url':'listar_direcciones', 'detalle_url':'detalle_persona'}
@@ -71,12 +77,14 @@ def detalle_Persona(request, pk):
     }
     return render(request, 'plantilla_detalle.html', context)
 
-class Cliente_Delete(DeleteView):
+class Cliente_Delete(PermissionRequiredMixin,DeleteView):
+    permission_required = 'editor.dev_eliminar_clientes'
     model = Personas    # Especificar a solo los empleados con el rol != 0
     template_name = 'borrar.html'
     success_url = reverse_lazy('listar_clientes')
 
-class Cliente_Update(UpdateView):
+class Cliente_Update(PermissionRequiredMixin,UpdateView):
+    permission_required = 'editor.dev_editar_clientes'
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
