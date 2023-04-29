@@ -29,16 +29,10 @@ INSERT INTO auth_permission (name,content_type_id,codename) VALUES("Eliminar cli
 -- permisos Directorio
 UPDATE auth_permission SET name="Crear directorio" WHERE codename= "add_directorio";
 
--- creacion de roles por defecto (tipo de usuario)
+-- creacion de roles por defecto (tipo de usuario que usa Django)
 INSERT INTO auth_group(name) VALUES("Administrador");
-INSERT INTO auth_group(name) VALUES("Empleado");
 
--- permisos por defecto de empleado
-INSERT INTO auth_group_permissions(group_id,permission_id) VALUES
-(
-(
- SELECT id FROM auth_group where name = "Empleado"
-),
-(
- SELECT id FROM auth_permission WHERE codename="dev_ver_empleados")
-);
+-- creacio de tipo de usuario por defecto
+INSERT INTO tipo_usuarios(descr) VALUES("Empleado");
+INSERT INTO tipo_usuarios(descr) VALUES("Fisica");
+INSERT INTO tipo_usuarios(descr) VALUES("Moral");

@@ -26,13 +26,19 @@
             {% endfor %}
          {% else %}
          <!-- Tags para roles -->
-         {% if esRoles %}
-            {% if field.widget_type == 'checkboxselectmultiple' %}
+            {% if esRoles %}
+                {% if field.widget_type == 'checkboxselectmultiple' %}
+                    {{field.label}} : {{field}}
+                {% endif %}
+            {% endif %}
+            {% if esEmpleado %}
+                {% if field.name != 'tipo_usuario' %}
+                    {{field.label}} : {{field}} 
+                {% endif %}
+            {% else %}
                 {{field.label}} : {{field}}
             {% endif %}
-         {% endif %}
-         <!-- -->
-         {{field.label}} : {{field}}
+            <!-- -->
          {% endif %}
         </p>
         {% endfor %}

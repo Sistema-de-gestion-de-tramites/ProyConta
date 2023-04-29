@@ -18,7 +18,8 @@ class PersonaForm(forms.ModelForm):
     correo = forms.EmailField()
     fecha_nac = forms.DateField(initial=datetime.date.today, label="Fecha de nacimiento")
     fecha_reg = forms.DateField(initial=datetime.date.today, label="Fecha de registro", disabled=True)
-    tipo_usuario = ChoiceField_tipo_usuario(queryset=Tipo_Usuarios.objects.all())
+    queryTipoUsuario = Tipo_Usuarios.objects.exclude(descr="Empleado")
+    tipo_usuario = forms.ModelChoiceField(queryTipoUsuario,required=False,initial=queryTipoUsuario[0])
 
     class Meta:
         model = Personas
@@ -33,10 +34,11 @@ class PersonaForm(forms.ModelForm):
             'rfc',
             'curp',
             'fecha_reg',
-            'tipo_usuario',
+            'tipo_usuario'
         ]
 
         labels = {
+            'tipo_usuario':'Tipo de cliente'
         }
 
         widgets = {

@@ -51,13 +51,41 @@ class Crear_Persona(PermissionRequiredMixin,CreateView):
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
-    extra_context = {'titulo': 'clientes'}
     success_url = reverse_lazy('listar_personas')
+    
+    
+    def form_valid(self, form, **kwargs):
+        print(self.request.POST)
+        self.object = form.save(commit=False)
+        if self.kwargs.get('pk') == '1':
+            redirectUrl = 'listar_empleados'
+            try:
+                tipoEmpleado=Tipo_Usuarios.objects.get(descr="Empleado")
+                self.object.tipo_usuario = tipoEmpleado
+            except Tipo_Usuarios.DoesNotExist:
+                print("Error al obtener el tipo empleado")
+        else:
+            redirectUrl = 'listar_clientes'
+        super(Crear_Persona, self).form_valid(form)
+        return redirect(redirectUrl)
+    
+    def get_context_data(self, **kwargs):
+        context = super(Crear_Persona, self).get_context_data(**kwargs)
+        if self.kwargs.get('pk') == '1':
+            context['esEmpleado'] = True
+            context['titulo'] = 'empleados'
+            tipoEmpleado=Tipo_Usuarios.objects.get(descr="Empleado")
+            context['form'] = PersonaForm(initial={'tipo_usuario':tipoEmpleado})
+        else:
+            context['esEmpleado'] = False
+            context['titulo'] = 'clientes'
+            context['form'] = self.form_class
+        return context
 
 # Listar solo los clientes
 class Listar_Clientes(PermissionRequiredMixin,ListView):
     permission_required = 'editor.dev_ver_clientes'
-    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` != 1 ')
+    queryset = Personas.objects.exclude(tipo_usuario__descr="Empleado")
     template_name = 'plantilla_lista.html'
     extra_context={'titulo':'clientes', 'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente', 'telefono_url':'listar_telefonos', 'direccion_url':'listar_direcciones', 'detalle_url':'detalle_persona'}
 
