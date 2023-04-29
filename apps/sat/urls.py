@@ -43,7 +43,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('listar-comentarios', views.listar_Comentarios, name="listar_comentarios"),
     path('eliminar-comentario/<pk>', views.eliminar_Comentario, name="eliminar_comentario"),
     # URL del modelo Tipo de archivo
-   path('crear-tipo-archivos', views.crear_Tipo_Archivo, name="crear_tipo_archivos"),
+    path('crear-tipo-archivos', views.crear_Tipo_Archivo, name="crear_tipo_archivos"),
     path('editar-tipo-archivo/<pk>', views.editar_Tipo_Archivo.as_view(), name="editar_tipo_archivo"),
     path('listar-tipo-archivos', views.listar_Tipo_Archivos, name="listar_tipo_archivos"),
     path('eliminar-tipo_archivo/<pk>', views.eliminar_Tipo_Archivo, name="eliminar_tipo_archivo"),

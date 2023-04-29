@@ -271,7 +271,7 @@ class editar_archivo(UpdateView):
 def eliminar_archivo(request, pk):
     registro = get_object_or_404(Entrega_Doc, id=pk)
     try:
-        file_path = os.path.join(settings.MEDIA_ROOT, 'carp_' + str(registro.cliente_id) + '/' + str(registro.direccion))
+        file_path = os.path.join(settings.MEDIA_ROOT, str(registro.direccion))
         default_storage.delete(file_path)
     except SuspiciousFileOperation:
         # Manejar la excepción de operación de archivo sospechosa
