@@ -48,7 +48,7 @@ class Listar_Personas(PermissionRequiredMixin,ListView):
 # Listar solo los empleados
 class Listar_Empleados(PermissionRequiredMixin,ListView):
     permission_required = 'editor.dev_ver_empleados'
-    queryset = Personas.objects.raw('SELECT * FROM `personas` WHERE `tipo_usuario_id` = 1 ')
+    queryset = Personas.objects.filter(tipo_usuario__descr="Empleado")
     template_name = 'plantilla_lista.html'
     extra_context={'titulo':'empleados','actualizar_url': 'actualizar_empleado', 'borrar_url':'eliminar_empleado'}
 

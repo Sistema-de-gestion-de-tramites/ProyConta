@@ -239,7 +239,12 @@ def crear_Rol(request):
         form = Formulario_Rol(request.POST)
         if form.is_valid():
             if(Group.objects.filter(name= request.POST['nombre']).exists()):
-                messages.add_message(request=request,level=messages.ERROR,message="Error el rol ya existe",extra_tags='danger')
+                mensajeError="Error el rol ya existe"
+                messages.add_message(request=request,level=messages.ERROR,message=mensajeError,extra_tags='danger')
+                return redirect('crear_rol')
+            elif(request.POST['nombre']=='Empleado'):
+                mensajeError="Error no puedes crear un rol con este nombre"
+                messages.add_message(request=request,level=messages.ERROR,message=mensajeError,extra_tags='danger')
                 return redirect('crear_rol')
             else:
                 nuevoRol = Group(name=request.POST['nombre'])

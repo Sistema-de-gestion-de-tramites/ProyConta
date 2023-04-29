@@ -18,7 +18,7 @@ from . import views #{IMPORTAR LAS CLASE DE VIEW DE LA APP CLIENTES}
 
 urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     #path('registro/', views.registro, name="registro"),
-    path('registrar_persona/', views.Crear_Persona.as_view(), name="registrar_persona"),
+    path('registrar_persona/<pk>', views.Crear_Persona.as_view(), name="registrar_persona"),
 
     path('lista_clientes/', views.Listar_Clientes.as_view(), name="listar_clientes"),
     path('actualizar_cliente/<pk>', views.Cliente_Update.as_view(), name="actualizar_cliente"),
