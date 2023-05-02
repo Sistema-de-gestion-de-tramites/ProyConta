@@ -10,15 +10,22 @@ from django.db.models import Q
 
 #formulario version 3
 
+# Charfield que pasa el contenido en mayusculas
+class UpperField(forms.CharField):
+    def to_python(self, value):
+        return value.upper()
+
 class ChoiceField_tipo_usuario(forms.ModelChoiceField):     # Clase para el formulario de PersonaForm
     def label_from_instance(self, obj):
         return obj.descr
 
 class PersonaForm(forms.ModelForm):
-    correo = forms.EmailField()
+    #correo = forms.EmailField()
+    rfc = UpperField(label="RFC")
+    curp = UpperField(label="CURP")
     fecha_nac = forms.DateField(initial=datetime.date.today, label="Fecha de nacimiento")
     fecha_reg = forms.DateField(initial=datetime.date.today, label="Fecha de registro", disabled=True)
-    queryTipoUsuario = Tipo_Usuarios.objects.exclude(descr="Empleado")
+    queryTipoUsuario = Tipo_Usuarios.objects.exclude(descr__icontains="Empleado")
     tipo_usuario = forms.ModelChoiceField(queryTipoUsuario,required=False,initial=queryTipoUsuario[0])
 
     class Meta:

@@ -22,7 +22,7 @@ from django.core.exceptions import PermissionDenied
 #from apps.empleados.forms import EmpleadoForm
 from apps.clientes.forms import PersonaForm
 from apps.empleados.forms import RegistroUsuarioForm
-from apps.empleados.models import Personas
+from apps.empleados.models import *
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
@@ -52,11 +52,10 @@ class Listar_Empleados(PermissionRequiredMixin,ListView):
     template_name = 'plantilla_lista.html'
     extra_context={'titulo':'empleados','actualizar_url': 'actualizar_empleado', 'borrar_url':'eliminar_empleado'}
 
-class Empleado_Delete(PermissionRequiredMixin,UpdateView):
+class Empleado_Delete(PermissionRequiredMixin,DeleteView):
     permission_required = 'editor.dev_eliminar_empleados'
     model = Personas
-    form_class = PersonaForm
-    template_name = 'formulario.html'
+    template_name = 'borrar.html'
     success_url = reverse_lazy('listar_empleados')
 
 class Empleado_Update(PermissionRequiredMixin,UpdateView):
@@ -65,6 +64,18 @@ class Empleado_Update(PermissionRequiredMixin,UpdateView):
     form_class = PersonaForm
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_empleados')
+    extra_context = {'esEmpleado': True, 'titulo': 'empleados'}
+
+    def form_valid(self, form):
+        registro = form.save(commit=False)
+        try:
+            tipoEmpleado = Tipo_Usuarios.objects.filter(descr__icontains="Empleado").first()
+            registro.tipo_usuario_id = tipoEmpleado.pk
+        except Tipo_Usuarios.DoesNotExist:
+            print("Error al obtener el tipo empleado")
+        registro.save()
+        return super().form_valid(form)
+
     
 def registro(request):
     if(request.user.has_perm("editor.dev_crear_usuario")):

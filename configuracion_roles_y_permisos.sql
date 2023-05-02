@@ -1,4 +1,5 @@
 use project_ing;
+SET SQL_SAFE_UPDATES = 0;
 select * from auth_permission;
 
 -- permisos cuenta de usuario
@@ -36,3 +37,5 @@ INSERT INTO auth_group(name) VALUES("Administrador");
 INSERT INTO tipo_usuarios(descr) VALUES("Empleado");
 INSERT INTO tipo_usuarios(descr) VALUES("Fisica");
 INSERT INTO tipo_usuarios(descr) VALUES("Moral");
+
+SET SQL_SAFE_UPDATES = 1;

@@ -1,9 +1,34 @@
 from django.db import models
-from django.core.validators import RegexValidator
-
+from django.core.exceptions import ValidationError
+import re
 # Tablas de personas
 # --------------------------------------------------------------------------
 from django.db.models import ForeignKey
+
+def validar_CURP(value):
+    patron = r"^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$"
+
+    if not re.match(patron, value):
+        raise ValidationError('CURP invalida.')
+
+def validar_RFC(value):
+    patron = r"^[A-Za-zñÑ&]{3,4}\d{6}\w{3}$"
+
+    if not re.match(patron, value):
+        raise ValidationError('RFC invalido.')
+
+def validar_telefono(value):
+    patron = r"^\d{10}$"
+
+    if not re.match(patron, value):
+        raise ValidationError('Telefono invalido.')
+
+def validar_CP(value):
+    patron = r"^\d{5}$"
+
+    if not re.match(patron, value):
+        raise ValidationError('El codigo postal debe tener 5 digitos.')
+
 
 
 class Tipo_Archivos(models.Model):
@@ -94,10 +119,10 @@ class Personas(models.Model):
         ('V', 'VIUDO(A)'),
     ]
     estado_civil = models.CharField(max_length=1, choices=ESTADO_CIV, default='S', verbose_name="Estado civil")
-
+    correo = models.EmailField(max_length=254)
     fecha_nac = models.DateField(verbose_name="Fecha de nacimiento")
-    rfc = models.CharField(max_length=13, verbose_name="RFC")
-    curp = models.CharField(max_length=28, verbose_name="CURP")
+    rfc = models.CharField(validators=[validar_RFC], max_length=13, unique=True, verbose_name="RFC")
+    curp = models.CharField(validators=[validar_CURP], max_length=28, verbose_name="CURP")
     fecha_reg = models.DateField(verbose_name="Fecha de registro")
     tipo_usuario = models.ForeignKey(Tipo_Usuarios, on_delete=models.CASCADE, verbose_name="Tipo de usuario")
 
@@ -106,6 +131,14 @@ class Personas(models.Model):
         verbose_name = "Persona"
         verbose_name_plural = "Personas"
         db_table = "personas"
+
+    def clean_curp(self):
+        validar_CURP(self.curp)
+        return self.curp
+
+    def clean_rfc(self):
+        validar_RFC(self.rfc)
+        return self.rfc
 
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Personas._meta.fields]
@@ -119,14 +152,17 @@ class Personas(models.Model):
 class Telefonos(models.Model):
     persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Persona")
     descr = models.CharField(max_length=30, verbose_name="Descripción")
-    telRegex = RegexValidator(regex=r"^\d{10}$")
-    telefono = models.CharField(validators=[telRegex], max_length=10, unique=True, verbose_name="Telefono")
+    telefono = models.CharField(validators=[validar_telefono], max_length=10, unique=True, verbose_name="Telefono")
 
     class Meta:
         managed = True
         verbose_name = "Telefono"
         verbose_name_plural = "Telefonos"
         db_table = "telefonos"
+
+    def clean_telefono(self):
+        validar_telefono(self.telefono)
+        return self.telefono
 
     def get_fields_and_values(self):
         fields = []
@@ -153,8 +189,7 @@ class Direcciones(models.Model):
     num_ext = models.IntegerField(verbose_name="Num. Ext.")
     calle = models.CharField(max_length=40, verbose_name="Calle")
     colonia = models.CharField(max_length=40, verbose_name="Colonia")
-    cpRegex = RegexValidator(regex=r"^\d{5}$")
-    cod_postal = models.CharField(validators=[cpRegex], max_length=5, verbose_name="Codigo Postal")
+    cod_postal = models.CharField(validators=[validar_CP], max_length=5, verbose_name="Codigo Postal")
     municipio = models.CharField(max_length=25, verbose_name="Municipio")
     estado = models.CharField(max_length=25, verbose_name="Estado")
 
@@ -163,6 +198,10 @@ class Direcciones(models.Model):
         verbose_name = "Dirección"
         verbose_name_plural = "Direcciones"
         db_table = "direcciones"
+
+    def clean_cod_postal(self):
+        validar_CP(self.cod_postal)
+        return self.cod_postal
 
     def get_fields_and_values(self):
         fields = []

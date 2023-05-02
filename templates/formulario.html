@@ -4,10 +4,23 @@
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}
+{% if form.errors %}
+    <ul>
+      {% for field_name, field_errors in form.errors.items %}
+        <li>{{ field_name }}:
+          <ul>
+            {% for error in field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 <div class="my-3 p-3 bg-body rounded-4 shadow-sm">
     <div class="modal-header border-bottom-0">
         <h1 class="modal-title fs-5">Añadir {{titulo}}</h1>

@@ -51,35 +51,43 @@ class Crear_Persona(PermissionRequiredMixin,CreateView):
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
-    success_url = reverse_lazy('listar_personas')
-    
-    
+    success_url = reverse_lazy('listar_clientes')
+
+    def form_invalid(self, form):
+        # Acceder a los errores del formulario
+        errores = form.errors
+
+        context = self.get_context_data(form=form, errores=errores)
+        return self.render_to_response(context)
+
     def form_valid(self, form, **kwargs):
-        print(self.request.POST)
-        self.object = form.save(commit=False)
+        registro = form.save(commit=False)
         if self.kwargs.get('pk') == '1':
-            redirectUrl = 'listar_empleados'
+            self.success_url = reverse_lazy('listar_empleados')
             try:
-                tipoEmpleado=Tipo_Usuarios.objects.get(descr="Empleado")
-                self.object.tipo_usuario = tipoEmpleado
+                tipoEmpleado = Tipo_Usuarios.objects.filter(descr__icontains="Empleado").first()
+                registro.tipo_usuario_id = tipoEmpleado.pk
             except Tipo_Usuarios.DoesNotExist:
                 print("Error al obtener el tipo empleado")
-        else:
-            redirectUrl = 'listar_clientes'
-        super(Crear_Persona, self).form_valid(form)
-        return redirect(redirectUrl)
-    
+        return super().form_valid(form)
+
+    # Formulario del empleado
+    def get_form_emp(self, form_class=None):
+        form = super().get_form(form_class)
+        tipoEmpleado = get_object_or_404(Tipo_Usuarios, descr__icontains="Empleado")
+        form.fields['tipo_usuario'].initial = tipoEmpleado
+        return form
+
     def get_context_data(self, **kwargs):
-        context = super(Crear_Persona, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         if self.kwargs.get('pk') == '1':
             context['esEmpleado'] = True
             context['titulo'] = 'empleados'
-            tipoEmpleado=Tipo_Usuarios.objects.get(descr="Empleado")
-            context['form'] = PersonaForm(initial={'tipo_usuario':tipoEmpleado})
+            context['form'] = self.get_form_emp()
         else:
             context['esEmpleado'] = False
             context['titulo'] = 'clientes'
-            context['form'] = self.form_class
+            context['form'] = self.get_form()
         return context
 
 # Listar solo los clientes
@@ -117,6 +125,7 @@ class Cliente_Update(PermissionRequiredMixin,UpdateView):
     form_class = PersonaForm
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_clientes')
+    extra_context = {'esEmpleado': False, 'titulo': 'clientes'}
 
 def Registrar_Telefono(request, per_id):
     persona = get_object_or_404(Personas, pk = per_id)
