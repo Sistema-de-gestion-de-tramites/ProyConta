@@ -83,6 +83,19 @@ class DireccionesForm(forms.ModelForm):
             'estado',
         ]
 
+class CuentasForm(forms.ModelForm):
+    nombre = forms.CharField(label='Nombre', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    persona = forms.HiddenInput()
+
+    class Meta:
+        model = Cuentas
+
+        fields = [
+            'nombre',
+            'cuenta',
+            'contra',
+        ]
+
 class Formulario_Documento(forms.ModelForm):
     empleado = forms.HiddenInput()
     fecha = forms.DateField(disabled=True, initial=datetime.date.today)

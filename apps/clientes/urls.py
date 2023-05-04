@@ -24,29 +24,28 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('actualizar_cliente/<pk>', views.Cliente_Update.as_view(), name="actualizar_cliente"),
     path('eliminar_cliente/<pk>', views.Cliente_Delete.as_view(), name="eliminar_cliente"),
 
-    path('registrar_telefono/<per_id>', views.Registrar_Telefono, name="registrar_telefono"),
-    path('lista_telefono/<per_id>', views.listar_telefonos, name="listar_telefonos"),
-    path('actualizar_telefono/<pk>', views.editar_Telefono, name="actualizar_telefono"),
-    path('eliminar_telefono/<pk>', views.eliminar_Telefono, name="eliminar_telefono"),
-
-    path('registrar_telefono/<per_id>', views.Registrar_Telefono, name="registrar_telefono"),
+    path('registrar_telefono/<pk>', views.Registrar_Telefono.as_view(), name="registrar_telefono"),
     path('lista_telefono/<per_id>', views.listar_telefonos, name="listar_telefonos"),
     path('actualizar_telefono/<pk>', views.editar_Telefono, name="actualizar_telefono"),
     path('eliminar_telefono/<pk>', views.eliminar_Telefono, name="eliminar_telefono"),
 
     path('directorio/', views.Directorio, name="directorio"),
 
-    path('registrar_direccion/<per_id>', views.Registrar_Direccion, name="registrar_direccion"),
+    path('registrar_direccion/<pk>', views.Registrar_Direccion.as_view(), name="registrar_direccion"),
     path('lista_direcciones/<per_id>', views.listar_Direcciones, name="listar_direcciones"),
     path('actualizar_direccion/<pk>', views.editar_Direccion, name="actualizar_direccion"),
     path('eliminar_direccion/<pk>', views.eliminar_Direccion, name="eliminar_direccion"),
+
+    path('registrar_cuenta/<pk>', views.Registrar_Cuenta.as_view(), name="registrar_cuenta"),
+    path('lista_cuenta/<per_id>', views.listar_Cuentas, name="listar_cuentas"),
+    path('actualizar_cuenta/<pk>', views.editar_Cuenta, name="actualizar_cuenta"),
+    path('eliminar_cuenta/<pk>', views.eliminar_Cuenta, name="eliminar_cuenta"),
 
     path('subir_documento', views.subir_archivo.as_view(), name="subir_documento"),
     path('lista_documento/', views.listar_archivos, name="listar_todos_documentos"),
     path('lista_documento/<clie_id>', views.busqueda_archivos, name="listar_documentos"),
     path('actualizar_documento/<pk>', views.editar_archivo.as_view(), name="actualizar_documento"),
     path('eliminar_documento/<pk>', views.eliminar_archivo, name="eliminar_documento"),
-    #path('files/<pk>', views.view_file, name="media"),
 
     path('detalles/<pk>', views.detalle_Persona, name="detalle_persona")
 ]

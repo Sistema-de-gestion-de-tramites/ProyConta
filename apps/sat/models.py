@@ -141,7 +141,15 @@ class Personas(models.Model):
         return self.rfc
 
     def get_fields_and_values(self):
-        return [(field.verbose_name, field.value_to_string(self)) for field in Personas._meta.fields]
+        fields = []
+        for field in self._meta.fields:
+            if isinstance(field, ForeignKey):
+                related_obj = getattr(self, field.name)
+                if related_obj is not None:
+                    fields.append((field.verbose_name, related_obj.nombre_principal()))
+            else:
+                fields.append((field.verbose_name, getattr(self, field.name)))
+        return fields
 
     def nombre_principal(self):
         return self.nombre + " " + self.ap_paterno + " " + self.ap_materno
