@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import permission_required
 
 #from apps.empleados.forms import EmpleadoForm
 from apps.clientes.forms import PersonaForm
-from apps.empleados.forms import RegistroUsuarioForm
+from apps.empleados.forms import *
 from apps.empleados.models import *
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -162,16 +162,14 @@ class Usuario_Delete(PermissionRequiredMixin,DeleteView):
 class usuario_Update(PermissionRequiredMixin,UpdateView):
     permission_required = 'auth.dev_editar_usuario'
     model = User
-    form_class = RegistroUsuarioForm
-    template_name = 'formulario.html'
+    form_class = ActualizarUsuarioForm
+    template_name = 'registro.html'
     success_url = reverse_lazy('listar_cuentas_usuario')
 
     def form_valid(self, form):
         cuentaUsuario = form.save(commit=False)
         usuario_empleado = get_object_or_404(Usuario_empleado, usuario=self.object)
         usuario_empleado.empleado = get_object_or_404(Personas, id=self.request.POST['empleado'])
-        #print(usuario_empleado.usuario.username)
-        #print(self.request.POST.getlist('roles',default=[]))
         guardarPermisosDeUsuario(usuario_empleado.usuario,self.request.POST.getlist('roles',default=[]))
         usuario_empleado.save()
         cuentaUsuario.save()
@@ -184,6 +182,31 @@ class usuario_Update(PermissionRequiredMixin,UpdateView):
         roles = list(usuario_empleado.usuario.groups.all())
         form.fields['empleado'].initial = usuario_empleado.empleado
         form.fields['roles'].initial = roles
+        context['empleado'] = usuario_empleado
         context['titulo'] = 'Usuarios'
+        context['form'] = form
+        return context
+
+#actualizar contraseña usuario
+class usuario_contrasenia_Update(PermissionRequiredMixin,UpdateView):
+    permission_required = 'auth.dev_editar_usuario'
+    model = User
+    form_class = ActualizarContraseniaUsuarioForm
+    template_name = 'registro.html'
+    success_url = reverse_lazy('listar_cuentas_usuario')
+
+    def form_valid(self, form):
+        cuentaUsuario = form.save(commit=False)
+        cuentaUsuario.save()
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = self.get_form()
+        usuario_empleado = get_object_or_404(Usuario_empleado, usuario=self.object)
+        form.fields['empleado'].initial = usuario_empleado.empleado
+        context['empleado'] = usuario_empleado
+        context['titulo'] = 'Usuarios'
+        context['esActualizarContrasenia'] = True
         context['form'] = form
         return context

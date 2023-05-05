@@ -16,6 +16,27 @@ class RegistroUsuarioForm(UserCreationForm):
     listaRolesDisponibles = Group.objects.all()
     roles = forms.ModelMultipleChoiceField(listaRolesDisponibles,widget=forms.CheckboxSelectMultiple)
      
-    class meta:
+    class Meta:
         model = User
         fields = ['username','password1','password2','empleado','roles']
+
+class ActualizarUsuarioForm(forms.ModelForm):
+    username = forms.CharField(label="Nombre de usuario", max_length=50, required=True)
+    empleado = forms.ModelChoiceField(Personas.objects.filter(tipo_usuario=1),required=True,label="Empleado Asociado")
+    listaRolesDisponibles = Group.objects.all()
+    roles = forms.ModelMultipleChoiceField(listaRolesDisponibles,widget=forms.CheckboxSelectMultiple)
+     
+    class Meta:
+        model = User
+        fields = ['username']
+
+class ActualizarContraseniaUsuarioForm(UserCreationForm):
+    username = forms.CharField(label="Nombre de usuario", max_length=50, required=False,disabled=True)
+    empleado = forms.CharField(label="Empleado propietario", max_length=50, required=False,disabled=True)
+    password1 = forms.CharField(label="Contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Confirmar contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    
+     
+    class Meta:
+        model = User
+        fields = ['username','empleado','password1','password2']
