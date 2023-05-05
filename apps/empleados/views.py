@@ -13,11 +13,12 @@ ____________________________________________________________________________
 """
 from email.policy import default
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.models import Permission, Group,User
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required
 
 #from apps.empleados.forms import EmpleadoForm
 from apps.clientes.forms import PersonaForm
@@ -25,6 +26,8 @@ from apps.empleados.forms import RegistroUsuarioForm
 from apps.empleados.models import *
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+
+from apps.sat.models import Usuario_empleado
 
 #{----------------------------------------------------------------------------------------}
 
@@ -76,17 +79,26 @@ class Empleado_Update(PermissionRequiredMixin,UpdateView):
         registro.save()
         return super().form_valid(form)
 
-    
+# CRUD cuentas de usuario
+
+#crear usuario
+@permission_required('auth.dev_crear_usuario')   
 def registro(request):
-    if(request.user.has_perm("editor.dev_crear_usuario")):
         if request.method == 'GET':
             form = RegistroUsuarioForm
-            return render(request,'registro.html',{'form':form})
+            #form.listaRolesDisponibles = Group.objects.all()
+            noHayRoles = Group.objects.all().exclude(name="Administrador").exists()
+            if noHayRoles:
+                sinRegistros=False
+            else:
+                sinRegistros=True 
+            return render(request,'registro.html',{'form':form,'sinResgistros':sinRegistros})
         else:
             form = RegistroUsuarioForm(request.POST)
             if form.is_valid():
                 nuevoUsuario = form.save()
                 listaRoles = request.POST.getlist('roles',default=[])
+                guardarUsuarioDeEmpleado(request.POST,nuevoUsuario)
                 guardarPermisosDeUsuario(nuevoUsuario,listaRoles)
                 messages.add_message(request=request,level=messages.SUCCESS,message="Registro Exitoso")
                 redirect('registro/')
@@ -94,8 +106,20 @@ def registro(request):
                 messages.add_message(request=request,level=messages.ERROR,message="Datos invalidos",extra_tags="danger")
                 redirect('registro/')
         return render(request,'registro.html',{'form':form})
-    else:
-        raise PermissionDenied
+
+def guardarUsuarioDeEmpleado(post,usuario):
+    try:
+        empleado = Personas.objects.get(id=post['empleado'])
+    except:
+        return redirect('registro/')
+    usuario.email=empleado.correo
+    usuario.save()
+    nuevoUsuario_Empleado = Usuario_empleado(
+        empleado = empleado,
+        usuario = usuario
+    )
+    nuevoUsuario_Empleado.save()
+    
 
 def guardarPermisosDeUsuario(usuarioModelo,listaRoles):
     listaModeloRoles = []
@@ -108,20 +132,58 @@ def guardarPermisosDeUsuario(usuarioModelo,listaRoles):
             listaModeloRoles.append(rolModelo)
         except Group.DoesNotExist:
             print("Error rol no encontrado")
-    if len(listaModeloRoles)==1:
-        usuarioModelo.groups.remove(listaModeloRoles[0])
-        usuarioModelo.groups.add(listaModeloRoles[0])
-    else:
-        usuarioModelo.groups.set(listaModeloRoles)
+    usuarioModelo.groups.clear()
+    usuarioModelo.groups.set(listaModeloRoles)
     usuarioModelo.save()
     listaRolesDeUsuario = usuarioModelo.groups.all()
     listaPermisos = []
     for rolDeUsuario in listaRolesDeUsuario:
         permisos = list(rolDeUsuario.permissions.all().values_list('pk',flat=True))
         listaPermisos = list(set(listaPermisos+permisos))
+    usuarioModelo.user_permissions.clear()
     usuarioModelo.user_permissions.set(listaPermisos)
     usuarioModelo.save()
 
+#listar usuarios
+class Listar_Usuarios(PermissionRequiredMixin,ListView):
+    permission_required = 'auth.dev_ver_usuario'
+    queryset = Usuario_empleado.objects.all()
+    template_name = 'plantilla_lista.html'
+    extra_context={'titulo':'Cuentas de usuario','actualizar_url': 'actualizar_usuario', 'borrar_url':'eliminar_usuario'}
 
+#eliminar usuario
+class Usuario_Delete(PermissionRequiredMixin,DeleteView):
+    permission_required = 'auth.dev_eliminar_usuario'
+    model = User
+    template_name = 'borrar.html'
+    success_url = reverse_lazy('listar_cuentas_usuario')
 
+#actualizar usuario
+class usuario_Update(PermissionRequiredMixin,UpdateView):
+    permission_required = 'auth.dev_editar_usuario'
+    model = User
+    form_class = RegistroUsuarioForm
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_cuentas_usuario')
 
+    def form_valid(self, form):
+        cuentaUsuario = form.save(commit=False)
+        usuario_empleado = get_object_or_404(Usuario_empleado, usuario=self.object)
+        usuario_empleado.empleado = get_object_or_404(Personas, id=self.request.POST['empleado'])
+        #print(usuario_empleado.usuario.username)
+        #print(self.request.POST.getlist('roles',default=[]))
+        guardarPermisosDeUsuario(usuario_empleado.usuario,self.request.POST.getlist('roles',default=[]))
+        usuario_empleado.save()
+        cuentaUsuario.save()
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = self.get_form()
+        usuario_empleado = get_object_or_404(Usuario_empleado, usuario=self.object)
+        roles = list(usuario_empleado.usuario.groups.all())
+        form.fields['empleado'].initial = usuario_empleado.empleado
+        form.fields['roles'].initial = roles
+        context['titulo'] = 'Usuarios'
+        context['form'] = form
+        return context

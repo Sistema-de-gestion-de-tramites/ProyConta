@@ -43,6 +43,10 @@
     <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="40px">
     Empleados
    {% endif %}
+   {% if titulo == 'Cuentas de usuario' %}
+    <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="40px">
+    Cuentas de usuario
+   {% endif %}
 
 {% endblock%}
 
@@ -142,13 +146,13 @@
 
    {% endif %}
 
-   {% if titulo == 'empleados' %}
+   {% if titulo == 'empleados' or titulo == 'Cuentas de usuario' %}
     <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
       <li class="nav-item ">
-        <a class="nav-link link-secondary" >Lista</a>
+        <a class="nav-link link-secondary" href="{% url 'listar_empleados' %}">Lista de empleados</a>
       </li>
         <li class="nav-item ">
-        <a class="nav-link link-secondary" >Lista</a>
+        <a class="nav-link link-secondary" href="{% url 'listar_cuentas_usuario' %}">Lista de cuentas de usuario</a>
       </li>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
         <div class="btn-toolbar mb-2 mb-md-0 ">
@@ -172,7 +176,7 @@
               <img src="{% static 'img/icons8-add.png' %}" height="20px">
                Registrar comentario
          </a>
-{% endif %}
+    {% endif %}
 
     {% block contenido %}
     {% endblock %}

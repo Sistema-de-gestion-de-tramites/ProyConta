@@ -300,7 +300,7 @@ def editar_Rol(request,pk):
                 rol.permissions.clear()
                 rol.save()
                 guardarPermisos(rol,request.POST)
-                editarPermisosDeRolesEnUsuarios(rol)
+                editarPermisosDeRoleEnUsuarios(rol)
                 return redirect('listar_roles')
         else:
          mensajeErrorFormulario ="Complete correctamente el formulario"
@@ -325,14 +325,20 @@ def eliminar_Rol(request, pk):
     registro = get_object_or_404(Group, id=pk)
     if registro.name != 'Administrador':
         registro.delete()
+    actualizarPermisosEnUsuarios()
     return redirect('listar_roles')
 
-def editarPermisosDeRolesEnUsuarios(rol):
+def editarPermisosDeRoleEnUsuarios(rol):
     usuarios = User.objects.filter(groups=rol)
     for usuario in usuarios:
-        usuario.groups.remove(rol)
-        guardarPermisosDeUsuario(usuario,[rol.id])
-        
+        print(usuario.groups.all().values_list('id',flat=True))
+        guardarPermisosDeUsuario(usuario,usuario.groups.all().values_list('id',flat=True))
+
+def actualizarPermisosEnUsuarios():
+    usuarios = User.objects.all()
+    for usuario in usuarios:
+        print(usuario.groups.all().values_list('id',flat=True))
+        guardarPermisosDeUsuario(usuario,usuario.groups.all().values_list('id',flat=True))        
 # vista de documento
 
 def crearTipoDocumento(request):

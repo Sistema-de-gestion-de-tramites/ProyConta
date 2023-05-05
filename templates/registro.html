@@ -13,9 +13,18 @@
     {% for field in form %}
         <p>
         {% if field.name == form.roles.name %}
-        [Advertencia si seleccionas Administrador el usuario obtendra todos los permisos]
-        <br><br>
-        {{field.label}} : {{field}} 
+            {% if sinResgistros %}
+                {{field.label}}: no hay roles registrados
+            {% else %}
+                {{field.label}}:<br>
+                {% for opcion in field %}
+                    {% if opcion.data.label == 'Administrador' and user.is_superuser %}
+                    {{opcion}} [Advertencia este rol otorga todos los permisos en el sistema. Solo los Administradores pueden asignar este rol]<br>
+                    {% elif opcion.data.label != 'Administrador' %}
+                    {{opcion}}<br>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         {% else %}
         {{field.label}} : {{field}}
         {% endif %}
@@ -23,6 +32,7 @@
     {% endfor %}
     <div class="d-grid gap-2 col-3 mx-auto">
         <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
+        <a class="btn btn-sm btn-danger btn-lg" href="{% url 'listar_cuentas_usuario' %}">Cancelar</a>
     </div>
 </form>
 

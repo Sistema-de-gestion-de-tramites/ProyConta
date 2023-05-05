@@ -9,11 +9,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User,Group
 
 class RegistroUsuarioForm(UserCreationForm):
-    email = forms.EmailField(label="Correo electronico")
     username = forms.CharField(label="Nombre de usuario", max_length=50, required=True)
-    password1 = forms.CharField(label="contraseña", max_length=50, required=True, widget=forms.PasswordInput)
-    password2 = forms.CharField(label="confirmar contraseña", max_length=50, required=True, widget=forms.PasswordInput)
-    roles = forms.ModelMultipleChoiceField(Group.objects.all(),widget=forms.CheckboxSelectMultiple)
+    password1 = forms.CharField(label="Contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Confirmar contraseña", max_length=50, required=True, widget=forms.PasswordInput)
+    empleado = forms.ModelChoiceField(Personas.objects.filter(tipo_usuario=1),required=True,label="Empleado Asociado")
+    listaRolesDisponibles = Group.objects.all()
+    roles = forms.ModelMultipleChoiceField(listaRolesDisponibles,widget=forms.CheckboxSelectMultiple)
+     
     class meta:
         model = User
-        fields = ['username','email','password1','password2','esAdministrador','roles']
+        fields = ['username','password1','password2','empleado','roles']

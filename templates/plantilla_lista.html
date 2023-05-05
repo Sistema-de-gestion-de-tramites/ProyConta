@@ -6,6 +6,75 @@
 {% endblock %}
 
 {% block contenido %}
+{% if titulo == 'Cuentas de usuario' %}<!--lista usuarios-->
+{% if object_list %}
+<br>
+    <ul class="list-group">
+    {% for obj in object_list %}
+        <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-2" style="background-color: #e2e3e5;">
+            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#808080"></rect><text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text></svg>
+            <div class="ms-2 me-auto">
+
+                    <span class="d-block ">
+                        <div class="d-inline  ">
+                            <strong>Nombre de usuario:</strong>
+                        </div>
+                        <div class="d-inline ">
+                            {{ obj.usuario.username }}
+                        </div>
+                    </span>
+                    <span class="d-block ">
+                        <div class="d-inline  ">
+                            <strong>Correo:</strong>
+                        </div>
+                        <div class="d-inline ">
+                            {{ obj.usuario.email }}
+                        </div>
+                    </span>
+                    <span class="d-block ">
+                        <div class="d-inline  ">
+                            <strong>Empleado propietario:</strong>
+                        </div>
+                        <div class="d-inline ">
+                            {{ obj.empleado.nombre }} {{ obj.empleado.ap_paterno }} {{ obj.empleado.ap_materno }}
+                        </div>
+                    </span>
+            </div>
+            <p class="pb-3 mb-0 small lh-sm ">
+        {% if actualizar_url  %}
+            <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.usuario.id %}">
+                <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                Editar
+            </a>
+        {% endif %}
+        {% if borrar_url %}
+             <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.usuario.id %}">
+                <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                Eliminar
+            </a>
+        {% endif %}
+            </p>
+    <br><br>
+    {% empty %}
+         <div class="pt-3">
+        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+            <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+            No hay registros
+        </div>
+        </div>
+    {% endfor %}
+        </li>
+    </ul>
+{% else %}
+<div class="pt-3">
+    <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+        <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+        No hay registros
+    </div>
+</div>
+{% endif %}
+<!--termina lista usuario-->
+{% else %} <!--lista general-->
 {% if object_list %}
     <br>
     <ul class="list-group">
@@ -106,6 +175,6 @@
     <a href="{% url crear_url valor_fk %}">Nuevo registro</a>
 {% elif crear_url %}
     <a href="{% url crear_url %}">Nuevo registro</a> {% endif %}
-
+{% endif %} <!--Fin lista general-->
 {% endblock %}
 

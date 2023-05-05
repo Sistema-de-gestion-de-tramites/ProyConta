@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 import re
 # Tablas de personas
 # --------------------------------------------------------------------------
@@ -69,25 +70,6 @@ class Tipo_Documentos(models.Model):
     def __str__(self):
         return self.nombre
 
-class Rol(models.Model):
-    Rol = models.CharField(max_length=20, verbose_name="Nombre")
-    documentos = models.ManyToManyField(Tipo_Documentos, related_name="documentos")
-
-    class Meta:
-        managed = True
-        verbose_name = "Rol"
-        verbose_name_plural = "Roles"
-        db_table = "Rol"
-
-    def get_fields_and_values(self):
-        return [(field.verbose_name, field.value_to_string(self)) for field in Rol._meta.fields]
-
-    def nombre_principal(self):
-        return self.Rol
-
-    def __str__(self):
-        return self.Rol
-
 class Tipo_Usuarios(models.Model):
     descr = models.CharField(max_length=20, verbose_name="Descripción")
 
@@ -105,7 +87,7 @@ class Tipo_Usuarios(models.Model):
 
     def __str__(self):
         return self.descr
-
+ 
 class Personas(models.Model):
     nombre = models.CharField(max_length=50, verbose_name="Nombre")
     ap_paterno = models.CharField(max_length=30, verbose_name="Apellido paterno")
@@ -313,3 +295,15 @@ class Entrega_Doc(models.Model):
                 fields.append((field.verbose_name, getattr(self, field.name)))
         return fields
 
+class Usuario_empleado(models.Model):
+    empleado = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="empleado_id", verbose_name="Empleado")
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="usuario_id", verbose_name="Usuario")
+
+    class Meta:
+        managed = True
+        verbose_name = "usuario empleado"
+        verbose_name_plural = "usuarios empleados"
+        db_table = "usuario_empleado"
+
+    def get_fields_and_values(self):
+        return [(field.verbose_name, field.value_to_string(self)) for field in Usuario_empleado._meta.fields]

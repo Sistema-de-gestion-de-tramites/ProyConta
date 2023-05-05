@@ -9,7 +9,7 @@ from django import forms
 from .templatetags.poll_extras import get_verbose_name
 from django.contrib.auth.models import Group,Permission
 
-from .models import Rol, Tipo_Documentos, Estados, Comentarios, Tipo_Archivos
+from .models import Tipo_Documentos, Estados, Comentarios, Tipo_Archivos
 #Formulario Persona
 """
 #{--------------------------------------------------------------------------------}
