@@ -154,7 +154,7 @@ class Registrar_Telefono(CreateView):
 # Directorio
 def Directorio(request):
     lista = Personas.objects.all()
-    return render(request, 'directorio.html', {'object_list': lista})
+    return render(request, 'directorio.html', {'titulo':'directorio','object_list': lista})
 
 def listar_telefonos(request, per_id):
     persona = get_object_or_404(Personas, pk=per_id)
@@ -315,7 +315,7 @@ def busqueda_archivos(request, clie_id):
 
 def listar_archivos(request):
     lista = Entrega_Doc.objects.all()
-    return render(request, 'plantilla_lista.html', {'object_list': lista, 'actualizar_url': 'actualizar_documento', 'borrar_url': 'eliminar_documento', 'crear_url': 'subir_documento'})
+    return render(request, 'plantilla_lista.html', {'titulo': 'fichero', 'object_list': lista, 'actualizar_url': 'actualizar_documento', 'borrar_url': 'eliminar_documento', 'crear_url': 'subir_documento'})
 
 class editar_archivo(UpdateView):
     model = Entrega_Doc

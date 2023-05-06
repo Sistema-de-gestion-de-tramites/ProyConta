@@ -160,7 +160,7 @@ def crear_Estado(request):
 
 def listar_Estados(request):
     lista = Estados.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo':'Estados', 'object_list': lista, 'actualizar_url': 'editar_estado', 'borrar_url':'eliminar_estado'})
+    return render(request, 'plantilla_lista.html', {'titulo':'estados', 'object_list': lista, 'actualizar_url': 'editar_estado', 'borrar_url':'eliminar_estado'})
 
 class editar_Estado(UpdateView):
     model = Estados
@@ -189,7 +189,7 @@ def crear_Comentario(request):
 
 def listar_Comentarios(request):
     lista = Comentarios.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo':'Comentarios', 'object_list': lista, 'actualizar_url': 'editar_comentario', 'borrar_url':'eliminar_comentario'})
+    return render(request, 'plantilla_lista.html', {'titulo':'comentarios', 'object_list': lista, 'actualizar_url': 'editar_comentario', 'borrar_url':'eliminar_comentario'})
 
 class editar_Comentario(UpdateView):
     model = Comentarios

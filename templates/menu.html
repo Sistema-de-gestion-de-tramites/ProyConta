@@ -4,43 +4,52 @@
 {% block title %}
 
   {% if titulo == 'inicio' %}
-    <img src="{% static 'img/nav-color/icons8-home-page-100.png' %}" height="40px">
+    <img class="bi me-2 " src="{% static 'img/nav/icons8-casa-94.png' %}" height="50px">
     Inicio
   {% endif %}
 
-  {% if titulo == 'roles' %}
-    <img src="{% static 'img/nav-color/icons8-security-lock-100.png' %}" height="40px" >
+ {% if titulo == 'fichero' %}
+    <img class="bi me-2" src="{% static 'img/nav/icons8-paquete-94.png' %}" height="50px">
+    Fichero
+  {% endif %}
+
+ {% if titulo == 'roles' %}
+    <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="50px" >
     Roles
-
   {% endif %}
 
-  {% if titulo == 'tramites' %}
-    <img src="{% static 'img/nav-color/icons8-product-documents-100.png' %}" height="40px">
-    Trámites
+  {% if titulo == 'comentarios' %}
+    <img class="bi me-2" src="{% static 'img/nav/icons8-comentarios-94.png' %}" height="50px" >
+    Comentarios
   {% endif %}
 
-  {% if titulo == 'documentos' %}
-    <img src="{% static 'img/nav-color/icons8-documents-100.png' %}" height="40px">
-    Documentos
-  {% endif %}
-
-  {% if titulo == 'archivos' %}
-    <img src="{% static 'img/nav-color/icons8-file-100.png' %}" height="40px">
+ {% if titulo == 'archivos' %}
+    <img class="bi me-2" src="{% static 'img/nav/icons8-documento-94.png' %}" height="50px">
     Archivos
   {% endif %}
 
+  {% if titulo == 'documentos' %}
+    <img class="bi me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
+    Documentos
+  {% endif %}
+
+{% if titulo == 'estados' %}
+    <img class="bi me-2" src="{% static 'img/nav/icons8-aprobación-94.png' %}" height="50px">
+    Estados
+   {% endif %}
+
    {% if titulo == 'directorio' %}
-    <img src="{% static 'img/nav-color/icons8-address-book-100.png' %}" height="40px">
+    <img class="bi me-2" src="{% static 'img/nav/icons8-contactos-94.png' %}" height="50px">
     Directorio
    {% endif %}
 
    {% if titulo == 'clientes' %}
-    <img src="{% static 'img/nav-color/icons8-client-management-100.png' %}" height="40px">
+    <img class="bi me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
     Clientes
    {% endif %}
 
    {% if titulo == 'empleados' %}
-    <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="40px">
+    <img class="bi me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
     Empleados
    {% endif %}
    {% if titulo == 'Cuentas de usuario' %}
@@ -66,86 +75,14 @@
         </div>
       </section>
   {% endif %}
-  {% if titulo == 'roles' %}
-    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
-      <li class="nav-item ">
-        <a class="nav-link link-secondary" href="{% url 'listar_roles' %}">Lista</a>
-      </li>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
-        <div class="btn-toolbar mb-2 mb-md-0 ">
-          <div class="btn-group me-2 ">
-            <a type="button" class="btn btn-sm btn-dark rounded-pill " href="{% url 'crear_rol' %}">
-                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
-                Crear
-            </a>
-          </div>
-        </div>
-        </div>
-    </ul>
-  {% endif %}
-
-  {% if titulo == 'documentos' %}
-  <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
-    <li class="nav-item ">
-      <a class="nav-link link-secondary" href="{% url 'listar_tipo_documento' %}">Lista</a>
-    </li>
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
-      <div class="btn-toolbar mb-2 mb-md-0 ">
-        <div class="btn-group me-2 ">
-          <a type="button" class="btn btn-sm btn-dark rounded-pill "  href="{% url 'crear_tipo_documento' %}">
-               <img src="{% static 'img/icons8-add.png' %}" height="20px">
-              Crear
-          </a>
-        </div>
-      </div>
-      </div>
-  </ul>
 
 
-  {% endif %}
+    {% if titulo == 'documentos' %}{% endif %}
+    {% if titulo == 'archivos' %}{% endif %}
+    {% if titulo == 'directorio' %}{% endif %}
+    {% if titulo == 'clientes' %}{% endif %}
 
-  {% if titulo == 'archivos' %}
-    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
-      <li class="nav-item ">
-        <a class="nav-link link-secondary" href="{% url 'listar_tipo_archivos' %}">Lista</a>
-      </li>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
-        <div class="btn-toolbar mb-2 mb-md-0 ">
-          <div class="btn-group me-2 ">
-            <a type="button" class="btn btn-sm btn-dark rounded-pill "  href="{% url 'crear_tipo_archivos' %}">
-                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
-                Crear
-            </a>
-          </div>
-        </div>
-        </div>
-    </ul>
-
-    {% endif %}
-
-   {% if titulo == 'directorio' %}
-
-   {% endif %}
-
-   {% if titulo == 'clientes' %}
-    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
-      <li class="nav-item ">
-        <a class="nav-link link-secondary" >Lista</a>
-      </li>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
-        <div class="btn-toolbar mb-2 mb-md-0 ">
-          <div class="btn-group me-2 ">
-            <a type="button" class="btn btn-sm btn-dark rounded-pill" href="{% url 'registrar_persona' 2 %}">
-                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
-                Crear
-            </a>
-          </div>
-        </div>
-        </div>
-    </ul>
-
-   {% endif %}
-
+    {#
    {% if titulo == 'empleados' or titulo == 'Cuentas de usuario' %}
     <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
       <li class="nav-item ">
@@ -177,6 +114,10 @@
                Registrar comentario
          </a>
     {% endif %}
+    #}
+    {% if titulo == 'empleados' %}{% endif %}
+    {% if titulo == 'comentarios' %}{% endif %}
+
 
     {% block contenido %}
     {% endblock %}
