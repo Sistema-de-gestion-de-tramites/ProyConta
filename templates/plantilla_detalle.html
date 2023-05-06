@@ -1,22 +1,47 @@
-{% extends 'menu.html' %}
+{% extends 'base/index.html' %}
 
 {% load static %}
+
+{% block title %}
+<img class="bi me-2" src="{% static 'img/icons/icons8-información-94.png' %}" height="50px">
+    Información
+{% endblock%}
 
 {% block css_add %}
 {% endblock %}
 
-{% block contenido %}
+{% block cuerpo %}
 
 {% if obj %}
     {% for key, val in obj.get_fields_and_values %}
-        {% if key != 'ID' %}{{ key}}: {{ val }}<br>{% endif %}
+        {% if key != 'ID' %}
+            {% if key == 'Nombre' %}
+                <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
+                    {{ val }}
+                </b>
+                <br>
+            {% else %}
+                {{ key}}: {{ val }}<br>
+            {% endif %}
+        {% endif %}
     {% empty %}
         <h1>No hay campos</h1>
     {% endfor %}
 
     {% if listas_extra %}
         {% for lis_ext in listas_extra %}
-            {{ lis_ext.titulo }}: <br>
+            <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
+                {% if lis_ext.titulo == 'Direccion' %}
+                    <img class="bi me-2" src="{% static 'img/icons/icons8-marcador-100.png' %}" height="50px">
+                {% endif %}
+                {% if lis_ext.titulo == 'Telefonos' %}
+                    <img class="bi me-2" src="{% static 'img/icons/icons8-teléfono-100.png' %}" height="50px">
+                {% endif %}
+                {% if lis_ext.titulo == 'Extensiones validas' %}
+                    <img class="bi me-2" src="{% static 'img/icons/icons8-semáforo-94.png' %}" height="50px">
+                {% endif %}
+                {{ lis_ext.titulo }}
+            </b>
             <ul>
             {% for val in lis_ext.lista %}
                 <li>{{val}}</li>
@@ -27,7 +52,13 @@
 
     {% if editar_url %}<a href="{% url editar_url obj.id %}">Editar</a>{% endif %}
 {% else %}
-    <h1>No hay Registros</h1>
+
+    <div class="pt-1">
+        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-4 opacity-45">
+            <img src="{% static 'img/icons/icons8-alta-prioridad-94.png' %} " class="bg-danger-subtle rounded-circle p-1 bg-opacity-10" height="25px">
+             No hay registros
+        </div>
+    </div>
 {% endif %}
 
 {% endblock %}

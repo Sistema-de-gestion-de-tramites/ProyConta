@@ -6,18 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="SA-TRA">
-    <meta name="generator">
     <title>SA-TRA</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
 
-
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
-    <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <style>
-
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -68,184 +65,211 @@
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
       }
-
     </style>
 
-    <link href="{% static 'dashboard/dashboard.css' %}" rel="stylesheet">
+    
+    <!-- Estilos -->
+     <link href="{% static 'dashboard/dashboard-2.css' %}" rel="stylesheet">
   </head>
-
   <body>
+    
+<header class="navbar navbar-dark sticky-top flex-md-nowrap bg-black p-0 ">
+ 
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-center fw-bold " href="#">
+     SA-TRA
+  </a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+ 
+</header>
 
-  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow ">
-    <a class="navbar justify-content-center col-md-4 col-lg-2 me-0 px-3 fs-6 link-light text-decoration-none" href="#">
-      <b class="h3 text-light ">SA-TRA</b>
-      <img class="px-2" src="{% static 'img/icons8-task-100.png' %}" height="30p">
-    </a>
-
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="w-100 d-flex justify-content-center">
-
-      <form action="{% url 'busqueda' %}" method="GET" class="w-50 d-flex bg-secondary rounded-5">
-        <input class="form-control form-control rounded-5 border-0 p-2" type="text" name="q" placeholder="Buscar">
-        <button class="btn rounded-pill text-bg-secondary ms-1" type="submit" >
-           <img src="{% static 'img/icons8-search-100.png' %}" height="20px">
-        </button>
-
-      </form>
-
-    </div>
-
-    <div class="navbar-nav fs-6">
-      <div class="nav-item text-nowrap">
-        <span class="btn rounded-pill text-bg-info" style="margin-right: 1em ">Salir</span>
-        <div></div>
-      </div>
-    </div>
-  </header>
-
-<div class="container-fluid"  >
+<div class="container-fluid">
   <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse wi" style="background-color: #00344A;">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-body-secondary sidebar collapse ">
+      <div class="position-sticky sidebar-sticky">
 
-      <div class="position-sticky pt-3 sidebar-sticky">
-        <ul class="nav flex-column mb-auto">
+        <a href="#" class="list-group-item list-group-item-action d-flex py-3 mx-3 dropdown-toggle" aria-current="true">
+          <img src="{% static 'img/icons/icons8-cumpleaños-100.png' %}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
+          <div class="d-flex gap-2 w-100 justify-content-between px-2">
+            <div>
+              <h6 class="mb-0">Emmanuel Lira</h6>
+              <p class="mb-0 opacity-75">Administrador</p>
+            </div>
+           
+          </div>
+        </a>
 
-          <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'inicio' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-home-page-100.png' %}" height="20px" class="px-1">
+        <form action="{% url 'busqueda' %}" method="GET" class="d-flex mx-2 pt-0 mb-2" >
+          <input class="form-control bg-dark-subtle rounded-5 border border-0 rounded-end" type="text" name="q" placeholder="Buscar" >
+          <button type="submit" class="btn bg-dark-subtle rounded-5 rounded-start" id="button-addon2">
+            <img src="{% static 'img/nav/icons8-search-100.png' %}" width="20px">
+          </button>
+        </form>
+
+        <ul class="nav flex-column ">
+
+          <li class="nav-item h7 mb-0 d-flex justify-content-between align-items-center">
+            <a class="nav-link fw-normal" aria-current="page" href="{% url 'inicio' %}">
+              <img src="{% static 'img/nav/icons8-casa-94.png' %}" width="25" class="bg-dark-subtle rounded-2 me-1 p-1">
               Inicio
             </a>
           </li>
 
+          <li class="nav-item h7 mb-0">
+            <a class="nav-link fw-normal" href="{% url 'listar_todos_documentos' %}">
+              <img src="{% static 'img/nav/icons8-paquete-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 mx-auto p-1">
+              Fichero
+            </a>
+          </li>
+
+          <li class="border-top my-2"></li>
+
           {% if user.is_staff %}
-          <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'listar_roles' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-security-lock-100.png' %}" height="20px" class="px-1">
+          <h6 class="px-3 fw-semibold mb-3">Configuración</h6>
+          {% endif %}
+
+          {% if user.is_staff %}
+          <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black" href="{% url 'listar_roles' %}">
+              <img src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" width="25" class="bg-dark-subtle rounded-2 me-1 p-1">
               Roles
             </a>
-          </li>
-          {% endif %}
-
-          {% if user.is_staff %}
-          <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'listar_tipo_archivos' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-file-100.png' %}" height="20px" class="px-1">
-              Archivos
+            <a class="link-secondary" href="{% url 'crear_rol' %}" aria-label="Add a new report">
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
             </a>
           </li>
           {% endif %}
 
           {% if user.is_staff %}
-          <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'listar_tipo_documento' %}" class="nav-link link-light rounded-pill " style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-documents-100.png' %}" height="20px" class="px-1">
-              Documentos
-            </a>
-          </li>
-          {% endif %}
-
-          {% if user.is_staff %}
-          <li class="nav-item px-3 mb-2 h5 ">
-            <a href="{% url 'listar_comentarios' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-comments-100.png' %}" height="20px" class="px-1">
+          <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black" href="{% url 'listar_comentarios' %}">
+              <img src="{% static 'img/nav/icons8-comentarios-94.png' %}" width="25"class="bg-dark-subtle rounded-2 me-1 p-1">
               Comentarios
             </a>
+            <a class="link-secondary" href="{% url 'crear_comentario' %}" aria-label="Add a new report">
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
+            </a>
           </li>
           {% endif %}
 
           {% if user.is_staff %}
-          <li class="nav-item px-3 mb-2 h5 ">
-            <a href="{% url 'listar_estados' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-              Estados o status
+           <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black" href="{% url 'listar_tipo_archivos' %}">
+              <img src="{% static 'img/nav/icons8-documento-94.png' %}" width="25" class="bg-dark-subtle rounded-2 me-1 p-1">
+              Archivos
+            </a>
+            <a class="link-secondary" href="{% url 'crear_tipo_archivos' %}" aria-label="Add a new report">
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
             </a>
           </li>
           {% endif %}
-         
-          
-          <hr>
 
-          <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'directorio' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-address-book-100.png' %}" height="20px" class="px-1">
+          {% if user.is_staff %}
+           <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black"  href="{% url 'listar_tipo_documento' %}">
+              <img src="{% static 'img/nav/icons8-documentos-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 me-1 p-1">
+              Documentos
+            </a>
+            <a class="link-secondary" href="{% url 'crear_tipo_documento' %}" aria-label="Add a new report">
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user.is_staff %}
+          <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black"  href="{% url 'listar_estados' %}">
+             <img src="{% static 'img/nav/icons8-aprobación-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 mx-auto p-1">
+              Estados
+            </a>
+            <a class="link-secondary" href="{% url 'crear_estado' %}" aria-label="Add a new report">
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="border-top my-2"></li>
+         
+          <h6 class="px-3 fw-semibold mb-3">Herramientas</h6>
+
+          <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black "  href="{% url 'directorio' %}">
+             <img src="{% static 'img/nav/icons8-contactos-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 mx-auto p-1">
               Directorio
             </a>
           </li>
 
-           <li class="nav-item px-3 mb-2 h5">
-            <a href="{% url 'listar_clientes' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-client-management-100.png' %}" height="20px" class="px-1">
-              Clientes
-            </a>
-          </li>
-
-          <li class="nav-item px-3 mb-2 h5 ">
-            <a href="{% url 'listar_empleados' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-            <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="20px" class="px-1">
+          <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black"  href="{% url 'listar_empleados' %}">
+              <img src="{% static 'img/nav/icons8-maletín-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 mx-auto p-1">
               Empleados
             </a>
+            <div class="dropdown-center">
+            <a class="link-secondary "  type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
+            </a>
+              <ul class="dropdown-menu">
+                 <li><a class="dropdown-item small" href="{% url 'registrar_persona' 1%}">Registrar empleado</a></li>
+                <li><a class="dropdown-item small" href="{% url 'registro' %}">Registrar cuenta</a></li>
+              </ul>
+
+            </div>
           </li>
 
-          <li class="nav-item px-3 mb-2 h5 ">
-            <a href="{% url 'listar_todos_documentos' %}" class="nav-link link-light rounded-pill" style="background-color: #011F2C;">
-
-              Documentos subidos
+           <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black"  href="{% url 'listar_clientes' %}">
+             <img src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 mx-auto p-1">
+              Clientes
+            </a>
+            <a class="link-secondary" href="{% url 'registrar_persona' 2 %}" >
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
             </a>
           </li>
-          <div class="position-absolute bottom-0">
-          <div class="dropdown px-3 mb-3">
-          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{% static 'img/icons8-test-account-100.png' %}" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong class="h5">Usuario</strong>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style="">
-            <li><a class="dropdown-item" href="#">Configuración</a></li>
-            <li><a class="dropdown-item" href="#">Perfil</a></li>
+
+          <li class="px-2 my-3  w-100">
             {% if user.is_authenticated %}
-            <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesion</a></li>
+              <a type="button" class="btn btn-outline-danger rounded-5 w-100 fw-normal" href="{% url 'logout' %}">Cerrar sesión</a>
             {% else %}
-            <li><a class="dropdown-item" href="{% url 'login' %}">Iniciar Sesion</a></li>
+              <a type="button" class="btn btn-outline-dark rounded-5 w-100"  href="{% url 'login' %}">Iniciar sesión</a>
             {% endif %}
-          </ul>
-          </div>
-        </div>
+          </li>
+
 
         </ul>
-
+        
       </div>
+      
     </nav>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
-      <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-2 " >
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-1 border-bottom">
 
-        <b class="display-6 fw-normal">
+        <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
           {% block title %}
-
           {% endblock %}
         </b>
-        {% block css_add %}{% endblock %}
+
+        {% block css_add %}
+        {% endblock %}
       </div>
+
       <div>
         {% block cuerpo %}
         {% endblock %}
       </div>
 
-
       {% block javascript %}
       {% endblock %}
-
-
-
+     
     </main>
+  </div>
+</div>
 
-  </div>
-  </div>
 
     <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'dashboard/sidebars.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-    <script src="{% static 'dashboard/dashboard.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="{% static 'dashboard/dashboard.js/dashboard.js' %}"></script>
   </body>
+
 </html>

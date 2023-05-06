@@ -1,4 +1,5 @@
 {% extends 'menu.html' %}
+{% load static %}
 
 {% block contenido %}
 {% if messages %}
@@ -21,12 +22,17 @@
       {% endfor %}
     </ul>
   {% endif %}
-<div class="my-3 p-3 bg-body rounded-4 shadow-sm">
-    <div class="modal-header border-bottom-0">
-        <h1 class="modal-title fs-5">Añadir {{titulo}}</h1>
+
+<div class="card rounded-4 ">
+    <div class="card-header">
     </div>
-    <div class="d-flex text-muted pt-3">
-        <form method="POST" enctype="multipart/form-data">
+     <div class="card-body">
+    <h5 class="card-title">Añadir {{titulo}}</h5>
+    <h6 class="card-subtitle mb-2 text-body-secondary">{{titulo}}</h6>
+    <div class="card-text">
+        A continuación agrega la información
+        <hr>
+        <form class="my-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         {% for field in form %}
@@ -41,12 +47,12 @@
          <!-- Tags para roles -->
             {% if esRoles %}
                 {% if field.widget_type == 'checkboxselectmultiple' %}
-                    {{field.label}} : {{field}}
+                    {{field.label}} : {{field}}<br>
                 {% endif %}
             {% endif %}
             {% if esEmpleado %}
                 {% if field.name != 'tipo_usuario' %}
-                    {{field.label}} : {{field}} 
+                    {{field.label}} : {{field}} <br>
                 {% endif %}
             {% else %}
                 {{field.label}} : {{field}}
@@ -60,8 +66,9 @@
             <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
         </div>
         </form>
+
     </div>
-
   </div>
-
+</div>
+<br>
 {% endblock %}
