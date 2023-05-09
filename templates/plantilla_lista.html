@@ -6,211 +6,210 @@
 {% endblock %}
 
 {% block contenido %}
-<<<<<<< HEAD
-{# if titulo == 'Cuentas de usuario' #}<!--lista usuarios-->
-{% if object_list %}
-<br>
-    <ul class="list-group">
-    {% for obj in object_list %}
-        <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-2" style="background-color: #e2e3e5;">
-            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#808080"></rect><text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text></svg>
-            <div class="ms-2 me-auto">
 
-                    <span class="d-block ">
-                        <div class="d-inline  ">
-                            <strong>Nombre de usuario:</strong>
-                        </div>
-                        <div class="d-inline ">
-                            {{ obj.usuario.username }}
-                        </div>
-                    </span>
-                    <span class="d-block ">
-                        <div class="d-inline  ">
-                            <strong>Correo:</strong>
-                        </div>
-                        <div class="d-inline ">
-                            {{ obj.usuario.email }}
-                        </div>
-                    </span>
-                    <span class="d-block ">
-                        <div class="d-inline  ">
-                            <strong>Empleado propietario:</strong>
-                        </div>
-                        <div class="d-inline ">
-                            {{ obj.empleado.nombre }} {{ obj.empleado.ap_paterno }} {{ obj.empleado.ap_materno }}
-                        </div>
-                    </span>
-            </div>
-            <p class="pb-3 mb-0 small lh-sm ">
-        {% if not actualizar_url  %}
-            <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.usuario.id %}">
-                <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
-                Editar
-            </a>
-        {% endif %}
-        {% if not borrar_url %}
-             <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.usuario.id %}">
-                <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
-                Eliminar
-            </a>
-        {% endif %}
-            </p>
-    <br><br>
-    {% empty %}
-         <div class="pt-3">
-        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
-            <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
-            No hay registros
-        </div>
-        </div>
-    {% endfor %}
-        </li>
-    </ul>
-{% else %}
-<div class="pt-3">
-    <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
-        <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
-        No hay registros
-    </div>
-</div>
-{% endif %}
-<!--termina lista usuario-->
-{# else #} <!--lista general-->
-=======
+{% if titulo == 'Cuentas de usuario' %}<!--lista usuarios-->
+    {% if object_list %} 
+        <br>
+        <ul class="list-group">
+        {% for obj in object_list %}
+            <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-2" style="background-color: #e2e3e5;">
+                <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#808080"></rect><text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text></svg>
+                <div class="ms-2 me-auto">
 
->>>>>>> Front2
-{% if object_list %}
-
-    <div class="rounded-4 pt-5 pb-5 bg-body-secondary border">
-    <ul class="list-group">
-    {% for obj in object_list %}
-
-        <li class="list-group-item d-flex text-muted pt-3 bg-secondary-subtle rounded-0 ">
-            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#808080"></rect>
-                <text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text>
-            </svg>
-            <div class="ms-2 me-auto">
-
-                {% for key, val in obj.get_fields_and_values %}
-                    {% if key != 'ID' %}
-                    <span class="d-block ">
-                        <div class="d-inline  ">
-                            <strong>{{ key}}:</strong>
-                        </div>
-                        <div class="d-inline ">
-                            {{ val }}
-                        </div>
-                    </span>
-                    {% endif %}
-                {% empty %}
-                {% if rol %}
-                    <span class="d-block ">
-                        <div class="d-inline  ">
-                            <strong>Nombre:</strong>
-                        </div>
-                        <div class="d-inline ">
-                            {{ obj.name }}
-                        </div>
-                    </span>
-                {% else %}
-                    <strong>No hay campos</strong>
-                {% endif %}
-                {% endfor %}
-                {% if obj.direccion  %}
-                    <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
-                {% endif %}
-            </div>
-            <p class="pb-3 mb-0 small lh-sm ">
-        {% if titulo == 'roles' %}
-            {% if obj.name != 'Administrador' %}
-            {% if actualizar_url  %}
-            <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
-                <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
-                Editar
-            </a>
-            {% endif %}
-            {% if borrar_url %}
-             <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.id %}">
-                <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
-                Eliminar
-            </a>
-            {% endif %}
-            {% else %}
-            <h6><span class="badge text-bg-warning"> Este rol tiene todos los permisos</span></h6>
-            {% endif %}
-        {% else %}
-            {% if actualizar_url  %}
-                <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
+                        <span class="d-block ">
+                            <div class="d-inline  ">
+                                <strong>Nombre de usuario:</strong>
+                            </div>
+                            <div class="d-inline ">
+                                {{ obj.usuario.username }}
+                            </div>
+                        </span>
+                        <span class="d-block ">
+                            <div class="d-inline  ">
+                                <strong>Correo:</strong>
+                            </div>
+                            <div class="d-inline ">
+                                {{ obj.usuario.email }}
+                            </div>
+                        </span>
+                        <span class="d-block ">
+                            <div class="d-inline  ">
+                                <strong>Empleado propietario:</strong>
+                            </div>
+                            <div class="d-inline ">
+                                {{ obj.empleado.nombre }} {{ obj.empleado.ap_paterno }} {{ obj.empleado.ap_materno }}
+                            </div>
+                        </span>
+                </div>
+                <p class="pb-3 mb-0 small lh-sm ">
+            {% if not actualizar_url  %}
+                <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.usuario.id %}">
                     <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
                     Editar
                 </a>
             {% endif %}
-            {% if borrar_url %}
-                 <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.id %}">
+            {% if not borrar_url %}
+                <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.usuario.id %}">
                     <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
                     Eliminar
                 </a>
             {% endif %}
-        {% endif %}
-        {% if telefono_url %}
-            <a type="button" class="btn btn-dark btn-sm rounded-pill"  href="{% url telefono_url obj.id %}">
-                    Telefono(s)
-            </a>
-
-        {% endif %}
-        {% if direccion_url %}
-            <a type="button" class="btn btn-dark btn-sm rounded-pill"  href="{% url direccion_url obj.id %}">
-                    <img src="{% static 'img/icons/icons8-marcador-100.png' %}" height="20px">
-            </a>
-
-        {% endif %}
-        {% if cuentas_url %} <a href="{% url cuentas_url obj.id %}">Cuentas</a> {% endif %}
-        {% if detalle_url %}
-            <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
-                Mas info
-            </a>
-        {% endif %}
-
-            </p>
-    <br><br>
-    {% empty %}
+                </p>
+        <br><br>
+        {% empty %}
             <div class="pt-3">
-                <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
-                    <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
-                    No hay registros
-                </div>
+            <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+                <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+                No hay registros
             </div>
-        </li>
-    {% endfor %}
-
-    </ul>
-    </div>
-
-{% else %}
-    <div class="pt-1">
-        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-4 opacity-45">
-            <img src="{% static 'img/icons/icons8-alta-prioridad-94.png' %} " class="bg-danger-subtle rounded-circle p-1 bg-opacity-10" height="25px">
-             No hay registros
+            </div>
+        {% endfor %}
+            </li>
+        </ul>
+    {% else %}
+    <div class="pt-3">
+        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+            <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+            No hay registros
         </div>
     </div>
-{% endif %}
+    {% endif %}
+<!--termina lista usuario-->
+{% else %} <!--lista general-->
+    {% if object_list %}
 
-{% if crear_url and valor_fk %}
-<div class="d-flex justify-content-center">
-    <a type="button" class="btn btn-sm btn-dark rounded-pill" align="right" href="{% url crear_url valor_fk %}">
-        <img src="{% static 'img/icons8-add.png' %}" height="20px">
-        Nuevo registro
-    </a>
-</div>
-{% elif crear_url %}
-<div class="d-flex justify-content-center">
-    <a type="button" class="btn btn-sm btn-dark rounded-pill" align="right" href="{% url crear_url %}">
-        <img src="{% static 'img/icons8-add.png' %}" height="20px">
-        Nuevo registro
-    </a>
-</div>
+        <div class="rounded-4 pt-5 pb-5 bg-body-secondary border">
+        <ul class="list-group">
+        {% for obj in object_list %}
+
+            <li class="list-group-item d-flex text-muted pt-3 bg-secondary-subtle rounded-0 ">
+                <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#808080"></rect>
+                    <text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text>
+                </svg>
+                <div class="ms-2 me-auto">
+
+                    {% for key, val in obj.get_fields_and_values %}
+                        {% if key != 'ID' %}
+                        <span class="d-block ">
+                            <div class="d-inline  ">
+                                <strong>{{ key}}:</strong>
+                            </div>
+                            <div class="d-inline ">
+                                {{ val }}
+                            </div>
+                        </span>
+                        {% endif %}
+                    {% empty %}
+                        {% if rol %}
+                            <span class="d-block ">
+                                <div class="d-inline  ">
+                                    <strong>Nombre:</strong>
+                                </div>
+                                <div class="d-inline ">
+                                    {{ obj.name }}
+                                </div>
+                            </span>
+                        {% else %}
+                            <strong>No hay campos</strong>
+                        {% endif %}
+                    {% endfor %}
+                    {% if obj.direccion  %}
+                        <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
+                    {% endif %}
+                </div>
+                <p class="pb-3 mb-0 small lh-sm ">
+            {% if titulo == 'roles' %}
+                {% if obj.name != 'Administrador' %}
+                    {% if actualizar_url  %}
+                    <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
+                        <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                        Editar
+                    </a>
+                    {% endif %}
+                    {% if borrar_url %}
+                    <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.id %}">
+                        <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                        Eliminar
+                    </a>
+                    {% endif %}
+                {% else %}
+                    <h6><span class="badge text-bg-warning"> Este rol tiene todos los permisos</span></h6>
+                {% endif %}
+            {% else %}
+                {% if actualizar_url  %}
+                    <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.id %}">
+                        <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
+                        Editar
+                    </a>
+                {% endif %}
+                {% if borrar_url %}
+                    <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.id %}">
+                        <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
+                        Eliminar
+                    </a>
+                {% endif %}
+            {% endif %}
+            {% if telefono_url %}
+                <a type="button" class="btn btn-dark btn-sm rounded-pill"  href="{% url telefono_url obj.id %}">
+                        Telefono(s)
+                </a>
+
+            {% endif %}
+            {% if direccion_url %}
+                <a type="button" class="btn btn-dark btn-sm rounded-pill"  href="{% url direccion_url obj.id %}">
+                        <img src="{% static 'img/icons/icons8-marcador-100.png' %}" height="20px">
+                </a>
+
+            {% endif %}
+            {% if cuentas_url %} <a href="{% url cuentas_url obj.id %}">Cuentas</a> {% endif %}
+            {% if detalle_url %}
+                <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
+                    Mas info
+                </a>
+            {% endif %}
+
+                </p>
+        <br><br>
+        {% empty %}
+                <div class="pt-3">
+                    <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+                        <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+                        No hay registros
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+
+        </ul>
+        </div>
+
+    {% else %}
+        <div class="pt-1">
+            <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-4 opacity-45">
+                <img src="{% static 'img/icons/icons8-alta-prioridad-94.png' %} " class="bg-danger-subtle rounded-circle p-1 bg-opacity-10" height="25px">
+                No hay registros
+            </div>
+        </div>
+    {% endif %}
+
+    {% if crear_url and valor_fk %}
+        <div class="d-flex justify-content-center">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill" align="right" href="{% url crear_url valor_fk %}">
+                <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Nuevo registro
+            </a>
+        </div>
+    {% elif crear_url %}
+        <div class="d-flex justify-content-center">
+            <a type="button" class="btn btn-sm btn-dark rounded-pill" align="right" href="{% url crear_url %}">
+                <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                Nuevo registro
+            </a>
+        </div>
+    {% endif %}
+
 {% endif %}
 
 {% endblock %}

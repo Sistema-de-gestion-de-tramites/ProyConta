@@ -93,8 +93,12 @@
           <img src="{% static 'img/icons/icons8-cumpleaños-100.png' %}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
           <div class="d-flex gap-2 w-100 justify-content-between px-2">
             <div>
-              <h6 class="mb-0">Emmanuel Lira</h6>
+              <h6 class="mb-0">{{user.username}}</h6>
+              {% if user.is_superuser %}
               <p class="mb-0 opacity-75">Administrador</p>
+              {% else %}
+                <p class="mb-0 opacity-75">{{user.groups.all.0.name}}</p>
+              {% endif %}
             </div>
            
           </div>
