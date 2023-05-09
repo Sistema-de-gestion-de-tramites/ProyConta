@@ -42,13 +42,13 @@
                         </span>
                 </div>
                 <p class="pb-3 mb-0 small lh-sm ">
-            {% if not actualizar_url  %}
+            {% if actualizar_url  %}
                 <a type="button" class="btn btn-secondary btn-sm rounded-pill" href="{% url actualizar_url obj.usuario.id %}">
                     <img src="{% static 'img/icons8-edit-100.png' %}" height="15px">
                     Editar
                 </a>
             {% endif %}
-            {% if not borrar_url %}
+            {% if borrar_url %}
                 <a type="button" class="btn btn-danger btn-sm rounded-pill" href="{% url borrar_url obj.usuario.id %}">
                     <img src="{% static 'img/icons8-waste-100.png' %}" height="15px">
                     Eliminar
