@@ -101,7 +101,7 @@ class Personas(models.Model):
         ('V', 'VIUDO(A)'),
     ]
     estado_civil = models.CharField(max_length=1, choices=ESTADO_CIV, default='S', verbose_name="Estado civil")
-    correo = models.EmailField(max_length=254)
+    correo = models.EmailField(max_length=254, verbose_name="E-mail")
     fecha_nac = models.DateField(verbose_name="Fecha de nacimiento")
     rfc = models.CharField(validators=[validar_RFC], max_length=13, unique=True, verbose_name="RFC")
     curp = models.CharField(validators=[validar_CURP], max_length=28, verbose_name="CURP")
@@ -170,7 +170,7 @@ class Telefonos(models.Model):
 
         #return [(field.verbose_name, field.value_to_string(self)) for field in Telefonos._meta.fields]
     def __str__(self):
-        return self.telefono
+        return self.descr + ': ' + self.telefono
 
     def nombre_principal(self):
         return self.descr
@@ -207,7 +207,7 @@ class Direcciones(models.Model):
         return fields
 
     def __str__(self):
-        return self.calle
+        return 'Calle ' + self.calle + ' #' + str(self.num_ext) + ', Col. ' + self.colonia + ', ' + self.municipio + ', ' + self.estado
 
 class Ext_Direcciones(models.Model):
     direccion = models.ForeignKey(Direcciones, on_delete=models.CASCADE, verbose_name="Dirección")
@@ -270,6 +270,9 @@ class Comentarios(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Comentarios._meta.fields]
 
+    def __str__(self):
+        return self.descr
+
 class Entrega_Doc(models.Model):
     cliente = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="cliente", verbose_name="Cliente")
     empleado = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="empleado", verbose_name="Empleado")
@@ -295,6 +298,9 @@ class Entrega_Doc(models.Model):
             else:
                 fields.append((field.verbose_name, getattr(self, field.name)))
         return fields
+
+    def __str__(self):
+        return self.cliente.__str__() + ': ' + self.tipo_doc.__str__()
 
 class Usuario_empleado(models.Model):
     empleado = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="empleado_id", verbose_name="Empleado")
