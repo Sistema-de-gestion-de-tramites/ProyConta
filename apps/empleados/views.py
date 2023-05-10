@@ -33,37 +33,47 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from apps.sat.models import Usuario_empleado
 
-#{----------------------------------------------------------------------------------------}
-
-def id_emp_sesion(request):
-    empleados = Personas.objects.all()    # Especificar a solo los empleados con el rol = 0
-    for emp in empleados:
-        if emp.username == request.user.username:
-            id=request.user.username
-            break
-    return id
-
-#{----------------------------------------------------------------------------------------}
+def obtenerFotoPerfil(request):
+    empleado = obtenerEmpleadoDeCuentaUsuario(request.user)
+    if empleado != request.user:
+            if str(empleado.foto_perfil) != '':
+                return empleado.foto_perfil
+            else:
+                return False
+    else:
+        return False
 
 # Listar todos los registros
 class Listar_Personas(PermissionRequiredMixin,ListView):
-    permission_required = 'editor.dev_ver_empleados'
-    permission_required = 'editor.dev_ver_clientes'
+    permission_required = 'sat.dev_ver_empleados'
+    permission_required = 'sat.dev_ver_clientes'
     queryset = Personas.objects.all()
     template_name = 'plantilla_lista.html'
 
 # Listar solo los empleados
 class Listar_Empleados(PermissionRequiredMixin,ListView):
-    permission_required = 'editor.dev_ver_empleados'
+    permission_required = 'sat.dev_ver_empleados'
     queryset = Personas.objects.filter(tipo_usuario__descr="Empleado")
     template_name = 'plantilla_lista.html'
-    extra_context={'titulo':'empleados','actualizar_url': 'actualizar_empleado', 'borrar_url':'eliminar_empleado'}
+    extra_context={'titulo':'empleados',
+                   'actualizar_url': 'actualizar_empleado',
+                   'borrar_url':'eliminar_empleado',}
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 class Empleado_Delete(PermissionRequiredMixin,DeleteView):
     permission_required = 'editor.dev_eliminar_empleados'
     model = Personas
     template_name = 'borrar.html'
     success_url = reverse_lazy('listar_empleados')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 class Empleado_Update(PermissionRequiredMixin,UpdateView):
     permission_required = 'editor.dev_editar_empleados'
@@ -82,6 +92,11 @@ class Empleado_Update(PermissionRequiredMixin,UpdateView):
             print("Error al obtener el tipo empleado")
         registro.save()
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 # CRUD cuentas de usuario
 
@@ -96,7 +111,9 @@ def registro(request):
                 sinRegistros=False
             else:
                 sinRegistros=True 
-            return render(request,'registro.html',{'form':form,'sinResgistros':sinRegistros})
+            return render(request,'registro.html',{'form':form,
+                                                   'sinResgistros':sinRegistros,
+                                                   'fotoPerfil': obtenerFotoPerfil(request),})
         else:
             form = RegistroUsuarioForm(request.POST)
             if form.is_valid():
@@ -109,7 +126,8 @@ def registro(request):
             else:
                 messages.add_message(request=request,level=messages.ERROR,message="Datos invalidos",extra_tags="danger")
                 redirect('registro/')
-        return render(request,'registro.html',{'form':form})
+        return render(request,'registro.html',{'form':form,
+                                               'fotoPerfil': obtenerFotoPerfil(request),})
 
 def guardarUsuarioDeEmpleado(post,usuario):
     try:
@@ -153,7 +171,14 @@ class Listar_Usuarios(PermissionRequiredMixin,ListView):
     permission_required = 'auth.dev_ver_usuario'
     queryset = Usuario_empleado.objects.all()
     template_name = 'plantilla_lista.html'
-    extra_context={'titulo':'Cuentas de usuario','actualizar_url': 'actualizar_usuario', 'borrar_url':'eliminar_usuario'}
+    extra_context={'titulo':'Cuentas de usuario',
+                   'actualizar_url': 'actualizar_usuario',
+                   'borrar_url':'eliminar_usuario'}
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 #eliminar usuario
 class Usuario_Delete(PermissionRequiredMixin,DeleteView):
@@ -161,6 +186,11 @@ class Usuario_Delete(PermissionRequiredMixin,DeleteView):
     model = User
     template_name = 'borrar.html'
     success_url = reverse_lazy('listar_cuentas_usuario')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 #actualizar usuario
 class usuario_Update(PermissionRequiredMixin,UpdateView):
@@ -189,6 +219,7 @@ class usuario_Update(PermissionRequiredMixin,UpdateView):
         context['empleado'] = usuario_empleado
         context['titulo'] = 'Usuarios'
         context['form'] = form
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
 #actualizar contraseña usuario
@@ -213,6 +244,7 @@ class usuario_contrasenia_Update(PermissionRequiredMixin,UpdateView):
         context['titulo'] = 'Usuarios'
         context['esActualizarContrasenia'] = True
         context['form'] = form
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
 def PerfilEmpleado(request):
@@ -286,12 +318,3 @@ def obtenerEmpleadoDeCuentaUsuario(cuentaUsuario):
     
     return empleado
 
-def obtenerFotoPerfil(request):
-    empleado = obtenerEmpleadoDeCuentaUsuario(request.user)
-    if empleado != request.user:
-            if str(empleado.foto_perfil) != '':
-                return empleado.foto_perfil
-            else:
-                return False
-    else:
-        return False
