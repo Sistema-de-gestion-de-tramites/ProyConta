@@ -20,6 +20,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
 from ..empleados.views import guardarPermisosDeUsuario
+from apps.empleados.views import obtenerEmpleadoDeCuentaUsuario, obtenerFotoPerfil
 
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -50,106 +51,47 @@ def index(request): #{METODO REQUEST DE HTTP}
 def inicio(request):  # {METODO REQUEST DE HTTP}
     if request.user.is_authenticated:  # valida si existe una sesion activa
         print(request.user.username)
-    contexto = {'titulo': 'inicio'}
+    contexto = {'titulo': 'inicio','fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'menu.html', contexto)  # {DEVUELVE EL HTML (REQUEST)}
 def roles(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    contexto = {'titulo': 'roles'}
+    contexto = {'titulo': 'roles','fotoPerfil': obtenerFotoPerfil(request)}
     return render(request,'menu.html',contexto) #{DEVUELVE EL HTML (REQUEST)}
 def documentos(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    contexto = {'titulo': 'documentos'}
+    contexto = {'titulo': 'documentos','fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def archivos(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    contexto = {'titulo': 'archivos'}
+    contexto = {'titulo': 'archivos','fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def directorio(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    contexto = {'titulo': 'directorio'}
+    contexto = {'titulo': 'directorio','fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'directorio.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def clientes(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    contexto = {'titulo': 'clientes'}
+    contexto = {'titulo': 'clientes','fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 def empleados(request): #{METODO REQUEST DE HTTP}
     if request.user.is_authenticated: #valida si existe una sesion activa
         print(request.user.username)
-    contexto = {'titulo': 'empleados'}
+    contexto = {'titulo': 'empleados','fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'menu.html', contexto) #{DEVUELVE EL HTML (REQUEST)}
 
-#{----------------------------------------------------------------------------------------}
-# DESCRIPCION: Devuelve el id del empleado que ha iniciado sesion (no se valida que exista una sesion activa)
-def id_emp_sesion(request):
-    empleados = Personas.objects.all() # Empleados son el rol = 0
-    usernameValue=''
-    for emp in empleados:
-     if emp.username == request.user.username:
-        usernameValue=request.user.username
-        break
-    empleado= Personas.objects.get(username=usernameValue) # Empleados son el rol = 0, pero creo que aqui ya no se requiere cambiar
-    id = empleado.empleado_id
-    return id
-#{----------------------------------------------------------------------------------------}
-
-#{----------------------------------------------------------------------------------------}
-"""
-class Tarea_Create(CreateView):
-    #model = Tarea
-    form_class = TareaForm
-    template_name = 'formulario_2.html'
-    success_url = reverse_lazy('lista_tareas')
-    
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object
-        print(request.POST)
-        form = self.form_class(request.POST,request.FILES)
-        form.emp_creador.to_python()
-        if form.is_valid() and request.FILES['archivo']:
-            form.save(commit=False)
-            file = request.FILES['archivo']
-            fs = FileSystemStorage()
-            cliente = Emp_Clie_Asig.objects.get(id=request.POST['emp_clie']).empleado.empleado_id
-            fs.location = fs.location + "\\" + str(cliente)
-            print(fs.location)
-            fs.save(str(file.name),file)
-            uploaded_file_url = fs.location
-            form.save().dir_archivo= str(uploaded_file_url)
-            print(form)
-            form.save()
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
-
-class Tarea_Listar(ListView):
-    model = Tarea
-    template_name = 'tables.html'
-
-class Tarea_Update(UpdateView):
-    model = Tarea
-    form_class = TareaForm
-    template_name = 'formulario_2.html'
-    success_url = reverse_lazy('lista_tareas')
-
-class Tarea_Delete(DeleteView):
-    model = Tarea
-    template_name = 'borrar.html'
-    success_url = reverse_lazy('lista_tareas')
-"""
-
-#{----------------------------------------------------------------------------------------}
 
 # Vistas de los Estados
 def crear_Estado(request):
     if request.method == 'GET':
         contexto = {
             'titulo' : "Estados",
-            'form': Formulario_Estado}
+            'form': Formulario_Estado,
+            'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request, 'formulario.html', contexto)
     else:
         nuevoRegistro = Estados(
@@ -160,13 +102,22 @@ def crear_Estado(request):
 
 def listar_Estados(request):
     lista = Estados.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo':'estados', 'object_list': lista, 'actualizar_url': 'editar_estado', 'borrar_url':'eliminar_estado'})
+    return render(request, 'plantilla_lista.html', {'titulo':'estados',
+                                                    'object_list': lista,
+                                                    'actualizar_url': 'editar_estado',
+                                                    'borrar_url':'eliminar_estado',
+                                                    'fotoPerfil': obtenerFotoPerfil(request)})
 
 class editar_Estado(UpdateView):
     model = Estados
     form_class = Formulario_Estado
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_estados')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 def eliminar_Estado(request, pk):
     registro = get_object_or_404(Estados, id=pk)
@@ -178,7 +129,8 @@ def crear_Comentario(request):
     if request.method == 'GET':
         contexto = {
             'titulo':"Comentarios",
-            'form': Formulario_Comentario}
+            'form': Formulario_Comentario,
+            'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request, 'formulario.html', contexto)
     else:
         nuevoRegistro = Comentarios(
@@ -189,13 +141,22 @@ def crear_Comentario(request):
 
 def listar_Comentarios(request):
     lista = Comentarios.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo':'comentarios', 'object_list': lista, 'actualizar_url': 'editar_comentario', 'borrar_url':'eliminar_comentario'})
+    return render(request, 'plantilla_lista.html', {'titulo':'comentarios',
+                                                    'object_list': lista,
+                                                    'actualizar_url': 'editar_comentario',
+                                                    'borrar_url':'eliminar_comentario',
+                                                    'fotoPerfil': obtenerFotoPerfil(request)})
 
 class editar_Comentario(UpdateView):
     model = Comentarios
     form_class = Formulario_Comentario
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_comentarios')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 def eliminar_Comentario(request, pk):
     registro = get_object_or_404(Comentarios, id=pk)
@@ -205,7 +166,8 @@ def eliminar_Comentario(request, pk):
 # Vistas de los tipo-archivo
 def crear_Tipo_Archivo(request):
     if request.method=='GET':
-        contexto = {'form': Formulario_Tipo_Archivo}
+        contexto = {'form': Formulario_Tipo_Archivo,
+                    'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request,'formulario.html',contexto)
     elif request.method=='POST':
         nuevoRegistro = Tipo_Archivos(
@@ -220,13 +182,22 @@ def crear_Tipo_Archivo(request):
 
 def listar_Tipo_Archivos(request):
     lista = Tipo_Archivos.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo': 'archivos','object_list': lista, 'actualizar_url': 'editar_tipo_archivo', 'borrar_url':'eliminar_tipo_archivo'})
+    return render(request, 'plantilla_lista.html', {'titulo': 'archivos',
+                                                    'object_list': lista,
+                                                    'actualizar_url': 'editar_tipo_archivo',
+                                                    'borrar_url':'eliminar_tipo_archivo',
+                                                    'fotoPerfil': obtenerFotoPerfil(request)})
 
 class editar_Tipo_Archivo(UpdateView):
     model = Tipo_Archivos
     form_class = Formulario_Tipo_Archivo
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipo_archivos')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 def eliminar_Tipo_Archivo(request, pk):
     registro = get_object_or_404(Tipo_Archivos, id=pk)
@@ -258,7 +229,8 @@ def crear_Rol(request):
     else:
         permisosDocumentos = list(Tipo_Documentos.objects.all().values_list('nombre',flat=True))
         contexto = {'form': Formulario_Rol,
-                    'permisosDocumentos':permisosDocumentos}
+                    'permisosDocumentos':permisosDocumentos,
+                    'fotoPerfil': obtenerFotoPerfil(request)}
     if(Permission.objects.filter(codename__contains="dev_").count()==0):
         mensajeErrorFormulario= "No existen permisos registrados, por favor crearlos primero"
         messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
@@ -284,7 +256,8 @@ def listar_Roles(request):
                 'object_list': lista,
                 'actualizar_url': 'editar_rol',
                 'borrar_url':'eliminar_rol',
-                'rol':True}
+                'rol':True,
+                'fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'plantilla_lista.html', contexto)
 
 def editar_Rol(request,pk):
@@ -313,7 +286,8 @@ def editar_Rol(request,pk):
         permisosDocumentosSelecionados = list(rol.permissions.filter(codename__contains="doc_").values_list('codename',flat=True))
         contexto = {'form': Formulario_Rol(initial=initialValues),
                     'permisosDocumentos':permisosDocumentos,
-                    'seleccionados':permisosDocumentosSelecionados,}
+                    'seleccionados':permisosDocumentosSelecionados,
+                    'fotoPerfil': obtenerFotoPerfil(request)}
     if(Permission.objects.filter(codename__contains="dev_").count()==0):
         mensajeErrorFormulario= "No existen permisos registrados, por favor crearlos primero"
         messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
@@ -363,7 +337,8 @@ def crearTipoDocumento(request):
          messages.add_message(request=request,level=messages.ERROR,message=mensajeErrorFormulario,extra_tags='danger')
          return redirect('crear_tipo_documento')
     else:
-        contexto = {'form': Formulario_tipoDocumento}
+        contexto = {'form': Formulario_tipoDocumento,
+                    'fotoPerfil': obtenerFotoPerfil(request)}
     if(Tipo_Archivos.objects.all().count()==0):
         mensajeErrorFormulario= "No existen tipos de archivos registrados, por favor crearlos primero"
         messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
@@ -376,7 +351,8 @@ def listar_tipoDocumento(request):
                 'titulo': 'documentos',
                 'actualizar_url': 'editar_tipo_documento',
                 'borrar_url':'eliminar_tipo_documento',
-                'detalle_url':'detalle_tipo_documento'}
+                'detalle_url':'detalle_tipo_documento',
+                'fotoPerfil': obtenerFotoPerfil(request)}
 
    return render(request, 'plantilla_lista.html', contexto)
 
@@ -388,6 +364,7 @@ def detalle_tipoDocumento(request, pk):
         'listas_extra': [{'titulo': 'Extensiones validas', 'lista': lista_1},
                         ],
         'editar_url': 'editar_tipo_documento',
+        'fotoPerfil': obtenerFotoPerfil(request)
     }
     return render(request, 'plantilla_detalle.html', context)
 
@@ -396,6 +373,11 @@ class editar_tipoDocumento(UpdateView):
     form_class = Formulario_tipoDocumento
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipo_documento')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 def eliminar_TipoDocumento(request, pk):
     registro = get_object_or_404(Tipo_Documentos, id=pk)
@@ -434,4 +416,5 @@ def buscar(request):
                 {'object_list': lista_3, 'titulo': 'telefonos'},
                 ]
 
-    return render(request, 'buscador.html', {'contexto': contexto})
+    return render(request, 'buscador.html', {'contexto': contexto,
+                                             'fotoPerfil': obtenerFotoPerfil(request)})
