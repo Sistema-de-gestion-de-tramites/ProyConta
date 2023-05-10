@@ -13,26 +13,24 @@
 {% block cuerpo %}
 
 {% if obj %}
+    <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
+        {{ obj.nombre_principal }}
+    </b>
     {% for key, val in obj.get_fields_and_values %}
         {% if key != 'ID' %}
-            {% if key == 'Nombre' %}
-                <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
-                    {{ val }}
-                </b>
-                <br>
-            {% else %}
                 {{ key}}: {{ val }}<br>
+            {% if key == 'Documento' %}
+                <a href="{{ val.url }}" target='_blank'>Examinar documento</a><br>
             {% endif %}
         {% endif %}
+
     {% empty %}
         <h1>No hay campos</h1>
     {% endfor %}
+    {% if editar_url %}<a href="{% url editar_url obj.id %}">Editar</a>{% endif %}
 
     {% if listas_extra %}
         {% for lis_ext in listas_extra %}
-
-            {% if lis_ext.lista %}
-
             <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
                 {% if lis_ext.titulo == 'Direccion' %}
                     <img class="bi me-2" src="{% static 'img/icons/icons8-marcador-100.png' %}" height="50px">
@@ -47,15 +45,17 @@
             </b>
             <ul>
             {% for val in lis_ext.lista %}
-                <li>{{val}}</li>
+                <li>{{val}}
+                    {% if lis_ext.actualizar_url %} <a href="{% url lis_ext.actualizar_url val.id %}">Actualizar</a> {% endif %}
+                    {% if lis_ext.borrar_url %} <a href="{% url lis_ext.borrar_url val.id %}">Eliminar</a> {% endif %}
+                </li>
             {% endfor %}
             </ul>
-            {% endif %}
+            {% if lis_ext.nuevo_url %} <a href="{% url lis_ext.nuevo_url obj.id %}">Nuevo</a> {% endif %}
 
         {% endfor %}
     {% endif %}
 
-    {% if editar_url %}<a href="{% url editar_url obj.id %}">Editar</a>{% endif %}
 {% else %}
 
     <div class="pt-1">

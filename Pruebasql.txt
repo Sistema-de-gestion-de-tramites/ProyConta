@@ -1,11 +1,5 @@
 --- Valores de prueba
 
---- Tipos de usuario
-INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Empleado');
-INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Persona moral');
-INSERT INTO `tipo_usuarios`(`descr`) VALUES ('Persona fisica');
-
-
 -- Estados
 INSERT INTO `estados` (`nombre`) VALUES ('Aceptado');
 INSERT INTO `estados` (`nombre`) VALUES ('Rechazado');
@@ -32,8 +26,3 @@ INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('CURP','4');
 INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Acta','4');
 INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Firma digital','4');
 INSERT INTO `tipo_documentos`(`nombre`, `tamano_MB`) VALUES ('Constancia','4');
-
--- Roles
-INSERT INTO `rol`(`Rol`) VALUES ('Empleado');
-INSERT INTO `rol`(`Rol`) VALUES ('Gerente');
-INSERT INTO `rol`(`Rol`) VALUES ('Admin');

@@ -90,6 +90,12 @@
                 </svg>
                 <div class="ms-2 me-auto">
 
+                    <span class="d-block ">
+                        <div class="d-inline  ">
+                            <strong>{{ obj }}</strong>
+                        </div>
+                    </span>
+                    <!--
                     {% for key, val in obj.get_fields_and_values %}
                         {% if key != 'ID' %}
                         <span class="d-block ">
@@ -115,6 +121,7 @@
                             <strong>No hay campos</strong>
                         {% endif %}
                     {% endfor %}
+                    -->
                     {% if obj.direccion  %}
                         <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
                     {% endif %}
@@ -151,19 +158,6 @@
                     </a>
                 {% endif %}
             {% endif %}
-            {% if telefono_url %}
-                <a type="button" class="btn btn-dark btn-sm rounded-pill"  href="{% url telefono_url obj.id %}">
-                        Telefono(s)
-                </a>
-
-            {% endif %}
-            {% if direccion_url %}
-                <a type="button" class="btn btn-dark btn-sm rounded-pill"  href="{% url direccion_url obj.id %}">
-                        <img src="{% static 'img/icons/icons8-marcador-100.png' %}" height="20px">
-                </a>
-
-            {% endif %}
-            {% if cuentas_url %} <a href="{% url cuentas_url obj.id %}">Cuentas</a> {% endif %}
             {% if detalle_url %}
                 <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
                     Mas info

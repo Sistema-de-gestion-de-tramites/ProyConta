@@ -95,21 +95,18 @@ class Listar_Clientes(PermissionRequiredMixin,ListView):
     permission_required = 'editor.dev_ver_clientes'
     queryset = Personas.objects.exclude(tipo_usuario__descr="Empleado")
     template_name = 'plantilla_lista.html'
-    extra_context={'titulo':'clientes', 'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente', 'telefono_url':'listar_telefonos', 'direccion_url':'listar_direcciones', 'cuentas_url':'listar_cuentas', 'detalle_url':'detalle_persona'}
+    extra_context={'titulo':'clientes', 'actualizar_url': 'actualizar_cliente', 'borrar_url':'eliminar_cliente', 'detalle_url':'detalle_persona'}
 
 def detalle_Persona(request, pk):
     objeto = Personas.objects.get(id=pk)
-    titulo_1 = 'Direccion'
     lista_1 = Direcciones.objects.filter(persona_id=pk)
-    titulo_2 = 'Telefonos'
     lista_2 = Telefonos.objects.filter(persona_id=pk)
-    titulo_3 = 'Cuentas'
     lista_3 = Cuentas.objects.filter(persona_id=pk)
     context = {
         'obj': objeto,
-        'listas_extra': [{'titulo': titulo_1, 'lista': lista_1},
-                         {'titulo': titulo_2, 'lista': lista_2},
-                         {'titulo': titulo_3, 'lista': lista_3},
+        'listas_extra': [{'titulo': 'Direccion', 'lista': lista_1,  'nuevo_url': 'registrar_direccion', 'borrar_url': 'eliminar_direccion', 'actualizar_url':'actualizar_direccion',},
+                         {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},
+                         {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta',},
                          ],
         'editar_url': 'actualizar_cliente',
     }
@@ -127,17 +124,18 @@ class Cliente_Update(PermissionRequiredMixin,UpdateView):
     form_class = PersonaForm
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_clientes')
-    extra_context = {'esEmpleado': False, 'titulo': 'clientes'}
+    extra_context = {'esEmpleado': False, 'titulo': 'Editar cliente'}
 
 class Registrar_Telefono(CreateView):
     model = Telefonos
     form_class = TelefonosForm
     template_name = 'formulario.html'
+    extra_context = {'titulo': 'Añadir telefono'}
     #success_url = reverse_lazy('directorio')
 
     def get_success_url(self):
         obj = self.object
-        success_url = reverse('listar_telefonos', kwargs={'per_id': obj.persona_id})
+        success_url = reverse('detalle_persona', kwargs={'pk': obj.persona_id})
         return success_url
 
     def form_valid(self, form):
@@ -165,7 +163,7 @@ def eliminar_Telefono(request, pk):
     registro = get_object_or_404(Telefonos, id=pk)
     per_id = registro.persona_id
     registro.delete()
-    return redirect('listar_telefonos', per_id=per_id)
+    return redirect('detalle_persona', pk=per_id)
 
 def editar_Telefono(request, pk):
     modelo = get_object_or_404(Telefonos, pk=pk)
@@ -174,10 +172,10 @@ def editar_Telefono(request, pk):
         if formulario.is_valid():
             modelo = formulario.save(commit=False)
             modelo.save()
-            return redirect('listar_telefonos', per_id=modelo.persona_id)
+            return redirect('detalle_persona', pk=modelo.persona_id)
     else:
         formulario = TelefonosForm(instance=modelo, initial={'nombre':modelo.persona, 'persona' : modelo.persona_id})
-    return render(request, 'formulario.html', {'form': formulario})
+    return render(request, 'formulario.html', {'titulo': 'Editar telefono', 'form': formulario})
 
 # Direcciones
 
@@ -185,10 +183,11 @@ class Registrar_Direccion(CreateView):
     model = Direcciones
     form_class = DireccionesForm
     template_name = 'formulario.html'
+    extra_context = {'titulo': 'Registrar dirección'}
 
     def get_success_url(self):
         obj = self.object
-        success_url = reverse('listar_direcciones', kwargs={'per_id': obj.persona_id})
+        success_url = reverse('detalle_persona', kwargs={'pk': obj.persona_id})
         return success_url
 
     def form_valid(self, form):
@@ -211,7 +210,7 @@ def eliminar_Direccion(request, pk):
     registro = get_object_or_404(Direcciones, id=pk)
     per_id = registro.persona_id
     registro.delete()
-    return redirect('listar_direcciones', per_id=per_id)
+    return redirect('detalle_persona', pk=per_id)
 
 def editar_Direccion(request, pk):
     modelo = get_object_or_404(Direcciones, pk=pk)
@@ -220,10 +219,10 @@ def editar_Direccion(request, pk):
         if formulario.is_valid():
             modelo = formulario.save(commit=False)
             modelo.save()
-            return redirect('listar_direcciones', per_id=modelo.persona_id)
+            return redirect('detalle_persona', pk=modelo.persona_id)
     else:
         formulario = DireccionesForm(instance=modelo, initial={'nombre':modelo.persona, 'persona': modelo.persona_id})
-    return render(request, 'formulario.html', {'form': formulario})
+    return render(request, 'formulario.html', {'titulo': 'Editar dirección', 'form': formulario})
 
 # Cuentas de clientes
 
@@ -231,10 +230,11 @@ class Registrar_Cuenta(CreateView):
     model = Cuentas
     form_class = CuentasForm
     template_name = 'formulario.html'
+    extra_context = {'titulo': 'Registrar cuenta'}
 
     def get_success_url(self):
         obj = self.object
-        success_url = reverse('listar_cuentas', kwargs={'per_id': obj.persona_id})
+        success_url = reverse('detalle_persona', kwargs={'per_id': obj.persona_id})
         return success_url
 
     def form_valid(self, form):
@@ -257,7 +257,7 @@ def eliminar_Cuenta(request, pk):
     registro = get_object_or_404(Cuentas, id=pk)
     per_id = registro.persona_id
     registro.delete()
-    return redirect('listar_cuentas', per_id=per_id)
+    return redirect('detalle_persona', pk=per_id)
 
 def editar_Cuenta(request, pk):
     modelo = get_object_or_404(Cuentas, pk=pk)
@@ -266,10 +266,10 @@ def editar_Cuenta(request, pk):
         if formulario.is_valid():
             modelo = formulario.save(commit=False)
             modelo.save()
-            return redirect('listar_cuentas', per_id=modelo.persona_id)
+            return redirect('detalle_persona', pk=modelo.persona_id)
     else:
         formulario = CuentasForm(instance=modelo, initial={'nombre': modelo.persona, 'persona': modelo.persona_id})
-    return render(request, 'formulario.html', {'form': formulario})
+    return render(request, 'formulario.html', {'titulo': 'Editar cuenta', 'form': formulario})
 
 # Subir documentos
 class subir_archivo(CreateView):
@@ -315,7 +315,15 @@ def busqueda_archivos(request, clie_id):
 
 def listar_archivos(request):
     lista = Entrega_Doc.objects.all()
-    return render(request, 'plantilla_lista.html', {'titulo': 'fichero', 'object_list': lista, 'actualizar_url': 'actualizar_documento', 'borrar_url': 'eliminar_documento', 'crear_url': 'subir_documento'})
+    return render(request, 'plantilla_lista.html', {'titulo': 'fichero', 'object_list': lista, 'actualizar_url': 'actualizar_documento', 'borrar_url': 'eliminar_documento', 'detalle_url':'detalle_documento', 'crear_url': 'subir_documento'})
+
+def detalle_archivo(request, pk):
+    objeto = Entrega_Doc.objects.get(id=pk)
+    context = {
+        'obj': objeto,
+        'editar_url': 'actualizar_documento',
+    }
+    return render(request, 'plantilla_detalle.html', context)
 
 class editar_archivo(UpdateView):
     model = Entrega_Doc
