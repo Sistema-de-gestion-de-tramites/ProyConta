@@ -11,7 +11,6 @@ ____________________________________________________________________________
 -- ARIO, EN ESTA CLASE IRA EL BACKEND DE LA APLICACION EMPLEADOS                --
 ----------------------------------------------------------------------------
 """
-from email.policy import default
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect,get_object_or_404
 from django.urls import reverse_lazy
@@ -19,6 +18,11 @@ from django.contrib import messages
 from django.contrib.auth.models import Permission, Group,User
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import permission_required
+from django.utils.text import slugify
+from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import default_storage
+from django.conf import settings
+import os
 
 #from apps.empleados.forms import EmpleadoForm
 from apps.clientes.forms import PersonaForm
@@ -210,3 +214,84 @@ class usuario_contrasenia_Update(PermissionRequiredMixin,UpdateView):
         context['esActualizarContrasenia'] = True
         context['form'] = form
         return context
+
+def PerfilEmpleado(request):
+    informacionEmpleado = obtenerEmpleadoDeCuentaUsuario(request.user)
+    if request.method == 'GET':
+        informacionCuentaUsuario = [("Nombre de usuario: " + str(request.user.username)),
+                                    ("Ultimo acceso: " + str(request.user.last_login)),
+                                    ("Fecha de creacion: " + str(request.user.date_joined))]
+        
+        informacionRoles = request.user.groups.all
+        informacionPermisos = request.user.user_permissions.all().values_list('name',flat=True)
+        
+        if informacionEmpleado != request.user:
+            formularioFoto = imagenPerfilForm()
+            if str(informacionEmpleado.foto_perfil) != '':
+                fotoPerfil = informacionEmpleado.foto_perfil
+            else:
+                fotoPerfil = False
+        else:
+            formularioFoto = False
+        context = {
+            'obj': informacionEmpleado,
+            'listas_extra': [{'titulo': 'Informacion de cuenta', 'lista': informacionCuentaUsuario},
+                            {'titulo': 'Mis roles', 'lista': informacionRoles},
+                            {'titulo': 'Mis Permisos', 'lista': informacionPermisos}
+                            ],
+            'fotoPerfilForm': formularioFoto,
+            'fotoPerfil': fotoPerfil
+            
+        }
+        return render(request, 'plantilla_detalle.html', context)
+    else: 
+        formularioFoto = imagenPerfilForm(request.POST,request.FILES)
+        if formularioFoto.is_valid():
+
+            archivo = formularioFoto.cleaned_data['imagen']
+            # Prepara el nombre del archivo y lo normaliza
+            base, extension = os.path.splitext(archivo.name)
+            base = slugify(base)
+            nombre_archivo = base + extension
+            # Define el sistema de archivos para guardar el archivo
+            carpeta = str(settings.MEDIA_ROOT) + '/fotos_perfil'
+            fs = FileSystemStorage(location=carpeta)
+
+            # Si el archivo ya existe, agrega un sufijo numérico al nombre para evitar colisiones
+            i = 0
+            while fs.exists(nombre_archivo):
+                i += 1
+                nombre_archivo = f"{base}_{i}{extension}"
+
+            # Guarda el archivo en el sistema de archivos
+            fs.save(nombre_archivo, archivo)
+            
+            if str(informacionEmpleado.foto_perfil) != '':
+                file_path = os.path.join(settings.MEDIA_ROOT, str(informacionEmpleado.foto_perfil))
+                default_storage.delete(file_path)
+            
+            # Establece el nombre del archivo en el modelo antes de guardarlo
+            informacionEmpleado.foto_perfil = 'fotos_perfil' + '/' + str(nombre_archivo)
+            informacionEmpleado.save()
+        else:
+            print('no valido')
+        return redirect('perfil')
+
+def obtenerEmpleadoDeCuentaUsuario(cuentaUsuario):
+    try:
+        relacionUsuarioEmpleado = Usuario_empleado.objects.get(usuario=cuentaUsuario)
+        empleado = relacionUsuarioEmpleado.empleado
+    except Usuario_empleado.DoesNotExist:
+        return cuentaUsuario
+    
+    return empleado
+
+def obtenerFotoPerfil(request):
+    empleado = obtenerEmpleadoDeCuentaUsuario(request.user)
+    if empleado != request.user:
+            if str(empleado.foto_perfil) != '':
+                return empleado.foto_perfil
+            else:
+                return False
+    else:
+        return False

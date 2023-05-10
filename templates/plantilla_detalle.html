@@ -1,5 +1,4 @@
-{% extends 'base/index.html' %}
-
+{% extends 'base/index.html'%}
 {% load static %}
 
 {% block title %}
@@ -10,7 +9,23 @@
 {% block css_add %}
 {% endblock %}
 
+
 {% block cuerpo %}
+
+<!--foto perfil usuario-->
+{% if fotoPerfilForm %}
+    {% if fotoPerfil %}
+        <img src="{{fotoPerfil.url}}" alt="twbs" width="100" height="100">
+    {% else %}
+        <img src="{% static 'img/icons/icons8-cumpleaños-100.png' %}" alt="twbs" width="100" height="100">
+    {% endif %}
+    <form class="my-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{fotoPerfilForm.as_p}}
+        <button type="submit" class="btn btn-sm btn-primary btn-lg">Actualizar foto</button>
+    </form>
+{% endif %}
+<!--fin foto perfil usuario-->
 
 {% if obj %}
     {% for key, val in obj.get_fields_and_values %}

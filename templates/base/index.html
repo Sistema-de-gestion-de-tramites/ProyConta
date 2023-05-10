@@ -89,15 +89,19 @@
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-body-secondary sidebar collapse ">
       <div class="position-sticky sidebar-sticky">
 
-        <a href="#" class="list-group-item list-group-item-action d-flex py-3 mx-3 dropdown-toggle" aria-current="true">
-          <img src="{% static 'img/icons/icons8-cumpleaños-100.png' %}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
+        <a href="{% url 'perfil' %}" class="list-group-item list-group-item-action d-flex py-3 mx-3 dropdown-toggle" aria-current="true">
+          {% if fotoPerfil %}
+            <img src="{{fotoPerfil.url}}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
+          {% else %}
+            <img src="{% static 'img/icons/icons8-cumpleaños-100.png' %}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
+          {% endif %}
           <div class="d-flex gap-2 w-100 justify-content-between px-2">
             <div>
               <h6 class="mb-0">{{user.username}}</h6>
               {% if user.is_superuser %}
-              <p class="mb-0 opacity-75">Administrador</p>
+              <p class="mb-0 opacity-75">Administrador (Ver perfil)</p>
               {% else %}
-                <p class="mb-0 opacity-75">{{user.groups.all.0.name}}</p>
+                <p class="mb-0 opacity-75">{{user.groups.all.0.name}} (Ver perfil)</p>
               {% endif %}
             </div>
            

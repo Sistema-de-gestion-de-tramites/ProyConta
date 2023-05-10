@@ -40,3 +40,6 @@ class ActualizarContraseniaUsuarioForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','empleado','password1','password2']
+
+class imagenPerfilForm(forms.Form):
+    imagen = forms.ImageField(max_length=1000,required=True,label="Subir foto")

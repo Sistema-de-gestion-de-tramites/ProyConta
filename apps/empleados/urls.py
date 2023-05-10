@@ -12,6 +12,7 @@ ____________________________________________________________________________
 ----------------------------------------------------------------------------
 """
 from math import perm
+from unicodedata import name
 from django.urls import path #{LIBRERIA URLS DE DJANGO}
 from . import views #{IMPORTAR LAS CLASE DE VIEW DE LA APP EMPLEADOS}
 
@@ -29,6 +30,8 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('eliminar_usuario/<pk>', views.Usuario_Delete.as_view(), name="eliminar_usuario"),
     path('actualizar_usuario/<pk>', views.usuario_Update.as_view(), name="actualizar_usuario"),
     path('actualizar_contrasenia_usuario/<pk>', views.usuario_contrasenia_Update.as_view(), name="actualizar_contrasenia_usuario"),
+    #usuario en sesion
+    path('perfil',views.PerfilEmpleado,name="perfil"),
 
 ]
 #{----------------------------------------------------------------------------------------------}
