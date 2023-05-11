@@ -32,12 +32,13 @@ from django.forms.models import model_to_dict
 from apps.clientes.models import Personas, Telefonos, Direcciones
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from apps.empleados.views import obtenerEmpleadoDeCuentaUsuario, obtenerFotoPerfil
+from django.contrib.auth.decorators import permission_required
 
 Empleado_id = 1
 
 class Crear_Persona(PermissionRequiredMixin,CreateView):
-    permission_required = 'editor.dev_crear_empleados'
-    permission_required = 'editor.dev_crear_clientes'
+    permission_required = 'sat.dev_crear_empleados'
+    permission_required = 'sat.dev_crear_clientes'
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
@@ -96,6 +97,7 @@ class Listar_Clientes(PermissionRequiredMixin,ListView):
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
+@permission_required(['sat.dev_ver_clientes','sat.dev_ver_empleados']) 
 def detalle_Persona(request, pk):
     objeto = Personas.objects.get(id=pk)
     lista_1 = Direcciones.objects.filter(persona_id=pk)
@@ -113,7 +115,7 @@ def detalle_Persona(request, pk):
     return render(request, 'plantilla_detalle.html', context)
 
 class Cliente_Delete(PermissionRequiredMixin,DeleteView):
-    permission_required = 'editor.dev_eliminar_clientes'
+    permission_required = 'sat.dev_eliminar_clientes'
     model = Personas    # Especificar a solo los empleados con el rol != 0
     template_name = 'borrar.html'
     success_url = reverse_lazy('listar_clientes')
@@ -124,7 +126,7 @@ class Cliente_Delete(PermissionRequiredMixin,DeleteView):
         return context
 
 class Cliente_Update(PermissionRequiredMixin,UpdateView):
-    permission_required = 'editor.dev_editar_clientes'
+    permission_required = 'sat.dev_editar_clientes'
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
