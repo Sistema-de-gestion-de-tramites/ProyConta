@@ -379,6 +379,35 @@ class editar_tipoDocumento(UpdateView):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
+    
+    def form_valid(self, form, **kwargs):
+        registro = form.save(commit=False)
+        try:
+            nombreAntiguo =  str(Tipo_Documentos.objects.get(id=self.object.id).nombre)
+        except Tipo_Documentos.DoesNotExist:
+            mensajeError ="Error al obtener el objecto.Por favor vuelve a intentarlo o reporta el error"
+            messages.add_message(request=self.request,level=messages.WARNING,message=mensajeError,extra_tags='danger')
+            return redirect('editar_tipo_documento',self.object.id)
+        try:    
+            permisoEdicion = Permission.objects.get(codename='doc_edicion_' + nombreAntiguo)
+        except Permission.DoesNotExist:
+            mensajeError ="Error al actualizar los permisos.Por favor vuelve a intentarlo o reporta el error"
+            messages.add_message(request=self.request,level=messages.WARNING,message=mensajeError,extra_tags='danger')
+            return redirect('editar_tipo_documento',self.object.id)
+        permisoEdicion.name = "Edicion "+ self.request.POST['nombre']
+        permisoEdicion.codename = 'doc_edicion_' + self.request.POST['nombre']
+        permisoEdicion.save()
+        try:
+            permisoVer = Permission.objects.get(codename='doc_ver_' + nombreAntiguo)
+        except Permission.DoesNotExist:
+            mensajeError ="Error al actualizar los permisos.Por favor vuelve a intentarlo o reporta el error"
+            messages.add_message(request=self.request,level=messages.WARNING,message=mensajeError,extra_tags='danger')
+            return redirect('editar_tipo_documento',self.object.id)
+        permisoVer.name = "Ver " + self.request.POST['nombre']
+        permisoVer.codename = 'doc_ver_' + self.request.POST['nombre']
+        permisoVer.save()
+        registro.save()
+        return super().form_valid(form)
 
 def eliminar_TipoDocumento(request, pk):
     registro = get_object_or_404(Tipo_Documentos, id=pk)

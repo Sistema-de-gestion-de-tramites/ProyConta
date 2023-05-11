@@ -1,0 +1,17 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<p>Error del servidor. reportar error al ...<p>
+
+<input type="button" value="Regresar" onClick="history.go(-1);" class="btn btn-primary my-2">
+<a href="{% url 'inicio' %}" class="btn btn-primary my-2">ir al inicio</a>
+
+{% endblock %}
