@@ -30,6 +30,16 @@ INSERT INTO auth_permission (name,content_type_id,codename) VALUES("Eliminar cli
 -- permisos Directorio
 UPDATE auth_permission SET name="Crear directorio" WHERE codename= "add_directorio";
 
+-- permisos Cuentas
+UPDATE auth_permission SET name="Crear cuentas" WHERE codename= "add_cuentas";
+UPDATE auth_permission SET codename= "dev_crear_cuentas" WHERE codename= "add_cuentas";
+UPDATE auth_permission SET name="Ver cuentas" WHERE codename= "view_cuentas";
+UPDATE auth_permission SET codename= "dev_ver_cuentas" WHERE codename= "view_cuentas";
+UPDATE auth_permission SET name="Editar cuentas" WHERE codename= "change_cuentas";
+UPDATE auth_permission SET codename= "dev_editar_cuentas" WHERE codename= "change_cuentas";
+UPDATE auth_permission SET name="Eliminar cuentas" WHERE codename= "delete_cuentas";
+UPDATE auth_permission SET codename= "dev_eliminar_cuentas" WHERE codename= "delete_cuentas";
+
 -- creacion de roles por defecto (tipo de usuario que usa Django)
 INSERT INTO auth_group(name) VALUES("Administrador");
 

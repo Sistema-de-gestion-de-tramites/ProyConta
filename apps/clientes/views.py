@@ -265,6 +265,7 @@ def editar_Direccion(request, pk):
 # Cuentas de clientes
 
 class Registrar_Cuenta(CreateView):
+    permission_required = 'sat.dev_crear_cuentas'
     model = Cuentas
     form_class = CuentasForm
     template_name = 'formulario.html'
@@ -291,6 +292,7 @@ class Registrar_Cuenta(CreateView):
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
+@permission_required('sat.dev_ver_cuentas') 
 def listar_Cuentas(request, per_id):
     persona = get_object_or_404(Personas, pk=per_id)
     lista = Cuentas.objects.filter(persona_id=persona)
@@ -301,12 +303,14 @@ def listar_Cuentas(request, per_id):
                                                     'valor_fk': per_id,
                                                     'fotoPerfil': obtenerFotoPerfil(request)})
 
+@permission_required('sat.dev_eliminar_cuentas')
 def eliminar_Cuenta(request, pk):
     registro = get_object_or_404(Cuentas, id=pk)
     per_id = registro.persona_id
     registro.delete()
     return redirect('detalle_persona', pk=per_id)
 
+@permission_required('sat.dev_editar_cuentas')
 def editar_Cuenta(request, pk):
     modelo = get_object_or_404(Cuentas, pk=pk)
     if request.method == 'POST':
