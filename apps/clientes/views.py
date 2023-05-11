@@ -24,6 +24,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .forms import *   #{IMPORTA LOS METODOS DE LA CLASE FORM}
 import os
+from .cifrado import AES
 from django.contrib import messages
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -107,7 +108,7 @@ def detalle_Persona(request, pk):
         'obj': objeto,
         'listas_extra': [{'titulo': 'Direccion', 'lista': lista_1,  'nuevo_url': 'registrar_direccion', 'borrar_url': 'eliminar_direccion', 'actualizar_url':'actualizar_direccion',},
                          {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},
-                         {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta',},
+                         {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta','ver_url':'ver_cuenta'},
                          ],
         'archivos_url': 'listar_documentos',
         'editar_url': 'actualizar_cliente',
@@ -273,12 +274,13 @@ class Registrar_Cuenta(CreateView):
 
     def get_success_url(self):
         obj = self.object
-        success_url = reverse('detalle_persona', kwargs={'per_id': obj.persona_id})
+        success_url = reverse_lazy('detalle_persona', kwargs={'pk': obj.persona_id})
         return success_url
 
     def form_valid(self, form):
         registro = form.save(commit=False)
         registro.persona_id = get_object_or_404(Personas, id=self.kwargs.get('pk')).pk
+        registro.contra = AES.encript(str.encode(registro.contra)).decode()
         return super().form_valid(form)
 
     def get_form(self, form_class=None, **kwargs):
@@ -317,13 +319,26 @@ def editar_Cuenta(request, pk):
         formulario = CuentasForm(request.POST, instance=modelo)
         if formulario.is_valid():
             modelo = formulario.save(commit=False)
+            modelo.contra = AES.encript(str.encode(modelo.contra)).decode()
             modelo.save()
             return redirect('detalle_persona', pk=modelo.persona_id)
     else:
-        formulario = CuentasForm(instance=modelo, initial={'nombre': modelo.persona, 'persona': modelo.persona_id})
+        binarioDeContra = str.encode(modelo.contra)
+        contra = AES.decript(binarioDeContra)
+        datosIniciales = {'nombre': modelo.persona,
+                          'persona': modelo.persona_id,
+                          'contra': contra.decode()}
+        if request.resolver_match.url_name == "actualizar_cuenta":
+            formulario = CuentasForm(instance=modelo, initial=datosIniciales)
+            verCuenta = False
+        else:
+            verCuenta =True
+            formulario = CuentasFormView(instance=modelo, initial=datosIniciales)
+        
     return render(request, 'formulario.html', {'titulo': 'Editar cuenta',
                                                'form': formulario,
-                                               'fotoPerfil': obtenerFotoPerfil(request)})
+                                               'fotoPerfil': obtenerFotoPerfil(request),
+                                               'verCuenta':verCuenta})
 
 # Subir documentos
 class subir_archivo(CreateView):

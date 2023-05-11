@@ -225,7 +225,7 @@ class Ext_Direcciones(models.Model):
 class Cuentas(models.Model):
     persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Cliente")
     cuenta = models.CharField(max_length=30, verbose_name="Cuenta")
-    contra = models.CharField(max_length=30, verbose_name="Contraseña")
+    contra = models.CharField(max_length=1000, verbose_name="Contraseña")
 
     class Meta:
         managed = True

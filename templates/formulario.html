@@ -61,11 +61,14 @@
          {% endif %}
         </p>
         {% endfor %}
-
-        <div class="d-grid gap-2 col-3 mx-auto">
-            <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
-            <input type="button" value="Cancelar" onClick="history.go(-1);" class="btn btn-sm btn-danger btn-lg">
-        </div>
+        {% if verCuenta %}
+          <input type="button" value="Regresar" onClick="history.go(-1);" class="btn btn-sm btn-danger btn-lg">
+        {% else %}
+          <div class="d-grid gap-2 col-3 mx-auto">
+              <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
+              <input type="button" value="Cancelar" onClick="history.go(-1);" class="btn btn-sm btn-danger btn-lg">
+          </div>
+        {% endif %}
         </form>
 
     </div>

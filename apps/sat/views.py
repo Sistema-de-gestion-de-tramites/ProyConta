@@ -50,6 +50,7 @@ def index(request): #{METODO REQUEST DE HTTP}
 
 
 def inicio(request):  # {METODO REQUEST DE HTTP}
+    
     if request.user.is_authenticated:  # valida si existe una sesion activa
         print(request.user.username)
     contexto = {'titulo': 'inicio','fotoPerfil': obtenerFotoPerfil(request)}

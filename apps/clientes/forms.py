@@ -96,6 +96,20 @@ class CuentasForm(forms.ModelForm):
             'contra',
         ]
 
+class CuentasFormView(forms.ModelForm):
+    nombre = forms.CharField(label='Nombre cliente', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    persona = forms.HiddenInput()
+    contra = forms.CharField(label='Contraseña', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    cuenta = forms.CharField(label='Cuenta', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    class Meta:
+        model = Cuentas
+
+        fields = [
+            'nombre',
+            'cuenta',
+            'contra',
+        ]
+
 class Formulario_Documento(forms.ModelForm):
     empleado = forms.HiddenInput()
     fecha = forms.DateField(disabled=True, initial=datetime.date.today)
