@@ -65,7 +65,7 @@ class Listar_Empleados(PermissionRequiredMixin,ListView):
         return context
 
 class Empleado_Delete(PermissionRequiredMixin,DeleteView):
-    permission_required = 'editor.dev_eliminar_empleados'
+    permission_required = 'sat.dev_eliminar_empleados'
     model = Personas
     template_name = 'borrar.html'
     success_url = reverse_lazy('listar_empleados')
@@ -76,7 +76,7 @@ class Empleado_Delete(PermissionRequiredMixin,DeleteView):
         return context
 
 class Empleado_Update(PermissionRequiredMixin,UpdateView):
-    permission_required = 'editor.dev_editar_empleados'
+    permission_required = 'sat.dev_editar_empleados'
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
@@ -219,6 +219,7 @@ class usuario_Update(PermissionRequiredMixin,UpdateView):
         context['empleado'] = usuario_empleado
         context['titulo'] = 'Usuarios'
         context['form'] = form
+        context['user'] = self.request.user
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
