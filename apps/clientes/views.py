@@ -108,6 +108,7 @@ def detalle_Persona(request, pk):
                          {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},
                          {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta',},
                          ],
+        'archivos_url': 'listar_documentos',
         'editar_url': 'actualizar_cliente',
     }
     return render(request, 'plantilla_detalle.html', context)
@@ -309,12 +310,16 @@ class subir_archivo(CreateView):
 
         return super().form_valid(form)
 
-def busqueda_archivos(request, clie_id):
-    lista = Entrega_Doc.objects.filter(cliente_id=clie_id)
-    return render(request, 'plantilla_lista.html',{'object_list': lista})
-
 def listar_archivos(request):
     lista = Entrega_Doc.objects.all()
+    cliente = request.GET.get('clie')
+    doc = request.GET.get('doc')
+
+    if cliente:
+        lista = lista.filter(cliente_id=cliente)
+    if doc:
+        lista = lista.filter(tipo_doc_id=doc)
+
     return render(request, 'plantilla_lista.html', {'titulo': 'fichero', 'object_list': lista, 'actualizar_url': 'actualizar_documento', 'borrar_url': 'eliminar_documento', 'detalle_url':'detalle_documento', 'crear_url': 'subir_documento'})
 
 def detalle_archivo(request, pk):
@@ -329,7 +334,7 @@ class editar_archivo(UpdateView):
     model = Entrega_Doc
     form_class = Formulario_Documento
     template_name = 'formulario.html'
-    success_url = reverse_lazy('listar_todos_documentos')
+    success_url = reverse_lazy('listar_documentos')
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -393,7 +398,7 @@ def eliminar_archivo(request, pk):
         messages.error(request, 'No se pudo borrar el archivo.')
 
     registro.delete()
-    return redirect('listar_todos_documentos')
+    return redirect('listar_documentos')
 
 
 """

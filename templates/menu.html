@@ -3,73 +3,55 @@
 
 {% block title %}
 
-  {% if titulo == 'inicio' %}
-    <img class="bi me-2 " src="{% static 'img/nav/icons8-casa-94.png' %}" height="50px">
-    Inicio
-  {% endif %}
-
- {% if titulo == 'fichero' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-paquete-94.png' %}" height="50px">
-    Fichero
-  {% endif %}
-
- {% if titulo == 'roles' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="50px" >
-    Roles
-  {% endif %}
-
-  {% if titulo == 'comentarios' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-comentarios-94.png' %}" height="50px" >
-    Comentarios
-  {% endif %}
-
- {% if titulo == 'archivos' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-documento-94.png' %}" height="50px">
-    Archivos
-  {% endif %}
-
-  {% if titulo == 'documentos' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
-    Documentos
-  {% endif %}
-
-{% if titulo == 'estados' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-aprobación-94.png' %}" height="50px">
-    Estados
-   {% endif %}
-
-   {% if titulo == 'directorio' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-contactos-94.png' %}" height="50px">
-    Directorio
-   {% endif %}
-
-   {% if titulo == 'clientes' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
-    Clientes
-   {% endif %}
-
-   {% if titulo == 'empleados' %}
-    <img class="bi me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
-    Empleados
-   {% endif %}
-   {% if titulo == 'Cuentas de usuario' %}
-    <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="40px">
-    Cuentas de usuario
-   {% endif %}
+    {% if titulo == 'inicio' %}
+        <img class="bi me-2 " src="{% static 'img/nav/icons8-casa-94.png' %}" height="50px">
+        Inicio
+    {% elif titulo == 'fichero' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-paquete-94.png' %}" height="50px">
+        Fichero
+    {% elif titulo == 'roles' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="50px" >
+        Roles
+    {% elif titulo == 'comentarios' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-comentarios-94.png' %}" height="50px" >
+        Comentarios
+    {% elif titulo == 'archivos' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-documento-94.png' %}" height="50px">
+        Archivos
+    {% elif titulo == 'documentos' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
+        Documentos
+    {% elif titulo == 'estados' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-aprobación-94.png' %}" height="50px">
+        Estados
+    {% elif titulo == 'directorio' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-contactos-94.png' %}" height="50px">
+        Directorio
+    {% elif titulo == 'clientes' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
+        Clientes
+    {% elif titulo == 'empleados' %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
+        Empleados
+    {% elif titulo == 'Cuentas de usuario' %}
+        <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="40px">
+        Cuentas de usuario
+    {% endif %}
 
 {% endblock%}
 
 {% block cuerpo %}
    {% if titulo == 'inicio' %}
-       <section class="py-5 text-center container">
+      <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light">Bienvenido</h1>
-              <p class="lead text-muted">
-                texto
-              <p>
-              <a href="#" class="btn btn-primary my-2">Opción 1</a>
-              <a href="#" class="btn btn-secondary my-2">Opción 2</a>
+             <p class="lead text-muted">
+               texto
+             </p>
+             <p>
+               <a href="#" class="btn btn-primary my-2">Opción 1</a>
+               <a href="#" class="btn btn-secondary my-2">Opción 2</a>
             </p>
           </div>
         </div>
