@@ -16,6 +16,7 @@ from email.policy import default
 from tokenize import group
 
 from django.db.models import Q
+from functools import reduce
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
@@ -390,30 +391,36 @@ def eliminar_TipoDocumento(request, pk):
 
 # Buscador
 def buscar(request):
-    busqueda = request.GET.get('q')
+    lista = request.GET.get('q').split()
 
     titulo_1 = 'Documentos'
     lista_1 = Tipo_Documentos.objects.all()
     titulo_2 = 'Usuarios'
     lista_2 = Personas.objects.all()
-    lista_3 = Telefonos.objects.all()
+    titulo_3 = 'Archivos'
+    lista_3 = Entrega_Doc.objects.all()
 
 
-    if busqueda:
-        lista_1 = Tipo_Documentos.objects.filter(nombre__icontains=busqueda)
-        lista_2 = Personas.objects.filter(
-            Q(nombre__icontains=busqueda) |
-            Q(ap_paterno__icontains=busqueda) |
-            Q(ap_materno__icontains=busqueda)
-        )
-        lista_3 = Telefonos.objects.filter(
-            Q(descr__icontains=busqueda) |
-            Q(telefono__icontains=busqueda)
-        )
+    if lista:
+        queries_1 = [Q(nombre__icontains=busqueda) for busqueda in lista]
+        lista_1 = lista_1.filter(reduce(lambda x, y: x | y, queries_1))
 
-    contexto = [{'object_list': lista_1, 'titulo': titulo_1},
-                {'object_list': lista_2, 'titulo': titulo_2},
-                {'object_list': lista_3, 'titulo': 'telefonos'},
+        queries_2 = [Q(nombre__icontains=busqueda) for busqueda in lista]
+        queries_2.extend([Q(ap_paterno__icontains=busqueda) for busqueda in lista])
+        queries_2.extend([Q(ap_materno__icontains=busqueda) for busqueda in lista])
+        queries_2.extend([Q(correo__icontains=busqueda) for busqueda in lista])
+        queries_2.extend([Q(curp__icontains=busqueda) for busqueda in lista])
+        queries_2.extend([Q(rfc__icontains=busqueda) for busqueda in lista])
+        lista_2 = lista_2.filter(reduce(lambda x, y: x | y, queries_2))
+
+        queries_3 = [Q(cliente__nombre__icontains=busqueda) for busqueda in lista]
+        queries_3.extend([Q(empleado__nombre__icontains=busqueda) for busqueda in lista])
+        queries_3.extend([Q(tipo_doc__nombre__icontains=busqueda) for busqueda in lista])
+        lista_3 = lista_3.filter(reduce(lambda x, y: x | y, queries_3))
+
+    contexto = [{'object_list': lista_1, 'titulo': titulo_1, 'lista_url': 'listar_documentos'},
+                {'object_list': lista_2, 'titulo': titulo_2, 'lista_url': 'detalle_persona'},
+                {'object_list': lista_3, 'titulo': titulo_3, 'lista_url': 'detalle_documento'},
                 ]
 
     return render(request, 'buscador.html', {'contexto': contexto,

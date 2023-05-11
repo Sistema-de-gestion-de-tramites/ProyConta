@@ -42,7 +42,11 @@
     {% empty %}
         <h1>No hay campos</h1>
     {% endfor %}
-    {% if editar_url %}<a href="{% url editar_url obj.id %}">Editar</a>{% endif %}
+    {% if editar_url %}<a href="{% url editar_url obj.id %}">Editar</a><br>{% endif %}
+
+    {% if archivos_url %}
+        <a href="{% url archivos_url %}?clie={{obj.id}}">Archivo</a><br>
+    {% endif %}
 
     {% if listas_extra %}
         {% for lis_ext in listas_extra %}

@@ -42,8 +42,8 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('eliminar_cuenta/<pk>', views.eliminar_Cuenta, name="eliminar_cuenta"),
 
     path('subir_documento', views.subir_archivo.as_view(), name="subir_documento"),
-    path('lista_documento/', views.listar_archivos, name="listar_todos_documentos"),
-    path('lista_documento/<clie_id>', views.busqueda_archivos, name="listar_documentos"),
+    #path('lista_documento/', views.listar_archivos, name="listar_todos_documentos"),
+    path('lista_documento/', views.listar_archivos, name="listar_documentos" ),
     path('actualizar_documento/<pk>', views.editar_archivo.as_view(), name="actualizar_documento"),
     path('eliminar_documento/<pk>', views.eliminar_archivo, name="eliminar_documento"),
 
