@@ -40,6 +40,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('lista_cuenta/<per_id>', views.listar_Cuentas, name="listar_cuentas"),
     path('actualizar_cuenta/<pk>', views.editar_Cuenta, name="actualizar_cuenta"),
     path('ver_cuenta/<pk>', views.editar_Cuenta, name="ver_cuenta"),
+    path('autenticar/<clienteID>/<cuentaID>', views.autenticarParaVerPassword, name="autenticar"),
     path('eliminar_cuenta/<pk>', views.eliminar_Cuenta, name="eliminar_cuenta"),
 
     path('subir_documento', views.subir_archivo.as_view(), name="subir_documento"),

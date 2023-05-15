@@ -1,0 +1,23 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <p {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="messages">
+    <p class="alert alert-warning">Atencion: para mayor seguirad se sugiere no guardar la contraseña de esta pagina</p>
+</div>
+<form method="POST">
+    {% csrf_token %}
+        {{form.as_p}}
+    <div class="d-grid gap-2 col-3 mx-auto">
+        <button type="submit" class="btn btn-sm btn-primary btn-lg">Autenticar</button>
+        <a class="btn btn-sm btn-danger btn-lg" href="{% url 'detalle_persona' clienteID %}">Cancelar</a>   
+    </div>
+</form>
+
+{% endblock %}

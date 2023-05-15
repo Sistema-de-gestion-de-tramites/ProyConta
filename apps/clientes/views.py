@@ -11,6 +11,7 @@ ____________________________________________________________________________
 -- ARIO, EN ESTA CLASE IRA EL BACKEND DE LA APLICACION EMPLEADOS                --
 ----------------------------------------------------------------------------
 """
+from tkinter import E
 from django.http import HttpResponseRedirect, HttpResponse, Http404, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -21,6 +22,8 @@ from django.utils.text import slugify
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required,login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.models import Permission
+from django.core.exceptions import PermissionDenied
 
 from .forms import *   #{IMPORTA LOS METODOS DE LA CLASE FORM}
 import os
@@ -108,11 +111,12 @@ def detalle_Persona(request, pk):
         'obj': objeto,
         'listas_extra': [{'titulo': 'Direccion', 'lista': lista_1,  'nuevo_url': 'registrar_direccion', 'borrar_url': 'eliminar_direccion', 'actualizar_url':'actualizar_direccion',},
                          {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},
-                         {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta','ver_url':'ver_cuenta'},
+                         {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta','ver_url':'autenticar'},
                          ],
         'archivos_url': 'listar_documentos',
         'editar_url': 'actualizar_cliente',
         'fotoPerfil': obtenerFotoPerfil(request),
+        'clienteID':pk
     }
     return render(request, 'plantilla_detalle.html', context)
 
@@ -312,7 +316,6 @@ def eliminar_Cuenta(request, pk):
     registro.delete()
     return redirect('detalle_persona', pk=per_id)
 
-@permission_required('sat.dev_editar_cuentas')
 def editar_Cuenta(request, pk):
     modelo = get_object_or_404(Cuentas, pk=pk)
     if request.method == 'POST':
@@ -329,16 +332,46 @@ def editar_Cuenta(request, pk):
                           'persona': modelo.persona_id,
                           'contra': contra.decode()}
         if request.resolver_match.url_name == "actualizar_cuenta":
+            if  not request.user.has_perm('sat.dev_editar_cuentas'):
+                raise PermissionDenied
             formulario = CuentasForm(instance=modelo, initial=datosIniciales)
             verCuenta = False
         else:
+            permisoVerContrasenia = get_object_or_404(Permission,codename='auth_ver_password')
+            if  not (request.user.has_perm('sat.auth_ver_password') and request.user.has_perm('sat.dev_ver_cuentas')):
+                request.user.user_permissions.remove(permisoVerContrasenia)
+                raise PermissionDenied
             verCuenta =True
             formulario = CuentasFormView(instance=modelo, initial=datosIniciales)
+            request.user.user_permissions.remove(permisoVerContrasenia)
         
     return render(request, 'formulario.html', {'titulo': 'Editar cuenta',
                                                'form': formulario,
                                                'fotoPerfil': obtenerFotoPerfil(request),
                                                'verCuenta':verCuenta})
+
+def autenticarParaVerPassword(request,clienteID,cuentaID):
+    
+    if request.method == "GET":
+        form = FormularioAutenticar
+        contexto = {'form':form,
+                    'clienteID':clienteID,
+                    'fotoPerfil': obtenerFotoPerfil(request)}
+        return render(request,'autenticar.html',contexto)
+    else:
+        form = FormularioAutenticar(request.POST)
+        if form.is_valid:
+            print(request.POST['password'])
+            esPasswordCorrecto = request.user.check_password(request.POST['password'])
+            print(esPasswordCorrecto)
+            if esPasswordCorrecto:
+                permisoVerContrasenia = get_object_or_404(Permission,codename='auth_ver_password')
+                request.user.user_permissions.set([permisoVerContrasenia])
+                return redirect('ver_cuenta',cuentaID)
+            else:
+                mensaje = "Contraseña incorrecta vuelve a intentarlo. contacte al administrador si desea recuperar su contraseña"
+                messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+                return redirect('autenticar',clienteID,cuentaID)
 
 # Subir documentos
 class subir_archivo(CreateView):

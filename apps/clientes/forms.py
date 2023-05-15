@@ -127,6 +127,9 @@ class Formulario_Documento(forms.ModelForm):
             'direccion',
         ]
 
+class FormularioAutenticar (forms.Form):
+    password = forms.CharField(label="Escribe tu contraseña",widget=forms.PasswordInput, required=True)
+
 """
 class ClienteForm(forms.ModelForm):
     tipo_clie_id = forms.ChoiceField(choices=[(choice.pk, choice.tipo_c) for choice in TipoClie.objects.all()])

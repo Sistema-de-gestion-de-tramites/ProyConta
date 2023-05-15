@@ -65,7 +65,7 @@
             <ul>
             {% for val in lis_ext.lista %}
                 <li>{{val}}
-                    {% if lis_ext.ver_url %} <a href="{% url lis_ext.ver_url val.id %}">Ver</a> {% endif %}
+                    {% if lis_ext.ver_url %} <a href="{% url lis_ext.ver_url clienteID val.id%}">Ver</a> {% endif %}
                     {% if lis_ext.actualizar_url %} <a href="{% url lis_ext.actualizar_url val.id %}">Actualizar</a> {% endif %}
                     {% if lis_ext.borrar_url %} <a href="{% url lis_ext.borrar_url val.id %}">Eliminar</a> {% endif %}
                 </li>

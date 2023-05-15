@@ -40,12 +40,16 @@ UPDATE auth_permission SET codename= "dev_editar_cuentas" WHERE codename= "chang
 UPDATE auth_permission SET name="Eliminar cuentas" WHERE codename= "delete_cuentas";
 UPDATE auth_permission SET codename= "dev_eliminar_cuentas" WHERE codename= "delete_cuentas";
 
+-- crear permiso para ver contraseña de cuentas
+INSERT INTO auth_permission (name,content_type_id,codename) VALUES("Ver contraseña",11,"auth_ver_password");
+
 -- creacion de roles por defecto (tipo de usuario que usa Django)
 INSERT INTO auth_group(name) VALUES("Administrador");
 
--- creacio de tipo de usuario por defecto
+-- creacion de tipo de usuario por defecto
 INSERT INTO tipo_usuarios(descr) VALUES("Empleado");
 INSERT INTO tipo_usuarios(descr) VALUES("Fisica");
 INSERT INTO tipo_usuarios(descr) VALUES("Moral");
+
 
 SET SQL_SAFE_UPDATES = 1;
