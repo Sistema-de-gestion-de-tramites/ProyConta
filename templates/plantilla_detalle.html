@@ -2,8 +2,27 @@
 {% load static %}
 
 {% block title %}
-<img class="bi me-2" src="{% static 'img/icons/icons8-información-94.png' %}" height="50px">
-    Información
+
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+            {% if titulo == 'Clientes' %}
+            <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
+                <img class="me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
+                {{ titulo }}
+            </a>
+            {% endif %}
+            {% if titulo == 'Documentos' %}
+            <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_tipo_documento' %}">
+                <img class=" me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
+                {{ titulo }}
+            </a>
+            {% endif %}
+    </li>
+    <li class="breadcrumb-item fw-normal">
+        Más información
+    </li>
+  </ol>
+
 {% endblock%}
 
 {% block css_add %}
@@ -12,67 +31,135 @@
 
 {% block cuerpo %}
 
+<div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col ">
+        <div class="card rounded-top-4 rounded-bottom-4">
+          <div class="rounded-top-4 d-flex flex-row bg-dark mb-5" style="height:150px;">
+
 <!--foto perfil usuario-->
 {% if fotoPerfilForm %}
+    <div class="ms-3 mt-5 d-flex flex-column" style="width: 150px;">
     {% if fotoPerfil %}
-        <img src="{{fotoPerfil.url}}" alt="twbs" width="100" height="100">
+        <img src="{{fotoPerfil.url}}" alt="twbs" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; z-index: 1">
     {% else %}
-        <img src="{% static 'img/icons/icons8-cumpleaños-100.png' %}" alt="twbs" width="100" height="100">
+        <img src="{% static 'img/icons/icons8-foto-750.png' %}" alt="twbs" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 100px; z-index: 1">
     {% endif %}
     <form class="my-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{fotoPerfilForm.as_p}}
-        <button type="submit" class="btn btn-sm btn-primary btn-lg">Actualizar foto</button>
+        <button type="submit" class="btn btn-sm btn-outline-dark rounded-pill" data-mdb-ripple-color="dark" style="width: 100px; z-index: 1">Actualizar</button>
     </form>
+    </div>
 {% endif %}
 <!--fin foto perfil usuario-->
+            <div class="ms-5" style="margin-top: 90px;">
+              <h5 class="fs-1 fw-bold text-white">{{ obj.nombre_principal }}</h5>
+            </div>
+          </div>
 
 {% if obj %}
-    <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
-        {{ obj.nombre_principal }}
-    </b>
-    {% for key, val in obj.get_fields_and_values %}
-        {% if key != 'ID' %}
-                {{ key}}: {{ val }}<br>
-            {% if key == 'Documento' %}
-                <a href="{{ val.url }}" target='_blank'>Examinar documento</a><br>
-            {% endif %}
-        {% endif %}
+          <div class="card-body p-4 text-black">
+            <div class="mb-4">
+               <div class="d-flex justify-content-between align-items-center mb-2">
+                   <b class="fs-4 fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
+                       <img class="bi me-1" src="{% static 'img/icons/icons8-información-94.png' %}" height="40px">
+                       Información
+                   </b>
+                   {% if editar_url %}
+                   <a type="button" class="btn btn-sm btn-outline-dark rounded-pill" href="{% url editar_url obj.id %}">
+                       Editar
+                   </a>
+                   {% endif %}
+               </div>
+              <div class="p-4 bg-body-secondary rounded-4">
+                {% for key, val in obj.get_fields_and_values %}
+                    {% if key != 'ID' %}
+                            <p class="mb-0 ">
+                                <b class="fw-medium ">
+                                    {{ key}}:
+                                </b>
+                                {{ val }}
+                            </p>
+                        {% if key == 'Documento' %}
+                            <a href="{{ val.url }}" target='_blank'>Examinar documento</a><br>
+                        {% endif %}
+                    {% endif %}
+                {% empty %}
+                    <h1>No hay campos</h1>
+                {% endfor %}
+              </div>
+            </div>
 
-    {% empty %}
-        <h1>No hay campos</h1>
-    {% endfor %}
-    {% if editar_url %}<a href="{% url editar_url obj.id %}">Editar</a>{% endif %}
+            <div class="row g-4 ">
+               {% if listas_extra %}
 
-    {% if listas_extra %}
-        {% for lis_ext in listas_extra %}
-            <b class="display-6 fw-normal fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
-                {% if lis_ext.titulo == 'Direccion' %}
-                    <img class="bi me-2" src="{% static 'img/icons/icons8-marcador-100.png' %}" height="50px">
-                {% endif %}
-                {% if lis_ext.titulo == 'Telefonos' %}
-                    <img class="bi me-2" src="{% static 'img/icons/icons8-teléfono-100.png' %}" height="50px">
-                {% endif %}
-                {% if lis_ext.titulo == 'Extensiones validas' %}
-                    <img class="bi me-2" src="{% static 'img/icons/icons8-semáforo-94.png' %}" height="50px">
-                {% endif %}
-                {{ lis_ext.titulo }}
-            </b>
-            <ul>
-            {% for val in lis_ext.lista %}
-                <li>{{val}}
-                    {% if lis_ext.actualizar_url %} <a href="{% url lis_ext.actualizar_url val.id %}">Actualizar</a> {% endif %}
-                    {% if lis_ext.borrar_url %} <a href="{% url lis_ext.borrar_url val.id %}">Eliminar</a> {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-            {% if lis_ext.nuevo_url %} <a href="{% url lis_ext.nuevo_url obj.id %}">Nuevo</a> {% endif %}
+                    {% for lis_ext in listas_extra %}
+                    <div class="col-12">
 
-        {% endfor %}
-    {% endif %}
+                            <div class="bg-body-secondary rounded-top-4 p-3 d-flex justify-content-between align-items-center ">
+                               <b class="fs-5 fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
+
+                                    {% if lis_ext.titulo == 'Direccion' %}
+                                        <img class="bi me-2" src="{% static 'img/icons/icons8-marcador-100.png' %}" height="30px">
+                                    {% endif %}
+                                    {% if lis_ext.titulo == 'Telefonos' %}
+                                        <img class="bi me-2" src="{% static 'img/icons/icons8-teléfono-100.png' %}" height="30px">
+                                    {% endif %}
+                                    {% if lis_ext.titulo == 'Extensiones validas' %}
+                                        <img class="bi me-2" src="{% static 'img/icons/icons8-semáforo-94.png' %}" height="30px">
+                                    {% endif %}
+                                    {% if lis_ext.titulo == 'Cuentas' %}
+                                        <img class="bi me-2" src="{% static 'img/icons/icons8-usuario-masculino-en-círculo-100.png' %}" height="30px">
+                                    {% endif %}
+                                    {{ lis_ext.titulo }}
+                               </b>
+                           </div>
+
+                                <ul class="list-group list-group-flush ">
+                                {% for val in lis_ext.lista %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center pt-3 bg-body-secondary">
+                                        {{val}}
+                                        <span>
+                                        {% if lis_ext.actualizar_url %}
+                                            <a href="{% url lis_ext.actualizar_url val.id %}"><img src="{% static 'img/icons/icons8-crear-nuevo-100.png' %}" width="24" height="24" class="feather feather-plus-circle align-text-bottom"></a>
+                                        {% endif %}
+                                        {% if lis_ext.borrar_url %}
+
+                                            <a href="{% url lis_ext.borrar_url val.id %}">
+                                                <img src="{% static 'img/icons/icons8-trash-100.png' %}" width="24" height="24" class="feather feather-plus-circle align-text-bottom">
+                                            </a>
+                                        {% endif %}
+                                        </span>
+                                        </li>
+                                {% endfor %}
+                                </ul>
+
+                            <div class="text-align-center bg-body-secondary p-2 px-3 rounded-bottom-4">
+                                {% if lis_ext.nuevo_url %}
+                                    <a type="button" class="btn btn-sm btn-dark rounded-pill" href="{% url lis_ext.nuevo_url obj.id %}">
+                                         <img src="{% static 'img/icons8-add.png' %}" height="20px">
+                                        Nuevo
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                    </div>
+                    {% endfor %}
+
+
+                {% endif %}
+
+
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
 {% else %}
-
     <div class="pt-1">
         <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-4 opacity-45">
             <img src="{% static 'img/icons/icons8-alta-prioridad-94.png' %} " class="bg-danger-subtle rounded-circle p-1 bg-opacity-10" height="25px">

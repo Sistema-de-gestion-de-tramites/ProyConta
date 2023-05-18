@@ -1,14 +1,26 @@
-{% extends 'base/base.html' %}
+{% extends 'base/index.html' %}
+{% load static %}
 
+{% block title %}
+<img class="bi me-2 " src="{% static 'img/icons/icons8-alta-prioridad-94.png' %}" height="50px">
+    Advertencia
+{% endblock %}
 {% block cuerpo %}
 <form method="POST">
+
     {% csrf_token %}
     {% if object.nombre_principal %}
-        <h3>¿Deseas eliminar el registro de "{{ object.nombre_principal }}"</h3>
+    <div class="pt-3">
+        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-4">
+
+            <h3>¿Deseas eliminar el registro de "{{ object.nombre_principal }}"</h3>
+
     {% else %}
-        <h3>¿Deseas eliminar el registro de "{{object.username}}"</h3>
+            <h3>¿Deseas eliminar el registro de "{{object.username}}"</h3>
     {% endif %}
-    <a href="{% url 'index' %}">Cancelar</a>
-    <button type="submit">Borrar</button>
+    <a class="btn btn-dark rounded-5" href="{% url 'index' %}">Cancelar</a>
+    <button class="btn btn-dark rounded-5" type="submit">Borrar</button>
+                </div>
+    </div>
 </form>
 {% endblock %}
