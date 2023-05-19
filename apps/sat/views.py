@@ -362,6 +362,7 @@ def detalle_tipoDocumento(request, pk):
     objeto = Tipo_Documentos.objects.get(id=pk)
     lista_1 = objeto.archivos.all()
     context = {
+        'titulo': 'Documentos',
         'obj': objeto,
         'listas_extra': [{'titulo': 'Extensiones validas', 'lista': lista_1},
                         ],
