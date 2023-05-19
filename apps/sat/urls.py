@@ -58,7 +58,8 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('detalle-tipo-documento/<pk>', views.detalle_tipoDocumento, name="detalle_tipo_documento"),
     path('editar-tipo-documento/<pk>', views.editar_tipoDocumento.as_view(), name="editar_tipo_documento"),
     path('eliminar-tipo-documento/<pk>', views.eliminar_TipoDocumento, name="eliminar_tipo_documento"),
-
+    #URL soporte tecnico
+    path('enviar-email',views.soporteTecnico, name="enviar_email"),
     path('busqueda/', views.buscar, name="busqueda"),
 ]
 #{----------------------------------------------------------------------------------------------}

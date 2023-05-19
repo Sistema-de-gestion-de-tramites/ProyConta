@@ -29,6 +29,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.models import Permission, Group,User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required,permission_required
+from django.core.mail import send_mail
 """   #Antiguas importaciones 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect #{LIBRERIA PARA DESPLEGAR(RENDER) LOS HTML}
@@ -455,3 +456,30 @@ def buscar(request):
 
     return render(request, 'buscador.html', {'contexto': contexto,
                                              'fotoPerfil': obtenerFotoPerfil(request)})
+
+# VISTA: funciona para la vista de soporte tecnico
+#DESCRIPCION: se utiliza el core de email de Django para enviar
+# un correo de soporte con remitente: soporte.satra@gmail.com
+# al correo destino: satra.itq@gmail.com
+def soporteTecnico(request):
+    
+    if request.method == 'GET':
+        form = FormularioEmail
+        contexto = {'form':form,'titulo':'correo a soporte tecnico'}
+        return render(request,'formulario.html',contexto)
+    else:
+        form = FormularioEmail(request.POST)
+        if form.is_valid():
+            remitente = 'REMITENTE: ' + request.POST['email'] +'\n'
+            send_mail(
+                'SOPORTE: '+request.POST['asunto'],
+                remitente + request.POST['texto'],
+                'soporte.satra@gmail.com',
+                ['satra.itq@gmail.com'],
+                fail_silently=False)
+            mensaje ="correo enviado con exito"
+            messages.add_message(request=request,level=messages.SUCCESS,message=mensaje)
+        else:
+            mensaje ="Error verifica que los campos solicitados esten llenados de forma correcta"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+        return redirect('enviar_email')

@@ -127,8 +127,10 @@ class Formulario_tipoDocumento(forms.ModelForm):
             'archivos'
         ]
 
-
-
+class FormularioEmail(forms.Form):
+    email = forms.EmailField(label="Remitente",widget=forms.EmailInput)
+    asunto = forms.CharField(label="Asunto")
+    texto = forms.CharField(label="cuerpo",widget=forms.Textarea)
 
 
 
