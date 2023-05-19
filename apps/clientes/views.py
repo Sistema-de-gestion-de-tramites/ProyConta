@@ -108,6 +108,7 @@ def detalle_Persona(request, pk):
     lista_2 = Telefonos.objects.filter(persona_id=pk)
     lista_3 = Cuentas.objects.filter(persona_id=pk)
     context = {
+        'titulo':'Clientes',
         'obj': objeto,
         'listas_extra': [{'titulo': 'Direccion', 'lista': lista_1,  'nuevo_url': 'registrar_direccion', 'borrar_url': 'eliminar_direccion', 'actualizar_url':'actualizar_direccion',},
                          {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},

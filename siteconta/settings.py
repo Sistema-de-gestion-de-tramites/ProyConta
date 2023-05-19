@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-uklpjrnw3_w9#d&r=!952+0taye^ze8#k^d%51-f6ow@rbr7jx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.100.5']
+#ALLOWED_HOSTS = ''
 
 
 # Application definition
@@ -93,7 +93,7 @@ DATABASES = {
         },
         'NAME': 'project_ing',
         'USER': 'root',
-        'PASSWORD': 'oracle',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

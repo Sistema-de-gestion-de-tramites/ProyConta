@@ -90,13 +90,7 @@
     </ul>
    {% endif %}
 
-    {% if titulo == 'Comentarios' %}
-        <a type="button" class="btn btn-sm btn-dark rounded-pill " href="{% url 'crear_comentario' %}">
-              <img src="{% static 'img/icons8-add.png' %}" height="20px">
-               Registrar comentario
-         </a>
-    {% endif %}
-
+    {% if titulo == 'Comentarios' %}{% endif %}
     {% if titulo == 'empleados' %}{% endif %}
     {% if titulo == 'comentarios' %}{% endif %}
 
