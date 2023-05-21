@@ -175,10 +175,11 @@ class Registrar_Telefono(CreateView):
 
 # Directorio
 def Directorio(request):
-    lista = Personas.objects.all()
+    lista = Telefonos.objects.all().order_by('persona')
     return render(request, 'directorio.html', {'titulo':'directorio',
                                                'object_list': lista,
-                                               'fotoPerfil': obtenerFotoPerfil(request),})
+                                               'fotoPerfil': obtenerFotoPerfil(request),
+                                               'detalle_url': 'detalle_persona',})
 
 def listar_telefonos(request, per_id):
     persona = get_object_or_404(Personas, pk=per_id)
@@ -418,7 +419,7 @@ class subir_archivo(CreateView):
         return context
 
 def listar_archivos(request):
-    lista = Entrega_Doc.objects.all()
+    lista = Entrega_Doc.objects.all().order_by("-fecha")
     cliente = request.GET.get('clie')
     doc = request.GET.get('doc')
 

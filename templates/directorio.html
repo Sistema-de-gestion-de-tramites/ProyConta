@@ -7,26 +7,56 @@
 
 {% block contenido %}
 
-
-{% for obj in object_list %}
-    {% for key, val in obj.get_fields_and_values %}
-        {% if key != 'ID' %}
-            {{ key}}:
-            {{ val }}
-        {% endif %}
-    {% empty %}
-        No hay campos
-    {% endfor %}
-{% empty %}
-    No hay registros
-{% endfor %}
-
-
-
-
-
-
+{% regroup object_list by persona as object_group %}  {# Agrupar los registros usando el nombre #}
 <div class=" rounded-5 pt-5 pb-5" style="background-color: #e2e3e5;">
+    <table class="table table-secondary table-striped align-middle mb-0 ">
+        {% with first_obj=object_group.0.list.0 %}  {# Titulos de las columnas #}
+        <thead>
+            <tr>
+            {% for field, value in first_obj.get_fields_and_values %}
+                {% if field != "ID" %}
+                    <th>{{field}}</th>
+                {% endif %}
+            {% endfor %}
+            </tr>
+        </thead>
+        {% endwith %}
+        <tbody>
+        {% for obj_g in object_group %}
+            {% for obj in obj_g.list %}
+                <tr align="center">
+
+                    {# Agrupacion del nombre, esta celda  puede abarcar multiples celdas #}
+                    {% if obj_g.list|first == obj %}
+                        {% if detalle_url %}
+                            <td rowspan="{{obj_g.list|length}}"><a class="fw-bold mb-1" href="{% url detalle_url obj_g.grouper.id %}">{{obj_g.grouper}}</a></td>
+                        {% else %}
+                            <td rowspan="{{obj_g.list|length}}">{{obj_g.grouper}}</td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for field, value in obj.get_fields_and_values %}
+                       {% if field != "ID" and field != "Nombre" %}
+                           <td>{{value}}</td>
+                       {% endif %}
+                    {% endfor %}
+                </tr>
+            {% empty %}
+                No hay campos
+            {% endfor %}
+
+
+        {% empty %}
+            No hay registros
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<!--div-- class=" rounded-5 pt-5 pb-5" style="background-color: #e2e3e5;">
     <table class="table table-secondary table-striped align-middle mb-0 ">
   <thead>
     <tr>
@@ -93,7 +123,7 @@
     </tr>
   </tbody>
 </table>
-</div>
+</--div-->
 
 
 {% endblock %}
