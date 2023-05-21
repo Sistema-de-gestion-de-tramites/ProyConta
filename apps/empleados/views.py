@@ -145,6 +145,8 @@ def guardarUsuarioDeEmpleado(post,usuario):
 
 def guardarPermisosDeUsuario(usuarioModelo,listaRoles):
     listaModeloRoles = []
+    usuarioModelo.is_staff = False
+    usuarioModelo.is_superuser = False
     for rol in listaRoles:
         try:
             rolModelo = Group.objects.get(id=rol)
@@ -207,7 +209,8 @@ class usuario_Update(PermissionRequiredMixin,UpdateView):
         guardarPermisosDeUsuario(usuario_empleado.usuario,self.request.POST.getlist('roles',default=[]))
         usuario_empleado.save()
         cuentaUsuario.save()
-        return super().form_valid(form)
+        usuario_empleado.usuario.save()
+        return HttpResponseRedirect(self.get_success_url())
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -250,13 +253,16 @@ class usuario_contrasenia_Update(PermissionRequiredMixin,UpdateView):
 
 def PerfilEmpleado(request):
     informacionEmpleado = obtenerEmpleadoDeCuentaUsuario(request.user)
+    fotoPerfil = ''
     if request.method == 'GET':
         informacionCuentaUsuario = [("Nombre de usuario: " + str(request.user.username)),
                                     ("Ultimo acceso: " + str(request.user.last_login)),
                                     ("Fecha de creacion: " + str(request.user.date_joined))]
         
         informacionRoles = request.user.groups.all
-        informacionPermisos = request.user.user_permissions.all().values_list('name',flat=True)
+        informacionPermisos = list(request.user.user_permissions.all().values_list('name',flat=True))
+        if request.user.is_superuser:
+            informacionPermisos.append("Tienes todos los permisos (eres administrador)")
         
         if informacionEmpleado != request.user:
             formularioFoto = imagenPerfilForm()
