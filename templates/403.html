@@ -1,4 +1,32 @@
 {% extends 'menu.html' %}
+{% load static %}
+{% block estilos %}
+<style name="estilo_403">
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+#div_403 {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+}
+
+#body_403 {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom right, #EEE, #AAA);
+}
+
+#h1_403 {
+  margin: 40px 0 20px;
+}
+
+</style>
+{% endblock %}
 
 {% block contenido %}
 {% if messages %}
@@ -9,10 +37,18 @@
 </ul>
 {% endif %}
 
-<p>No cuenta con los permisos sufiencientes para entrar a esta seccion<p>
-<p>Por favor contactar con el administrador<p>
+<div id="div_403">
 
-<input type="button" value="Regresar" onClick="history.go(-1);" class="btn btn-primary my-2">
-<a href="{% url 'inicio' %}" class="btn btn-primary my-2">ir al inicio</a>
+<div class="message" id="body_403">
+  <img src="{% static 'img/candado_403.png' %}" alt="twbs" width="100" height="100" class=" flex-shrink-0">
+  <h1 id="h1_403" align="center">El accesso a esta pagina esta restringido</h1>
+  <p align="center">Por favor verifica que tienes los permisos necesarios.</p>
+  <p align="center">Contacta al administrador para resolver el conflicto si es necesario.</p>
+  <p align="center">
+  <input type="button" value="Regresar" onClick="history.go(-1);" class="btn btn-primary my-2">
+  <a href="{% url 'inicio' %}" class="btn btn-primary my-2">ir al inicio</a>
+  </p>
+</div>
+</div>
 
 {% endblock %}
