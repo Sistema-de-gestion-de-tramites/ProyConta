@@ -38,11 +38,9 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from apps.empleados.views import obtenerEmpleadoDeCuentaUsuario, obtenerFotoPerfil
 from django.contrib.auth.decorators import permission_required
 
-Empleado_id = 1
 
 class Crear_Persona(PermissionRequiredMixin,CreateView):
-    permission_required = 'sat.dev_crear_empleados'
-    permission_required = 'sat.dev_crear_clientes'
+    permission_required = ['sat.dev_crear_empleados', 'sat.dev_crear_clientes']
     model = Personas
     form_class = PersonaForm
     template_name = 'formulario.html'
@@ -77,11 +75,11 @@ class Crear_Persona(PermissionRequiredMixin,CreateView):
         context = super().get_context_data(**kwargs)
         if self.kwargs.get('pk') == '1':
             context['esEmpleado'] = True
-            context['titulo'] = 'empleados'
+            context['titulo'] = 'Registrar empleado'
             context['form'] = self.get_form_emp()
         else:
             context['esEmpleado'] = False
-            context['titulo'] = 'clientes'
+            context['titulo'] = 'Registrar cliente'
             context['form'] = self.get_form()
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
@@ -107,17 +105,25 @@ def detalle_Persona(request, pk):
     lista_1 = Direcciones.objects.filter(persona_id=pk)
     lista_2 = Telefonos.objects.filter(persona_id=pk)
     lista_3 = Cuentas.objects.filter(persona_id=pk)
+
+    if objeto.tipo_usuario == Tipo_Usuarios.objects.get(descr__icontains="Empleado"):
+        titulo = 'Empleados'
+        url_editar = 'actualizar_empleado'
+    else:
+        titulo = 'Clientes'
+        url_editar = 'actualizar_cliente'
+
     context = {
-        'titulo':'Clientes',
+        'titulo': titulo,
         'obj': objeto,
         'listas_extra': [{'titulo': 'Direccion', 'lista': lista_1,  'nuevo_url': 'registrar_direccion', 'borrar_url': 'eliminar_direccion', 'actualizar_url':'actualizar_direccion',},
                          {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},
                          {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta','ver_url':'autenticar'},
                          ],
         'archivos_url': 'listar_documentos',
-        'editar_url': 'actualizar_cliente',
+        'editar_url': url_editar,
         'fotoPerfil': obtenerFotoPerfil(request),
-        'clienteID':pk
+        'clienteID': pk
     }
     return render(request, 'plantilla_detalle.html', context)
 
@@ -379,12 +385,17 @@ def autenticarParaVerPassword(request,clienteID,cuentaID):
 class subir_archivo(CreateView):
     form_class = Formulario_Documento
     template_name = 'formulario.html'
-    extra_context = {'titulo': 'fichero'}
+    extra_context = {'titulo': 'Subir documento al fichero'}
     success_url = 'lista_documento'
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['empleado'] = Empleado_id
+        user = self.request.user
+        try:
+            emp = Usuario_empleado.objects.get(usuario=user)
+            initial['empleado'] = emp.empleado
+        except: #Para pruebas con el super user
+            initial['empleado'] = 1
         return initial
 
     def form_valid(self, form):
@@ -451,6 +462,17 @@ class editar_archivo(UpdateView):
     form_class = Formulario_Documento
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_documentos')
+    extra_context = {'titulo': 'Editar documento del fichero'}
+
+    def get_initial(self):
+        initial = super().get_initial()
+        user = self.request.user
+        try:
+            emp = Usuario_empleado.objects.get(usuario=user)
+            initial['empleado'] = emp.empleado
+        except: #Para pruebas con el super user
+            initial['empleado'] = 1
+        return initial
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -498,13 +520,6 @@ class editar_archivo(UpdateView):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
-
-# def view_file(request, pk):
-#     registro = get_object_or_404(Entrega_Doc, id=pk)
-#     file_path = os.path.join(settings.MEDIA_ROOT, 'carp_' + str(registro.cliente_id) + '/' + str(registro.direccion))
-#     if os.path.exists(file_path):
-#         return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
-#     raise Http404
 
 def eliminar_archivo(request, pk):
     registro = get_object_or_404(Entrega_Doc, id=pk)

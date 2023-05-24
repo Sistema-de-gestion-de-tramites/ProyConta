@@ -92,7 +92,7 @@ def empleados(request): #{METODO REQUEST DE HTTP}
 def crear_Estado(request):
     if request.method == 'GET':
         contexto = {
-            'titulo' : "estados",
+            'titulo' : 'Registrar estado o status',
             'form': Formulario_Estado,
             'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request, 'formulario.html', contexto)
@@ -116,6 +116,7 @@ class editar_Estado(UpdateView):
     form_class = Formulario_Estado
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_estados')
+    extra_context = {'titulo': 'Editar estado o status'}
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,7 +132,7 @@ def eliminar_Estado(request, pk):
 def crear_Comentario(request):
     if request.method == 'GET':
         contexto = {
-            'titulo':"comentarios",
+            'titulo': 'Añadir comentario',
             'form': Formulario_Comentario,
             'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request, 'formulario.html', contexto)
@@ -155,6 +156,7 @@ class editar_Comentario(UpdateView):
     form_class = Formulario_Comentario
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_comentarios')
+    extra_context = {'titulo': 'Editar comentario'}
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -168,8 +170,8 @@ def eliminar_Comentario(request, pk):
 
 # Vistas de los tipo-archivo
 def crear_Tipo_Archivo(request):
-    if request.method=='GET':
-        contexto = {'titulo':'archivos',
+    if request.method == 'GET':
+        contexto = {'titulo':'Registrar extensión de archivos',
                     'form': Formulario_Tipo_Archivo,
                     'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request,'formulario.html',contexto)
@@ -197,6 +199,7 @@ class editar_Tipo_Archivo(UpdateView):
     form_class = Formulario_Tipo_Archivo
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipo_archivos')
+    extra_context = {'titulo': 'Editar extensión de archivos'}
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -232,9 +235,9 @@ def crear_Rol(request):
          return redirect('crear_rol')
     else:
         permisosDocumentos = list(Tipo_Documentos.objects.all().values_list('nombre',flat=True))
-        contexto = {'titulo':'roles',
+        contexto = {'titulo': 'Añadir rol',
                     'form': Formulario_Rol,
-                    'permisosDocumentos':permisosDocumentos,
+                    'permisosDocumentos': permisosDocumentos,
                     'fotoPerfil': obtenerFotoPerfil(request)}
     if(Permission.objects.filter(codename__contains="dev_").count()==0):
         mensajeErrorFormulario= "No existen permisos registrados, por favor crearlos primero"
@@ -289,7 +292,8 @@ def editar_Rol(request,pk):
         initialValues = {'nombre':rol.name,'permisos':permisos}
         permisosDocumentos = list(Tipo_Documentos.objects.all().values_list('nombre',flat=True))
         permisosDocumentosSelecionados = list(rol.permissions.filter(codename__contains="doc_").values_list('codename',flat=True))
-        contexto = {'form': Formulario_Rol(initial=initialValues),
+        contexto = {'titulo': 'Editar rol',
+                    'form': Formulario_Rol(initial=initialValues),
                     'permisosDocumentos':permisosDocumentos,
                     'seleccionados':permisosDocumentosSelecionados,
                     'fotoPerfil': obtenerFotoPerfil(request)}
@@ -342,7 +346,7 @@ def crearTipoDocumento(request):
          messages.add_message(request=request,level=messages.ERROR,message=mensajeErrorFormulario,extra_tags='danger')
          return redirect('crear_tipo_documento')
     else:
-        contexto = {'titulo': 'documentos',
+        contexto = {'titulo': 'Registrar documento',
                     'form': Formulario_tipoDocumento,
                     'fotoPerfil': obtenerFotoPerfil(request)}
     if(Tipo_Archivos.objects.all().count()==0):
@@ -366,7 +370,7 @@ def detalle_tipoDocumento(request, pk):
     objeto = Tipo_Documentos.objects.get(id=pk)
     lista_1 = objeto.archivos.all()
     context = {
-        'titulo': 'Documentos',
+        'titulo': 'Documento',
         'obj': objeto,
         'listas_extra': [{'titulo': 'Extensiones validas', 'lista': lista_1},
                         ],
@@ -380,7 +384,8 @@ class editar_tipoDocumento(UpdateView):
     form_class = Formulario_tipoDocumento
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipo_documento')
-    
+    extra_context = {'titulo': 'Editar documento'}
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
@@ -446,11 +451,14 @@ def buscar(request):
         queries_2.extend([Q(correo__icontains=busqueda) for busqueda in lista])
         queries_2.extend([Q(curp__icontains=busqueda) for busqueda in lista])
         queries_2.extend([Q(rfc__icontains=busqueda) for busqueda in lista])
+        queries_2.extend([Q(correo__icontains=busqueda) for busqueda in lista])
+        queries_2.extend([Q(telefonos__telefono__icontains=busqueda) for busqueda in lista])
         lista_2 = lista_2.filter(reduce(lambda x, y: x | y, queries_2))
 
         queries_3 = [Q(cliente__nombre__icontains=busqueda) for busqueda in lista]
         queries_3.extend([Q(empleado__nombre__icontains=busqueda) for busqueda in lista])
         queries_3.extend([Q(tipo_doc__nombre__icontains=busqueda) for busqueda in lista])
+        queries_3.extend([Q(estado__nombre__icontains=busqueda) for busqueda in lista])
         lista_3 = lista_3.filter(reduce(lambda x, y: x | y, queries_3))
 
     contexto = [{'object_list': lista_1, 'titulo': titulo_1, 'lista_url': 'listar_documentos'},

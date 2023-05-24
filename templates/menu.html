@@ -6,31 +6,31 @@
     {% if titulo == 'inicio' %}
         <img class="bi me-2 " src="{% static 'img/nav/icons8-casa-94.png' %}" height="50px">
         Inicio
-    {% elif titulo == 'fichero' %}
+    {% elif 'fichero' in titulo %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-paquete-94.png' %}" height="50px">
         Fichero
-    {% elif titulo == 'roles' %}
+    {% elif 'rol' in titulo %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="50px" >
         Roles
-    {% elif titulo == 'comentarios' %}
+    {% elif 'comentario' in titulo %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-comentarios-94.png' %}" height="50px" >
         Comentarios
-    {% elif titulo == 'archivos' %}
+    {% elif 'archivos' in titulo %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-documento-94.png' %}" height="50px">
         Archivos
-    {% elif titulo == 'documentos' %}
+    {% elif 'documento' in titulo %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
         Documentos
-    {% elif titulo == 'estados' %}
+    {% elif 'estado' in titulo %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-aprobación-94.png' %}" height="50px">
         Estados
     {% elif titulo == 'directorio' %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-contactos-94.png' %}" height="50px">
         Directorio
-    {% elif titulo == 'clientes' %}
+    {% elif 'cliente' in titulo %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
         Clientes
-    {% elif titulo == 'empleados' or titulo == 'Cuentas de usuario' %}
+    {% elif 'empleado' in titulo or titulo == 'Cuentas de usuario' %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
         Empleados
     {% endif %}
@@ -94,8 +94,6 @@
           </li>
         </ul>
     {% endif %}
-    {% if titulo == 'Comentarios' %}{% endif %}
-
 
 
     {% block contenido %}

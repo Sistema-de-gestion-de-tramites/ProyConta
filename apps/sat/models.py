@@ -107,7 +107,7 @@ class Personas(models.Model):
     curp = models.CharField(validators=[validar_CURP], max_length=28, verbose_name="CURP")
     fecha_reg = models.DateField(verbose_name="Fecha de registro")
     tipo_usuario = models.ForeignKey(Tipo_Usuarios, on_delete=models.CASCADE, verbose_name="Tipo de usuario")
-    foto_perfil = models.ImageField(upload_to='fotos_perfil/',null=True,blank=True)
+    foto_perfil = models.ImageField(upload_to='fotos_perfil/',null=True,blank=True, verbose_name="Foto de perfil")
     
     class Meta:
         managed = True

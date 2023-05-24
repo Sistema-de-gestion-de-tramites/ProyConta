@@ -111,7 +111,7 @@ class CuentasFormView(forms.ModelForm):
         ]
 
 class Formulario_Documento(forms.ModelForm):
-    empleado = forms.HiddenInput()
+    empleado = forms.ModelChoiceField(Personas.objects.filter(tipo_usuario=1),required=True,label="Empleado", disabled=True)
     fecha = forms.DateField(disabled=True, initial=datetime.date.today)
 
     class Meta:
