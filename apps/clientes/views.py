@@ -379,6 +379,7 @@ def autenticarParaVerPassword(request,clienteID,cuentaID):
 class subir_archivo(CreateView):
     form_class = Formulario_Documento
     template_name = 'formulario.html'
+    extra_context = {'titulo': 'fichero'}
     success_url = 'lista_documento'
 
     def get_initial(self):

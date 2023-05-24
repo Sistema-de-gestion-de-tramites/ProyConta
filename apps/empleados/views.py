@@ -111,7 +111,8 @@ def registro(request):
                 sinRegistros=False
             else:
                 sinRegistros=True 
-            return render(request,'registro.html',{'form':form,
+            return render(request,'registro.html',{'titulo':'empleados',
+                                                    'form':form,
                                                    'sinResgistros':sinRegistros,
                                                    'fotoPerfil': obtenerFotoPerfil(request),})
         else:
@@ -273,6 +274,7 @@ def PerfilEmpleado(request):
         else:
             formularioFoto = False
         context = {
+            'titulo': 'Perfil',
             'obj': informacionEmpleado,
             'listas_extra': [{'titulo': 'Informacion de cuenta', 'lista': informacionCuentaUsuario},
                             {'titulo': 'Mis roles', 'lista': informacionRoles},

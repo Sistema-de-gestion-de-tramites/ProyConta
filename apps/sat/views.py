@@ -92,7 +92,7 @@ def empleados(request): #{METODO REQUEST DE HTTP}
 def crear_Estado(request):
     if request.method == 'GET':
         contexto = {
-            'titulo' : "Estados",
+            'titulo' : "estados",
             'form': Formulario_Estado,
             'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request, 'formulario.html', contexto)
@@ -131,7 +131,7 @@ def eliminar_Estado(request, pk):
 def crear_Comentario(request):
     if request.method == 'GET':
         contexto = {
-            'titulo':"Comentarios",
+            'titulo':"comentarios",
             'form': Formulario_Comentario,
             'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request, 'formulario.html', contexto)
@@ -169,7 +169,8 @@ def eliminar_Comentario(request, pk):
 # Vistas de los tipo-archivo
 def crear_Tipo_Archivo(request):
     if request.method=='GET':
-        contexto = {'form': Formulario_Tipo_Archivo,
+        contexto = {'titulo':'archivos',
+                    'form': Formulario_Tipo_Archivo,
                     'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request,'formulario.html',contexto)
     elif request.method=='POST':
@@ -231,7 +232,8 @@ def crear_Rol(request):
          return redirect('crear_rol')
     else:
         permisosDocumentos = list(Tipo_Documentos.objects.all().values_list('nombre',flat=True))
-        contexto = {'form': Formulario_Rol,
+        contexto = {'titulo':'roles',
+                    'form': Formulario_Rol,
                     'permisosDocumentos':permisosDocumentos,
                     'fotoPerfil': obtenerFotoPerfil(request)}
     if(Permission.objects.filter(codename__contains="dev_").count()==0):
@@ -340,7 +342,8 @@ def crearTipoDocumento(request):
          messages.add_message(request=request,level=messages.ERROR,message=mensajeErrorFormulario,extra_tags='danger')
          return redirect('crear_tipo_documento')
     else:
-        contexto = {'form': Formulario_tipoDocumento,
+        contexto = {'titulo': 'documentos',
+                    'form': Formulario_tipoDocumento,
                     'fotoPerfil': obtenerFotoPerfil(request)}
     if(Tipo_Archivos.objects.all().count()==0):
         mensajeErrorFormulario= "No existen tipos de archivos registrados, por favor crearlos primero"

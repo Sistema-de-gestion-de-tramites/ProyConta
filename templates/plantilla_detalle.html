@@ -5,6 +5,12 @@
 
   <ol class="breadcrumb mb-0">
     <li class="breadcrumb-item">
+            {% if titulo == 'Perfil' %}
+            <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
+                <img class="me-2" src="{% static 'img/nav/icons8-smiling-face-with-smiling-eyes-100.png' %}" height="50px">
+                {{ titulo }}
+            </a>
+            {% endif %}
             {% if titulo == 'Clientes' %}
             <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
                 <img class="me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
@@ -86,20 +92,21 @@
                         {% endif %}
                     {% endif %}
                 {% empty %}
-                    <h1>No hay campos</h1>
+                    <h6>No hay campos</h6>
                 {% endfor %}
               </div>
+
+                 {% if archivos_url %}
+                    <div class="d-flex align-items-center p-3 my-3 text-white bg-warning-subtle rounded-4 ">
+                        <img class="me-3" src="{% static 'img/nav/icons8-paquete-94.png' %}" alt="" width="50" height="50">
+                        <div class="lh-1">
+                          <h1 class="h2 mb-2 text-warning lh-1 fw-bold">Fichero</h1>
+                         <a href="{% url archivos_url %}?clie={{obj.id}}" class=" btn btn-sm btn-warning text-decoration-none rounded-pill text-white">Examinar</a>
+                        </div>
+                      </div>
+
+                {% endif %}
             </div>
-
-
-
-
-
-    {% if archivos_url %}
-        <a href="{% url archivos_url %}?clie={{obj.id}}">Archivo</a><br>
-    {% endif %}
-
-
 
             <div class="row g-4 ">
                {% if listas_extra %}
@@ -108,7 +115,7 @@
                     <div class="col-12">
 
 
-                            <div class="bg-body-secondary rounded-top-4 p-3 d-flex justify-content-between align-items-center ">
+                            <div class="bg-body-secondary rounded-top-4 p-3 d-flex justify-content-between align-items-center  border-bottom  ">
                                <b class="fs-5 fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
 
                                     {% if lis_ext.titulo == 'Direccion' %}
@@ -123,6 +130,9 @@
                                     {% if lis_ext.titulo == 'Cuentas' %}
                                         <img class="bi me-2" src="{% static 'img/icons/icons8-usuario-masculino-en-círculo-100.png' %}" height="30px">
                                     {% endif %}
+                                    {% if lis_ext.titulo == 'Mis roles' %}
+                                        <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="30px">
+                                    {% endif %}
                                     {{ lis_ext.titulo }}
                                </b>
                            </div>
@@ -134,12 +144,15 @@
                                         <span>
                                         {% if lis_ext.ver_url %} <a href="{% url lis_ext.ver_url clienteID val.id%}">Ver</a> {% endif %}
                                         {% if lis_ext.actualizar_url %}
-                                            <a href="{% url lis_ext.actualizar_url val.id %}"><img src="{% static 'img/icons/icons8-crear-nuevo-100.png' %}" width="24" height="24" class="feather feather-plus-circle align-text-bottom"></a>
+                                            <a class="text-decoration-none text-dark" href="{% url lis_ext.actualizar_url val.id %}">
+                                                <img src="{% static 'img/icons/icons8-crear-nuevo-100.png' %}" width="24" height="24" class="feather feather-plus-circle align-text-bottom">
+
+                                            </a>
                                         {% endif %}
                                         {% if lis_ext.borrar_url %}
-
-                                            <a href="{% url lis_ext.borrar_url val.id %}">
+                                            <a href="{% url lis_ext.borrar_url val.id %}" class="text-decoration-none text-dark">
                                                 <img src="{% static 'img/icons/icons8-trash-100.png' %}" width="24" height="24" class="feather feather-plus-circle align-text-bottom">
+
                                             </a>
                                         {% endif %}
                                         </span>
@@ -149,7 +162,7 @@
 
                             <div class="text-align-center bg-body-secondary p-2 px-3 rounded-bottom-4">
                                 {% if lis_ext.nuevo_url %}
-                                    <a type="button" class="btn btn-sm btn-dark rounded-pill" href="{% url lis_ext.nuevo_url obj.id %}">
+                                    <a type="button" class="btn btn-sm btn-dark rounded-pill my-2" href="{% url lis_ext.nuevo_url obj.id %}">
                                          <img src="{% static 'img/icons8-add.png' %}" height="20px">
                                         Nuevo
                                     </a>

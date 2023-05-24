@@ -1,31 +1,36 @@
 {% extends 'base/index.html' %}
 {% load static %}
 
-{% block cuerpo %}
-
-    <b class="display-6 fw-normal">
+{% block title %}
+    <img class="bi me-2 " src="{% static 'img/icons/icons8-búsqueda-94.png' %}" height="50px">
     Resultados
-    </b>
+{% endblock%}
+
+{% block cuerpo %}
 
     {% for lista in contexto %}
         {% if lista.object_list %}
             <div class="rounded-5 my-3 p-3" style="background-color: #e2e3e5;">
                 {% if lista.titulo %}
-                    <h6 class="text-dark-emphasis fw-semibold border-bottom pb-2 mb-0">
+                    <h6 class="text-dark fw-semibold border-bottom pb-2 mb-0">
                         {% if titulo == 'Roles' %}
-                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-security-lock-100.png' %}" height="25px" >
-                        {% elif lista.titulo == 'Tramites' %}
-                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-product-documents-100.png' %}" height="25px">
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="25px" >
+                        {% elif lista.titulo == 'Comentarios' %}
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-comentarios-94.png' %}" height="25px">
                         {% elif lista.titulo == 'Documentos' %}
-                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-documents-100.png' %}" height="25px">
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="25px">
                         {% elif lista.titulo == 'Archivos' %}
-                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-file-100.png' %}" height="25px">
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-documento-94.png' %}" height="25px">
+                         {% elif lista.titulo == 'Estados' %}
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-aprobación-94.png' %}" height="25px">
                         {% elif lista.titulo == 'Directorio' %}
-                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-address-book-100.png' %}" height="25px">
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-contactos-94.png' %}" height="25px">
+                        {% elif lista.titulo == 'Empleados' %}
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="25px">
                         {% elif lista.titulo == 'Clientes' %}
-                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-client-management-100.png' %}" height="25px">
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="25px">
                         {% elif lista.titulo == 'Usuarios' %}
-                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="25px">
+                            <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="25px">
                         {% endif %}
 
                         {{ lista.titulo }}
@@ -41,11 +46,17 @@
                                         <p class="mb-0">{{ val }}</p>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="col-2">
                                     {% if lista.titulo == 'Documentos' %}
-                                        <a href="{% url lista.lista_url %}?doc={{val.id}}">Ver</a>
+
+                                        <a class="text-dark text-decoration-none" href="{% url lista.lista_url %}?doc={{val.id}}">
+                                            <img src="{% static 'img/icons/icons8-ver-100.png' %}" width="24" height="24" class="feather feather-plus-circle align-text-bottom">
+                                            Ver
+                                        </a>
                                     {% else %}
-                                        <a href="{% url lista.lista_url pk=val.id %}">Ver</a>
+                                        <a class="btn btn-sm rounded-pill btn-dark" href="{% url lista.lista_url pk=val.id %}">
+
+                                            Mas inf.</a>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -56,7 +67,7 @@
                     </tbody>
                 </table>
                 <small class="d-block text-end mt-3">
-                    <a href="#">Opcion</a>
+                    <!--<a href="#">Opcion</a>-->
                 </small>
             </div>
         {% else %}

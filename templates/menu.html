@@ -30,18 +30,15 @@
     {% elif titulo == 'clientes' %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
         Clientes
-    {% elif titulo == 'empleados' %}
+    {% elif titulo == 'empleados' or titulo == 'Cuentas de usuario' %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
         Empleados
-    {% elif titulo == 'Cuentas de usuario' %}
-        <img src="{% static 'img/nav-color/icons8-administrator-male-100.png' %}" height="40px">
-        Cuentas de usuario
     {% endif %}
 
 {% endblock%}
 
 {% block cuerpo %}
-   {% if titulo == 'inicio' %}
+    {% if titulo == 'inicio' %}
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
@@ -56,43 +53,49 @@
           </div>
         </div>
       </section>
-  {% endif %}
-
-
+    {% endif %}
     {% if titulo == 'documentos' %}{% endif %}
     {% if titulo == 'archivos' %}{% endif %}
     {% if titulo == 'directorio' %}{% endif %}
     {% if titulo == 'clientes' %}{% endif %}
+    {% if titulo == 'empleados' %}
 
+      <ul class="nav nav-tabs my-3">
+          <li class="nav-item">
+            <a class="nav-link active fw-normal" aria-current="page" href="{% url 'listar_empleados' %}">Empleados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-decoration-none text-dark " href="{% url 'listar_cuentas_usuario' %}">Cuentas de usuario</a>
+          </li>
+          <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle disabled" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Acciones</a>
+            <ul class="dropdown-menu ">
+              <li><a class="dropdown-item" href="{% url 'registrar_persona' 1%}">Añadir empleado</a></li>
+              <li><a class="dropdown-item" href="{% url 'registro' %}">Registrar nueva cuenta</a></li>
+            </ul>
+          </li>
+        </ul>
 
-   {% if titulo == 'empleados' or titulo == 'Cuentas de usuario' %}
-    <ul class="nav nav-tabs d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
-      <li class="nav-item ">
-        <a class="nav-link link-secondary" href="{% url 'listar_empleados' %}">Lista de empleados</a>
-      </li>
-        <li class="nav-item ">
-        <a class="nav-link link-secondary" href="{% url 'listar_cuentas_usuario' %}">Lista de cuentas de usuario</a>
-      </li>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  ">
-        <div class="btn-toolbar mb-2 mb-md-0 ">
-          <div class="btn-group me-2 ">
-            <a type="button" class="btn btn-sm btn-dark rounded-pill" href="{% url 'registrar_persona' 1%}">
-                 <img src="{% static 'img/icons8-add.png' %}" height="20px">
-                Registrar empleado
-            </a>
-            <a type="button" class="btn btn-sm btn-success rounded-pill" href="{% url 'registro' %}">
-              <img src="{% static 'img/icons8-add.png' %}" height="20px">
-               Registrar cuenta empleado
-         </a>
-          </div>
-        </div>
-        </div>
-    </ul>
-   {% endif %}
-
+    {% endif %}
+    {% if titulo == 'Cuentas de usuario' %}
+        <ul class="nav nav-tabs my-3">
+          <li class="nav-item">
+            <a class="nav-link text-decoration-none text-dark" aria-current="page" href="{% url 'listar_empleados' %}">Empleados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-normal" href="{% url 'listar_cuentas_usuario' %}">Cuentas de usuario</a>
+          </li>
+          <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle disabled" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Acciones</a>
+            <ul class="dropdown-menu ">
+              <li><a class="dropdown-item" href="{% url 'registrar_persona' 1%}">Añadir empleado</a></li>
+              <li><a class="dropdown-item" href="{% url 'registro' %}">Registrar nueva cuenta</a></li>
+            </ul>
+          </li>
+        </ul>
+    {% endif %}
     {% if titulo == 'Comentarios' %}{% endif %}
-    {% if titulo == 'empleados' %}{% endif %}
-    {% if titulo == 'comentarios' %}{% endif %}
+
 
 
     {% block contenido %}
