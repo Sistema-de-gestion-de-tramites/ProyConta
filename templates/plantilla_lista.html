@@ -152,6 +152,11 @@
                         Eliminar
                     </a>
                     {% endif %}
+                    {% if detalle_url %}
+                        <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
+                            Mas info
+                        </a>
+                    {% endif %}
                 {% else %}
                     <h6><span class="badge text-bg-warning"> Este rol tiene todos los permisos</span></h6>
                 {% endif %}
@@ -168,13 +173,12 @@
                         Eliminar
                     </a>
                 {% endif %}
+                {% if detalle_url %}
+                    <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
+                        Mas info
+                    </a>
+                {% endif %}
             {% endif %}
-            {% if detalle_url %}
-                <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
-                    Mas info
-                </a>
-            {% endif %}
-
                 </p>
         <br><br>
         {% empty %}

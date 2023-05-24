@@ -264,9 +264,29 @@ def listar_Roles(request):
                 'object_list': lista,
                 'actualizar_url': 'editar_rol',
                 'borrar_url':'eliminar_rol',
+                'detalle_url':'detalle_roles',
                 'rol':True,
                 'fotoPerfil': obtenerFotoPerfil(request)}
     return render(request, 'plantilla_lista.html', contexto)
+
+def detalle_roles(request, pk):
+    objeto = get_object_or_404(Group,id=pk)
+    lista_1 = list(objeto.permissions.filter(codename__contains="dev_").values_list('name',flat=True))
+    lista_2 = list(objeto.permissions.filter(codename__contains="doc_").values_list('name',flat=True))
+    informacionObjecto = [
+        ('Nombre',objeto.name)
+    ]
+    context = {
+        'titulo': 'Rol',
+        'obj': objeto,
+        'informacionObjecto': informacionObjecto,
+        'listas_extra': [{'titulo': 'Permisos', 'lista': lista_1},
+                         {'titulo': 'Permisos sobre documento', 'lista': lista_2}
+                        ],
+        'editar_url': 'editar_rol',
+        'fotoPerfil': obtenerFotoPerfil(request)
+    }
+    return render(request, 'plantilla_detalle.html', context)
 
 def editar_Rol(request,pk):
     rol = Group.objects.get(id=pk)

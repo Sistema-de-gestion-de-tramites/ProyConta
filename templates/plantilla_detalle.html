@@ -77,6 +77,7 @@
                        Editar
                    </a>
                    {% endif %}
+                   <input type="button" value="Regresar" onClick="history.go(-1);" class="btn btn-sm btn-outline-dark rounded-pill">
                </div>
               <div class="p-4 bg-body-secondary rounded-4">
                 {% for key, val in obj.get_fields_and_values %}
@@ -96,7 +97,18 @@
                         {% endif %}
                     {% endif %}
                 {% empty %}
-                    <h6>No hay campos</h6>
+                    {% if informacionObjecto %}
+                            {% for key,val in informacionObjecto %}
+                            <p class="mb-0 ">
+                                <b class="fw-medium ">
+                                    {{ key}}:
+                                </b>
+                                {{ val }}
+                            </p>
+                            {% endfor %}
+                    {% else %}
+                        <h6>No hay campos</h6>
+                    {% endif %}
                 {% endfor %}
               </div>
 
