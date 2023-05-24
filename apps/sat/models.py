@@ -240,7 +240,7 @@ class Cuentas(models.Model):
         return self.cuenta
 
 class Estados(models.Model):
-    nombre = models.CharField(max_length=10, verbose_name="Nombre")
+    nombre = models.CharField(max_length=50, verbose_name="Nombre")
     # ENTREGADO, CANCELADO, ATRASADO, INICIADO, PENDIENTE,
 
     class Meta:

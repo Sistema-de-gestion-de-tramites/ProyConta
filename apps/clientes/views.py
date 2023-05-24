@@ -439,21 +439,24 @@ def listar_archivos(request):
         lista = lista.filter(cliente_id=cliente)
     if doc:
         lista = lista.filter(tipo_doc_id=doc)
-
+    listaPermisosVerDocumento = list(request.user.user_permissions.filter(codename__contains="doc_ver").values_list('codename',flat=True))
     return render(request, 'plantilla_lista.html', {'titulo': 'fichero',
                                                     'object_list': lista,
                                                     'actualizar_url': 'actualizar_documento',
                                                     'borrar_url': 'eliminar_documento',
                                                     'detalle_url':'detalle_documento',
                                                     'crear_url': 'subir_documento',
-                                                    'fotoPerfil': obtenerFotoPerfil(request)})
+                                                    'fotoPerfil': obtenerFotoPerfil(request),
+                                                    'listaPermisosVerDocumento':listaPermisosVerDocumento})
 
 def detalle_archivo(request, pk):
     objeto = Entrega_Doc.objects.get(id=pk)
+    listaPermisosVerDocumento = list(request.user.user_permissions.filter(codename__contains="doc_ver").values_list('codename',flat=True))
     context = {
         'obj': objeto,
         'editar_url': 'actualizar_documento',
-        'fotoPerfil': obtenerFotoPerfil(request)
+        'fotoPerfil': obtenerFotoPerfil(request),
+        'listaPermisosVerDocumento':listaPermisosVerDocumento
     }
     return render(request, 'plantilla_detalle.html', context)
 
@@ -519,21 +522,30 @@ class editar_archivo(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
-        return context
+        nombreDocumento = str(self.get_object().tipo_doc.nombre)
+        if self.request.user.has_perm("admin.doc_edicion_"+nombreDocumento):
+            return context
+        else:
+            raise PermissionDenied
 
 def eliminar_archivo(request, pk):
     registro = get_object_or_404(Entrega_Doc, id=pk)
-    try:
-        file_path = os.path.join(settings.MEDIA_ROOT, str(registro.direccion))
-        default_storage.delete(file_path)
-    except SuspiciousFileOperation:
-        # Manejar la excepción de operación de archivo sospechosa
-        messages.error(request, 'La ruta del archivo no es válida.')
-    except OSError:
-        # Manejar la excepción de sistema de archivos
-        messages.error(request, 'No se pudo borrar el archivo.')
+    nombreDocumento = str(registro.tipo_doc.nombre)
+    if request.user.has_perm("admin.doc_edicion_"+nombreDocumento):
+        try:
+            file_path = os.path.join(settings.MEDIA_ROOT, str(registro.direccion))
+            default_storage.delete(file_path)
+        except SuspiciousFileOperation:
+            # Manejar la excepción de operación de archivo sospechosa
+            messages.error(request, 'La ruta del archivo no es válida.')
+        except OSError:
+            # Manejar la excepción de sistema de archivos
+            messages.error(request, 'No se pudo borrar el archivo.')
 
-    registro.delete()
-    return redirect('listar_documentos')
+        registro.delete()
+        return redirect('listar_documentos')
+    else:
+        raise PermissionDenied
+        
 
 

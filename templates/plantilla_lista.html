@@ -130,7 +130,11 @@
                     {% endfor %}
                     -->
                     {% if obj.direccion  %}
-                        <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
+                        {% if 'doc_ver_'|add:obj.tipo_doc.nombre in listaPermisosVerDocumento or user.is_superuser %}
+                            <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
+                        {% else %}
+                            no cuentas con los permisos para ver estos documentos
+                        {% endif %}
                     {% endif %}
                 </div>
                 <p class="pb-3 mb-0 small lh-sm ">
