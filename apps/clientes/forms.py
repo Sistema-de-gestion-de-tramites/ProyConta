@@ -111,9 +111,13 @@ class CuentasFormView(forms.ModelForm):
         ]
 
 class Formulario_Documento(forms.ModelForm):
-    empleado = forms.HiddenInput()
+    #empleado = forms.HiddenInput()
     fecha = forms.DateField(disabled=True, initial=datetime.date.today)
-
+    queryClientes = Personas.objects.all().exclude(tipo_usuario__id='1')
+    cliente = forms.ModelChoiceField(queryClientes)
+    queryEmpleado = Personas.objects.filter(tipo_usuario__id='1')
+    empleado = forms.ModelChoiceField(queryEmpleado)
+    
     class Meta:
         model = Entrega_Doc
 

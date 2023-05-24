@@ -213,6 +213,10 @@ class usuario_Update(PermissionRequiredMixin,UpdateView):
         usuario_empleado.usuario.save()
         return HttpResponseRedirect(self.get_success_url())
     
+    def form_invalid(self, form):
+        messages.add_message(request=self.request,level=messages.ERROR,message=form.errors,extra_tags="danger")
+        return redirect('actualizar_usuario',self.kwargs['pk'])
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         form = self.get_form()
@@ -239,6 +243,10 @@ class usuario_contrasenia_Update(PermissionRequiredMixin,UpdateView):
         cuentaUsuario = form.save(commit=False)
         cuentaUsuario.save()
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.add_message(request=self.request,level=messages.ERROR,message=form.errors,extra_tags="danger")
+        return redirect('actualizar_contrasenia_usuario',self.kwargs['pk'])
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
