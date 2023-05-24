@@ -116,7 +116,7 @@
 
 
                             <div class="bg-body-secondary rounded-top-4 p-3 d-flex justify-content-between align-items-center  border-bottom  ">
-                               <b class="fs-5 fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
+                               <b class="fs-5 fw-bold text-black d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">
 
                                     {% if lis_ext.titulo == 'Direccion' %}
                                         <img class="bi me-2" src="{% static 'img/icons/icons8-marcador-100.png' %}" height="30px">
@@ -130,8 +130,14 @@
                                     {% if lis_ext.titulo == 'Cuentas' %}
                                         <img class="bi me-2" src="{% static 'img/icons/icons8-usuario-masculino-en-círculo-100.png' %}" height="30px">
                                     {% endif %}
+                                    {% if lis_ext.titulo == 'Informacion de cuenta' %}
+                                        <img class="bi me-2" src="{% static 'img/nav/icons8-user-location-100.png' %}" height="30px">
+                                    {% endif %}
                                     {% if lis_ext.titulo == 'Mis roles' %}
                                         <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="30px">
+                                    {% endif %}
+                                    {% if lis_ext.titulo == 'Mis permisos' %}
+                                        <img class="bi me-2" src="{% static 'img/icons/icons8-diseño-100.png' %}" height="30px">
                                     {% endif %}
                                     {{ lis_ext.titulo }}
                                </b>

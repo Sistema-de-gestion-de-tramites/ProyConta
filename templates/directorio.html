@@ -8,36 +8,47 @@
 {% block contenido %}
 
 {% regroup object_list by persona as object_group %}  {# Agrupar los registros usando el nombre #}
-<div class=" rounded-5 pt-5 pb-5" style="background-color: #e2e3e5;">
-    <table class="table table-secondary table-striped align-middle mb-0 ">
+<div class="table-responsive rounded-5 pt-5 pb-5" style="background-color: #e2e3e5;">
+    <table class="table table-secondary  align-middle mb-0 ">
         {% with first_obj=object_group.0.list.0 %}  {# Titulos de las columnas #}
         <thead>
             <tr>
             {% for field, value in first_obj.get_fields_and_values %}
                 {% if field != "ID" %}
-                    <th>{{field}}</th>
+                    <th class="px-3 text-dark fs-5 fw-bold ">{{field}}</th>
                 {% endif %}
             {% endfor %}
             </tr>
         </thead>
         {% endwith %}
-        <tbody>
+        <tbody class="">
         {% for obj_g in object_group %}
             {% for obj in obj_g.list %}
-                <tr align="center">
-
+                <tr >
                     {# Agrupacion del nombre, esta celda  puede abarcar multiples celdas #}
                     {% if obj_g.list|first == obj %}
                         {% if detalle_url %}
-                            <td rowspan="{{obj_g.list|length}}"><a class="fw-bold mb-1" href="{% url detalle_url obj_g.grouper.id %}">{{obj_g.grouper}}</a></td>
+                            <td rowspan="{{obj_g.list|length}}" class="px-3">
+                                <div class="d-flex align-items-center">
+                                <img src="{% static 'img/icons/icons8-usuario-100.png' %}" height="30">
+                                    <a class="px-3 mb-1 text-decoration-none text-dark h6" href="{% url detalle_url obj_g.grouper.id %}">
+                                        {{obj_g.grouper}}
+                                    </a>
+                                </div>
+                            </td>
                         {% else %}
-                            <td rowspan="{{obj_g.list|length}}">{{obj_g.grouper}}</td>
+                            <td rowspan="{{obj_g.list|length}}">
+
+                                {{obj_g.grouper}}
+                            </td>
                         {% endif %}
                     {% endif %}
 
                     {% for field, value in obj.get_fields_and_values %}
                        {% if field != "ID" and field != "Nombre" %}
-                           <td>{{value}}</td>
+                           <td>
+                               {{value}}
+                           </td>
                        {% endif %}
                     {% endfor %}
                 </tr>
@@ -47,7 +58,10 @@
 
 
         {% empty %}
-            No hay registros
+            <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+                <img src="/static/img/icons8-box-important-100.png" height="25px">
+                No hay registros
+            </div>
         {% endfor %}
         </tbody>
     </table>

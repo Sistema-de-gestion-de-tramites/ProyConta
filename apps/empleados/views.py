@@ -278,7 +278,7 @@ def PerfilEmpleado(request):
             'obj': informacionEmpleado,
             'listas_extra': [{'titulo': 'Informacion de cuenta', 'lista': informacionCuentaUsuario},
                             {'titulo': 'Mis roles', 'lista': informacionRoles},
-                            {'titulo': 'Mis Permisos', 'lista': informacionPermisos}
+                            {'titulo': 'Mis permisos', 'lista': informacionPermisos}
                             ],
             'fotoPerfilForm': formularioFoto,
             'fotoPerfil': fotoPerfil

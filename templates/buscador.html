@@ -12,7 +12,7 @@
         {% if lista.object_list %}
             <div class="rounded-5 my-3 p-3" style="background-color: #e2e3e5;">
                 {% if lista.titulo %}
-                    <h6 class="text-dark fw-semibold border-bottom pb-2 mb-0">
+                    <h6 class="text-dark fs-5 fw-bold border-bottom pb-2 mb-0">
                         {% if titulo == 'Roles' %}
                             <img class="rounded-5 bg-light p-1" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="25px" >
                         {% elif lista.titulo == 'Comentarios' %}
@@ -49,9 +49,8 @@
                                 <td class="col-2">
                                     {% if lista.titulo == 'Documentos' %}
 
-                                        <a class="text-dark text-decoration-none" href="{% url lista.lista_url %}?doc={{val.id}}">
-                                            <img src="{% static 'img/icons/icons8-ver-100.png' %}" width="24" height="24" class="feather feather-plus-circle align-text-bottom">
-                                            Ver
+                                        <a class="btn btn-sm rounded-pill btn-dark href="{% url lista.lista_url %}?doc={{val.id}}">
+                                            Examinar
                                         </a>
                                     {% else %}
                                         <a class="btn btn-sm rounded-pill btn-dark" href="{% url lista.lista_url pk=val.id %}">
