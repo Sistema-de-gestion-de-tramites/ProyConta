@@ -12,7 +12,7 @@
         {% if object.nombre_principal %}
             <h1 class="display-7 fw-bold text-body-emphasis ">¿Deseas eliminar el registro <br> "<a class="text-decoration-none text-danger">{{ object.nombre_principal }}</a>"?</h1>
         {% else %}
-            <h1 class="display-7 fw-bold text-body-emphasis ">¿Deseas eliminar el registro <br> "<a class="text-decoration-none text-danger">{{object.username}}</a>"?</h1>
+            <h1 class="display-7 fw-bold text-body-emphasis ">¿Deseas eliminar el registro <br> "<a class="text-decoration-none text-danger">{{nombre}}</a>"?</h1>
         {% endif %}
         <div class="col-lg-6 mx-auto">
           <p class="lead fw-normal mb-4">Esta acción no se puede deshacer.</p>

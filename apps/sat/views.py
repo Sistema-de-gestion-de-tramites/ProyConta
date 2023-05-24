@@ -11,9 +11,6 @@ ____________________________________________________________________________
 -- ARIO, EN ESTA CLASE IRA EL BACKEND DE LA APLICACION SAT                --
 ----------------------------------------------------------------------------
 """
-from distutils import extension
-from email.policy import default
-from tokenize import group
 
 from django.db.models import Q
 from functools import reduce
@@ -123,10 +120,15 @@ class editar_Estado(UpdateView):
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
-def eliminar_Estado(request, pk):
-    registro = get_object_or_404(Estados, id=pk)
-    registro.delete()
-    return redirect('listar_estados')
+class Estado_Delete(DeleteView):
+    model = Estados
+    template_name = 'borrar.html'
+    success_url = reverse_lazy('listar_estados')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 # Vistas de los Comentarios
 def crear_Comentario(request):
@@ -206,10 +208,15 @@ class editar_Tipo_Archivo(UpdateView):
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
-def eliminar_Tipo_Archivo(request, pk):
-    registro = get_object_or_404(Tipo_Archivos, id=pk)
-    registro.delete()
-    return redirect('listar_tipo_archivos')
+class TipoArchivo_Delete(DeleteView):
+    model = Tipo_Archivos
+    template_name = 'borrar.html'
+    success_url = reverse_lazy('listar_tipo_archivos')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 # Vistas de los Roles
 def crear_Rol(request):
@@ -289,7 +296,7 @@ def detalle_roles(request, pk):
     return render(request, 'plantilla_detalle.html', context)
 
 def editar_Rol(request,pk):
-    rol = Group.objects.get(id=pk)
+    rol = get_object_or_404(Group,id=pk)
     if request.method == 'POST':
         form = Formulario_Rol(request.POST)
         if form.is_valid():
@@ -326,10 +333,14 @@ def editar_Rol(request,pk):
 
 def eliminar_Rol(request, pk):
     registro = get_object_or_404(Group, id=pk)
-    if registro.name != 'Administrador':
-        registro.delete()
-    actualizarPermisosEnUsuarios()
-    return redirect('listar_roles')
+    if request.method == "GET":
+        contexto = {'nombre':registro.name}
+        return render(request,'borrar.html',contexto)
+    else:
+        if registro.name != 'Administrador':
+            registro.delete()
+            actualizarPermisosEnUsuarios()
+        return redirect('listar_roles')
 
 def editarPermisosDeRoleEnUsuarios(rol):
     usuarios = User.objects.filter(groups=rol)
@@ -338,10 +349,10 @@ def editarPermisosDeRoleEnUsuarios(rol):
         guardarPermisosDeUsuario(usuario,usuario.groups.all().values_list('id',flat=True))
 
 def actualizarPermisosEnUsuarios():
-    usuarios = User.objects.all()
+    usuarios = User.objects.all().exclude(id=1)
     for usuario in usuarios:
-        print(usuario.groups.all().values_list('id',flat=True))
-        guardarPermisosDeUsuario(usuario,usuario.groups.all().values_list('id',flat=True))        
+        listaIdDeRoles = usuario.groups.all().values_list('id',flat=True)
+        guardarPermisosDeUsuario(usuario,listaIdDeRoles)        
 # vista de documento
 
 def crearTipoDocumento(request):
@@ -440,14 +451,21 @@ class editar_tipoDocumento(UpdateView):
         registro.save()
         return super().form_valid(form)
 
-def eliminar_TipoDocumento(request, pk):
-    registro = get_object_or_404(Tipo_Documentos, id=pk)
-    registro.delete()
-    nombre= registro.nombre
-    permisos = Permission.objects.filter(codename__contains=nombre)
-    permisos.delete()
-    return redirect('listar_tipo_documento')
-
+class TipoDocumento_Delete(DeleteView):
+    model = Tipo_Documentos    
+    template_name = 'borrar.html'
+    success_url = reverse_lazy('listar_tipo_documento')
+    
+    def form_valid(self, form):
+        nombre= self.get_object().nombre
+        permisos = Permission.objects.filter(codename__contains=nombre)
+        permisos.delete()
+        return super(TipoDocumento_Delete,self).form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
 
 # Buscador
 def buscar(request):

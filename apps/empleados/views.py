@@ -193,6 +193,7 @@ class Usuario_Delete(PermissionRequiredMixin,DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        context['nombre'] = self.get_object().username
         return context
 
 #actualizar usuario

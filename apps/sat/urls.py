@@ -36,7 +36,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('crear-estado', views.crear_Estado, name="crear_estado"),
     path('editar-estado/<pk>', views.editar_Estado.as_view(), name="editar_estado"),
     path('listar-estados', views.listar_Estados, name="listar_estados"),
-    path('eliminar-estado/<pk>', views.eliminar_Estado, name="eliminar_estado"),
+    path('eliminar-estado/<pk>', views.Estado_Delete.as_view(), name="eliminar_estado"),
     # URL del modelo Comentario
     path('crear-comentario', views.crear_Comentario, name="crear_comentario"),
     path('editar-comentario/<pk>', views.editar_Comentario.as_view(), name="editar_comentario"),
@@ -46,7 +46,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('crear-tipo-archivos', views.crear_Tipo_Archivo, name="crear_tipo_archivos"),
     path('editar-tipo-archivo/<pk>', views.editar_Tipo_Archivo.as_view(), name="editar_tipo_archivo"),
     path('listar-tipo-archivos', views.listar_Tipo_Archivos, name="listar_tipo_archivos"),
-    path('eliminar-tipo_archivo/<pk>', views.eliminar_Tipo_Archivo, name="eliminar_tipo_archivo"),
+    path('eliminar-tipo_archivo/<pk>', views.TipoArchivo_Delete.as_view(), name="eliminar_tipo_archivo"),
     # URL del modelo Rol
     path('crear-rol', views.crear_Rol, name="crear_rol"),
     path('editar-rol/<pk>', views.editar_Rol, name="editar_rol"),
@@ -58,7 +58,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('listar-tipo-documentos', views.listar_tipoDocumento, name="listar_tipo_documento"),
     path('detalle-tipo-documento/<pk>', views.detalle_tipoDocumento, name="detalle_tipo_documento"),
     path('editar-tipo-documento/<pk>', views.editar_tipoDocumento.as_view(), name="editar_tipo_documento"),
-    path('eliminar-tipo-documento/<pk>', views.eliminar_TipoDocumento, name="eliminar_tipo_documento"),
+    path('eliminar-tipo-documento/<pk>', views.TipoDocumento_Delete.as_view(), name="eliminar_tipo_documento"),
     #URL soporte tecnico
     path('enviar-email',views.soporteTecnico, name="enviar_email"),
     path('busqueda/', views.buscar, name="busqueda"),
