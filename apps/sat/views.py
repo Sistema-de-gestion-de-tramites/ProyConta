@@ -485,7 +485,7 @@ class TipoDocumento_Delete(DeleteView):
         except ProtectedError:
             mensaje = "Error el TIPO DE DOCUMENTO esta asignado a algun(os) ARCHIVO(S). Por favor elimina primero los objectos relacionados"
             messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
-            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
+            return redirect('eliminar_tipo_documento',self.kwargs['pk'])
 
 # Buscador
 def buscar(request):

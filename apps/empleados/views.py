@@ -84,7 +84,7 @@ class Empleado_Delete(PermissionRequiredMixin,DeleteView):
         except ProtectedError:
             mensaje = "Error el EMPLEADO esta asignado a algun(os) TELEFONO(S),DIRECCION(ES),CUENTA(S),ARCHIVO(S),CUENTA(S) DE USUARIO(S). Por favor elimina primero los objectos relacionados"
             messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
-            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
+            return redirect('eliminar_empleado',self.kwargs['pk'])
 
 class Empleado_Update(PermissionRequiredMixin,UpdateView):
     permission_required = 'sat.dev_editar_empleados'

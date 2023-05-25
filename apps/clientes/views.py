@@ -165,7 +165,7 @@ class Cliente_Delete(PermissionRequiredMixin,DeleteView):
         except ProtectedError:
             mensaje = "Error el CLIENTE esta asignado a algun(os) TELEFONO(S),DIRECCION(ES),CUENTA(S),ARCHIVO(S). Por favor elimina primero los objectos relacionados"
             messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
-            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
+            return redirect('eliminar_cliente',self.kwargs['pk'])
 
 class Cliente_Update(PermissionRequiredMixin,UpdateView):
     permission_required = 'sat.dev_editar_clientes'
@@ -319,7 +319,7 @@ class eliminar_Direccion(DeleteView):
         except ProtectedError:
             mensaje = "Error la DIRECCION esta asignado a algun(os) DIRECCION(ES) EXTRA(S). Por favor elimina primero los objectos relacionados"
             messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
-            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
+            return redirect('eliminar_direccion',self.kwargs['pk'])
 
 def editar_Direccion(request, pk):
     modelo = get_object_or_404(Direcciones, pk=pk)
