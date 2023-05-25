@@ -103,7 +103,7 @@ class Listar_Clientes(PermissionRequiredMixin,ListView):
 
 @permission_required(['sat.dev_ver_clientes','sat.dev_ver_empleados']) 
 def detalle_Persona(request, pk):
-    objeto = Personas.objects.get(id=pk)
+    objeto = get_object_or_404(Personas,id=pk)
     lista_1 = Direcciones.objects.filter(persona_id=pk)
     lista_2 = Telefonos.objects.filter(persona_id=pk)
     lista_3 = Cuentas.objects.filter(persona_id=pk)
@@ -120,20 +120,27 @@ def detalle_Persona(request, pk):
         'fotoPerfil': obtenerFotoPerfil(request),
         'clienteID': pk
     }
-    if objeto.tipo_usuario == Tipo_Usuarios.objects.get(descr__icontains="Empleado"):
+    tipoUsuarioEmpleado = get_object_or_404(Tipo_Usuarios,descr__icontains="Empleado")
+    if objeto.tipo_usuario == tipoUsuarioEmpleado:
         context['titulo'] = 'Empleados'
         context['editar_url'] = 'actualizar_empleado'
-        user = Usuario_empleado.objects.get(empleado_id = pk).usuario
-        infoCuentaUsuario = [("Nombre de usuario: " + str(user.username)),
-                                    ("Ultimo acceso: " + str(user.last_login)),
-                                    ("Fecha de creacion: " + str(user.date_joined))]
-        infoRoles = user.groups.all
+        listaUsuarioEmpleado = Usuario_empleado.objects.filter(empleado_id = pk)
+        infoCuentaUsuario = []
+        infoRoles = []
+        for usuarioEmpledo in listaUsuarioEmpleado:
+            infoCuentaUsuario.append(("Nombre de usuario: " + str(usuarioEmpledo.usuario.username)))
+            infoCuentaUsuario.append(("Ultimo acceso: " + str(usuarioEmpledo.usuario.last_login)))
+            infoCuentaUsuario.append(("Fecha de creacion: " + str(usuarioEmpledo.usuario.date_joined)))
+            listaRoles = usuarioEmpledo.usuario.groups.all()
+            for rol in listaRoles:
+                if not rol.name in infoRoles:
+                    infoRoles.append(rol.name)
         context['listas_extra'].extend([
-                                {'titulo': 'Información de cuenta', 'lista': infoCuentaUsuario},
+                                {'titulo': 'Información de cuentas', 'lista': infoCuentaUsuario},
                                 {'titulo': 'Mis roles', 'lista': infoRoles},
                             ])
         context['fotoPerfil'] = objeto.foto_perfil
-        print(context)
+        #print(context)
 
     return render(request, 'plantilla_detalle.html', context)
 
@@ -466,7 +473,7 @@ def listar_archivos(request):
                                                     'listaPermisosVerDocumento':listaPermisosVerDocumento})
 
 def detalle_archivo(request, pk):
-    objeto = Entrega_Doc.objects.get(id=pk)
+    objeto = get_object_or_404(Entrega_Doc,id=pk)
     listaPermisosVerDocumento = list(request.user.user_permissions.filter(codename__contains="doc_ver").values_list('codename',flat=True))
     context = {
         'obj': objeto,
