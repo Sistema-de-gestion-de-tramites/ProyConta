@@ -130,6 +130,11 @@ class Personas(models.Model):
                 related_obj = getattr(self, field.name)
                 if related_obj is not None:
                     fields.append((field.verbose_name, related_obj.nombre_principal()))
+            elif field.name == 'estado_civil':
+                for tupla in self.ESTADO_CIV:
+                    if getattr(self, field.name) in tupla:
+                        fields.append((field.verbose_name, tupla[1]))
+                        break
             else:
                 fields.append((field.verbose_name, getattr(self, field.name)))
         return fields
@@ -167,8 +172,6 @@ class Telefonos(models.Model):
                 fields.append((field.verbose_name, getattr(self, field.name)))
         return fields
 
-
-        #return [(field.verbose_name, field.value_to_string(self)) for field in Telefonos._meta.fields]
     def __str__(self):
         return self.descr + ': ' + self.telefono
 

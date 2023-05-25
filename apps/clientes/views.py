@@ -173,13 +173,6 @@ class Cliente_Update(PermissionRequiredMixin,UpdateView):
             return super().form_invalid(form)
         return super().form_valid(form)
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        form.initial['fecha_nac'] = self.object.fecha_nac
-        print(form.initial)
-        return self.render_to_response(self.get_context_data(form=form))
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
