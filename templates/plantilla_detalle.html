@@ -50,13 +50,15 @@
 
 <!--foto perfil usuario-->
 {% if fotoPerfilForm %}
-    <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+    <div class="ms-4 mt-5 d-flex flex-column" align="center" style="width: 150px;">
     {% if fotoPerfil %}
-        <img src="{{fotoPerfil.url}}" class="img-fluid img-thumbnail mt-4 mb-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 110px;height:110px; z-index: 1">
+        <img src="{{fotoPerfil.url}}" class="object-fit-contain img-thumbnail mt-4 mb-2" style="width: 110px; height:110px; z-index: 1">
     {% else %}
-        <img src="{% static 'img/icons/icons8-foto-750.png' %}" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 100px; height:100px; z-index: 1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <img src="{% static 'img/icons/icons8-foto-750.png' %}" class="object-fit-contain img-thumbnail mt-4 mb-2" style="width: 110px; height:110px; z-index: 1">
     {% endif %}
+        <button class="btn btn-sm btn-outline-dark rounded-pill"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 110px; height:110px; z-index: 1">Cambiar</button>
     </div>
+
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content rounded-5 shadow">
@@ -65,9 +67,9 @@
               <div class="modal-body p-4 text-center">
                 <h1 class="fw-bold mb-0 fs-2">Actualizar foto del perfil</h1>
                  {% if fotoPerfil %}
-                    <img src="{{fotoPerfil.url}}" class="img-fluid img-thumbnail user-select-none mt-4 mb-2" data-bs-toggle="modal" >
+                    <img src="{{fotoPerfil.url}}" class="img-fluid img-thumbnail user-select-none mt-4 mb-2 w-50"  >
                 {% else %}
-                    <img src="{% static 'img/icons/icons8-foto-750.png' %}" class="rounded-5 mx-auto user-select-none d-block mt-4 mb-2">
+                    <img src="{% static 'img/icons/icons8-foto-750.png' %}" class="rounded-5 mx-auto user-select-none d-block mt-4 mb-2 w-50" >
                 {% endif %}
                   <hr class="my-4">
                   <h2 class="fs-5 fw-bold mb-3">Seleccionar archivo</h2>
@@ -92,7 +94,7 @@
           </div>
 
 {% if obj %}
-          <div class="card-body p-4 text-black">
+          <div class="my-5 card-body p-4 text-black">
             <div class="mb-4">
                <div class="d-flex justify-content-between align-items-center mb-2">
                    <b class="fs-4 fw-bold d-flex align-items-center mb-3 mb-lg-0 me-lg-auto">

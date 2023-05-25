@@ -93,7 +93,7 @@
 
         <a href="{% url 'perfil' %}" class="list-group-item list-group-item-action d-flex py-3 mx-3 dropdown-toggle" aria-current="true">
           {% if fotoPerfil %}
-            <img src="{{fotoPerfil.url}}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
+            <img src="{{fotoPerfil.url}}" alt="FotoPerfil" width="40" height="40" class="object-fit-contain rounded-circle flex-shrink-0 bg-white">
           {% else %}
             <img src="{% static 'img/nav/icons8-smiling-face-with-smiling-eyes-100.png' %}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
           {% endif %}

@@ -11,9 +11,9 @@
 
         <ul class="list-group">
         {% for obj in object_list %}
-            <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-2 py-3 shadow-sm" style="background-color: #e2e3e5;">
+            <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-3 py-3 shadow-sm" style="background-color: #e2e3e5;">
                 {% if obj.empleado.foto_perfil%}
-                    <img src="{{obj.empleado.foto_perfil.url}}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
+                    <img src="{{obj.empleado.foto_perfil.url}}" alt="twbs" width="40" height="40" class="object-fit-contain bg-secondary rounded-circle flex-shrink-0">
                 {% else %}
                     <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#808080"></rect><text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text></svg>
                 {% endif %}
@@ -87,7 +87,7 @@
 
             <li class="list-group-item d-flex text-muted pt-3 bg-secondary-subtle rounded-0 ">
                     {% if obj.foto_perfil%}
-                        <img src="{{obj.foto_perfil.url}}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
+                        <img src="{{obj.foto_perfil.url}}" alt="twbs" width="40" height="40" class="object-fit-contain bg-dark-subtle rounded-circle flex-shrink-0">
                     {% else %}
                         <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
