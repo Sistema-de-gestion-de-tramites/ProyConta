@@ -137,10 +137,7 @@ def registro(request):
                                                'fotoPerfil': obtenerFotoPerfil(request),})
 
 def guardarUsuarioDeEmpleado(post,usuario):
-    try:
-        empleado = Personas.objects.get(id=post['empleado'])
-    except:
-        return redirect('registro/')
+    empleado = get_object_or_404(Personas,id=post['empleado'])
     usuario.email=empleado.correo
     usuario.save()
     nuevoUsuario_Empleado = Usuario_empleado(
@@ -155,14 +152,12 @@ def guardarPermisosDeUsuario(usuarioModelo,listaRoles):
     usuarioModelo.is_staff = False
     usuarioModelo.is_superuser = False
     for rol in listaRoles:
-        try:
-            rolModelo = Group.objects.get(id=rol)
-            if rolModelo.name == 'Administrador':
-                usuarioModelo.is_staff = True
-                usuarioModelo.is_superuser = True
-            listaModeloRoles.append(rolModelo)
-        except Group.DoesNotExist:
-            print("Error rol no encontrado")
+        rolModelo = get_object_or_404(Group,id=rol)
+        if rolModelo.name == 'Administrador':
+            usuarioModelo.is_staff = True
+            usuarioModelo.is_superuser = True
+        listaModeloRoles.append(rolModelo)
+        
     usuarioModelo.groups.clear()
     usuarioModelo.groups.set(listaModeloRoles)
     usuarioModelo.save()

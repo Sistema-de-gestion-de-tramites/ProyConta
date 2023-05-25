@@ -132,7 +132,7 @@ def detalle_Persona(request, pk):
         infoCuentaUsuario = []
         infoRoles = []
         for usuarioEmpledo in listaUsuarioEmpleado:
-            infoCuentaUsuario.append(("Nombre de usuario: " + str(usuarioEmpledo.usuario.username)))
+            infoCuentaUsuario.append(("-> Nombre de usuario: " + str(usuarioEmpledo.usuario.username)))
             infoCuentaUsuario.append(("Ultimo acceso: " + str(usuarioEmpledo.usuario.last_login)))
             infoCuentaUsuario.append(("Fecha de creacion: " + str(usuarioEmpledo.usuario.date_joined)))
             listaRoles = usuarioEmpledo.usuario.groups.all()
