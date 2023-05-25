@@ -92,6 +92,7 @@ class CuentasForm(forms.ModelForm):
 
         fields = [
             'nombre',
+            'descripcion',
             'cuenta',
             'contra',
         ]
@@ -101,11 +102,14 @@ class CuentasFormView(forms.ModelForm):
     persona = forms.HiddenInput()
     contra = forms.CharField(label='Contraseña', widget=forms.TextInput(attrs={'readonly':'readonly'}))
     cuenta = forms.CharField(label='Cuenta', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    descripcion = forms.CharField(label='Descripcion', widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    
     class Meta:
         model = Cuentas
 
         fields = [
             'nombre',
+            'descripcion',
             'cuenta',
             'contra',
         ]
