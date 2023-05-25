@@ -528,6 +528,7 @@ def detalle_archivo(request, pk):
     objeto = get_object_or_404(Entrega_Doc,id=pk)
     listaPermisosVerDocumento = list(request.user.user_permissions.filter(codename__contains="doc_ver").values_list('codename',flat=True))
     context = {
+        'titulo': 'Fichero',
         'obj': objeto,
         'editar_url': 'actualizar_documento',
         'fotoPerfil': obtenerFotoPerfil(request),
