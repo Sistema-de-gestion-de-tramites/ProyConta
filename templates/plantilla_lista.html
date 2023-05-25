@@ -130,7 +130,11 @@
                     {% endfor %}
                     -->
                     {% if obj.direccion  %}
-                        <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
+                        {% if 'doc_ver_'|add:obj.tipo_doc.nombre in listaPermisosVerDocumento or user.is_superuser %}
+                            <a href="{{ obj.direccion.url }}" target='_blank'>Examinar</a>
+                        {% else %}
+                            no cuentas con los permisos para ver estos documentos
+                        {% endif %}
                     {% endif %}
                 </div>
                 <p class="pb-3 mb-0 small lh-sm ">
@@ -148,6 +152,11 @@
                         Eliminar
                     </a>
                     {% endif %}
+                    {% if detalle_url %}
+                        <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
+                            Mas info
+                        </a>
+                    {% endif %}
                 {% else %}
                     <h6><span class="badge text-bg-warning"> Este rol tiene todos los permisos</span></h6>
                 {% endif %}
@@ -164,13 +173,12 @@
                         Eliminar
                     </a>
                 {% endif %}
+                {% if detalle_url %}
+                    <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
+                        Mas info
+                    </a>
+                {% endif %}
             {% endif %}
-            {% if detalle_url %}
-                <a type="button" class="btn btn-dark btn-sm rounded-pill" href="{% url detalle_url obj.id %}">
-                    Mas info
-                </a>
-            {% endif %}
-
                 </p>
         <br><br>
         {% empty %}

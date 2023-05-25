@@ -54,6 +54,8 @@
                 {% if field.name != 'tipo_usuario' %}
                     {{field.label}} : {{field}} <br>
                 {% endif %}
+            {% elif field.label == "" %}
+                {{field}}
             {% else %}
                 {{field.label}} : {{field}}
             {% endif %}

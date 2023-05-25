@@ -12,13 +12,13 @@
         {% if object.nombre_principal %}
             <h1 class="display-7 fw-bold text-body-emphasis ">¿Deseas eliminar el registro <br> "<a class="text-decoration-none text-danger">{{ object.nombre_principal }}</a>"?</h1>
         {% else %}
-            <h1 class="display-7 fw-bold text-body-emphasis ">¿Deseas eliminar el registro <br> "<a class="text-decoration-none text-danger">{{object.username}}</a>"?</h1>
+            <h1 class="display-7 fw-bold text-body-emphasis ">¿Deseas eliminar el registro <br> "<a class="text-decoration-none text-danger">{{nombre}}</a>"?</h1>
         {% endif %}
         <div class="col-lg-6 mx-auto">
           <p class="lead fw-normal mb-4">Esta acción no se puede deshacer.</p>
           <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
             <button type="submit" class="btn btn-danger btn-lg rounded-pill px-4 me-sm-3">Eliminar</button>
-            <button href="{% url 'index' %}" class="btn btn-outline-dark rounded-pill btn-lg px-4">Cancelar</button>
+            <input type="button" value="Cancelar" onClick="history.go(-1);" class="btn btn-outline-dark rounded-pill btn-lg px-4">
           </div>
         </div>
     </div>

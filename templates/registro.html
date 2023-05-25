@@ -4,7 +4,10 @@
 {% if messages %}
 <div class="messages">
     {% for message in messages %}
-    <p {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{ message }}</p>
+    <div {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>
+    <p>{{ message }}</p>
+    {{form.errors}}
+    </div>
     {% endfor %}
 </div>
 {% endif %}
@@ -25,6 +28,15 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
+        {% elif field.name == form.password1.name %}
+        <ul class="alert alert-secondary">
+            <li>Su contraseña no puede ser muy similar a su otra información personal.</li>
+            <li>Debe contener al menos 8 caracteres.</li>
+            <li>Su contraseña no puede ser una contraseña de uso común.</li>
+            <li>Su contraseña no puede ser completamente numérica.</li>
+        </ul>
+        <br>
+        {{field.label}} : {{field}}
         {% else %}
         {{field.label}} : {{field}}
         {% endif %}
