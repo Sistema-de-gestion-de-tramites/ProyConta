@@ -39,6 +39,7 @@ from apps.clientes.models import Personas, Telefonos, Direcciones
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from apps.empleados.views import obtenerEmpleadoDeCuentaUsuario, obtenerFotoPerfil
 from django.contrib.auth.decorators import permission_required
+from datetime import date
 
 
 class Crear_Persona(PermissionRequiredMixin,CreateView):
@@ -57,6 +58,9 @@ class Crear_Persona(PermissionRequiredMixin,CreateView):
 
     def form_valid(self, form, **kwargs):
         registro = form.save(commit=False)
+        if (date.today().year - registro.fecha_nac.year) < 18:
+            messages.add_message(request=self.request, level=messages.ERROR, message="No es mayor de edad", extra_tags='danger')
+            return super().form_invalid(form)
         if self.kwargs.get('pk') == '1':
             self.success_url = reverse_lazy('listar_empleados')
             try:
@@ -109,7 +113,7 @@ def detalle_Persona(request, pk):
     lista_3 = Cuentas.objects.filter(persona_id=pk)
 
     context = {
-        'titulo': 'CLientes',
+        'titulo': 'Clientes',
         'obj': objeto,
         'listas_extra': [{'titulo': 'Direccion', 'lista': lista_1,  'nuevo_url': 'registrar_direccion', 'borrar_url': 'eliminar_direccion', 'actualizar_url':'actualizar_direccion',},
                          {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},
@@ -132,8 +136,7 @@ def detalle_Persona(request, pk):
                                 {'titulo': 'Información de cuenta', 'lista': infoCuentaUsuario},
                                 {'titulo': 'Mis roles', 'lista': infoRoles},
                             ])
-        context['fotoPerfil'] = objeto.foto_perfil
-        print(context)
+        context['fotoPerfil_2'] = objeto.foto_perfil if str(objeto.foto_perfil) != '' else False
 
     return render(request, 'plantilla_detalle.html', context)
 
@@ -155,7 +158,21 @@ class Cliente_Update(PermissionRequiredMixin,UpdateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_clientes')
     extra_context = {'esEmpleado': False, 'titulo': 'Editar clientes'}
-    
+
+    def form_valid(self, form):
+        registro = form.save(commit=False)
+        if (date.today().year - registro.fecha_nac.year) < 18:
+            messages.add_message(request=self.request, level=messages.ERROR, message="No es mayor de edad", extra_tags='danger')
+            return super().form_invalid(form)
+        return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        form.initial['fecha_nac'] = self.object.fecha_nac
+        print(form.initial)
+        return self.render_to_response(self.get_context_data(form=form))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)

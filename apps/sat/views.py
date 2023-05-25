@@ -533,3 +533,46 @@ def soporteTecnico(request):
             mensaje ="Error verifica que los campos solicitados esten llenados de forma correcta"
             messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
         return redirect('enviar_email')
+
+
+# Vistas de los tipos de usuario
+def crear_Tipo_Usuario(request):
+    if request.method == 'GET':
+        contexto = {
+            'titulo': 'Añadir tipo de cliente',
+            'form': Formulario_tipo_usuario,
+            'fotoPerfil': obtenerFotoPerfil(request)}
+        return render(request, 'formulario.html', contexto)
+    else:
+        nuevoRegistro = Tipo_Usuarios(
+            descr=request.POST['descr']
+        )
+        nuevoRegistro.save()
+        return redirect('listar_tipos_usuarios')
+
+
+def listar_Tipo_Usuarios(request):
+    lista = Tipo_Usuarios.objects.all().exclude(descr__icontains='empleado')
+    return render(request, 'plantilla_lista.html', {'titulo': 'Tipo de usuarios',
+                                                    'object_list': lista,
+                                                    'actualizar_url': 'editar_tipo_usuario',
+                                                    'borrar_url': 'eliminar_tipo_usuario',
+                                                    'fotoPerfil': obtenerFotoPerfil(request)})
+
+
+class editar_Tipo_usuario(UpdateView):
+    model = Tipo_Usuarios
+    form_class = Formulario_tipo_usuario
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_tipos_usuarios')
+    extra_context = {'titulo': 'Editar tipo de cliente'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
+
+class eliminar_Tipo_usuario(DeleteView):
+    model = Tipo_Usuarios
+    template_name = 'borrar.html'
+    success_url = reverse_lazy('listar_tipos_usuarios')

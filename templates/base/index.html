@@ -204,6 +204,18 @@
           </li>
           {% endif %}
 
+          {% if user.is_staff %}
+          <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
+            <a class="fw-normal text-decoration-none text-black"  href="{% url 'listar_tipos_usuarios' %}">
+             <img src="{% static 'img/nav/icons8-revista-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 mx-auto p-1">
+              Tipos de clientes
+            </a>
+            <a class="link-secondary" href="{% url 'crear_tipo_usuario' %}" aria-label="Add a new report">
+              <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
+            </a>
+          </li>
+          {% endif %}
+
           <li class="border-top my-2"></li>
          
           <h6 class="px-3 fw-semibold mb-3">Herramientas</h6>
