@@ -5,8 +5,8 @@
 
   <ol class="breadcrumb mb-0 text-align-center">
     <li class="breadcrumb-item ">
-            {% if 'perfil' in titulo|lower %}
-            <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
+            {% if 'perfil' in titulo|lower or 'usuario' in titulo|lower %}
+            <a class="d-flex align-items-center text-dark text-decoration-none" href="">
                 <img class="me-2" src="{% static 'img/nav/icons8-smiling-face-with-smiling-eyes-100.png' %}" height="50px">
                 {{ titulo }}
             </a>
@@ -190,7 +190,7 @@
                                     {% if lis_ext.titulo == 'Mis roles' %}
                                         <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="30px">
                                     {% endif %}
-                                    {% if lis_ext.titulo == 'Mis permisos' %}
+                                    {% if lis_ext.titulo == 'Mis permisos' or lis_ext.titulo == 'Mis permisos sobre documento'%}
                                         <img class="bi me-2" src="{% static 'img/icons/icons8-diseño-100.png' %}" height="30px">
                                     {% endif %}
                                     {{ lis_ext.titulo }}

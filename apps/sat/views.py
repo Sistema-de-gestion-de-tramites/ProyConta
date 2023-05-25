@@ -24,8 +24,10 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.models import Permission, Group,User
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import ProtectedError
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required,permission_required
 from django.core.mail import send_mail
 """   #Antiguas importaciones 
@@ -298,8 +300,8 @@ def detalle_roles(request, pk):
         'titulo': 'Rol',
         'obj': objeto,
         'informacionObjecto': informacionObjecto,
-        'listas_extra': [{'titulo': 'Permisos', 'lista': lista_1},
-                         {'titulo': 'Permisos sobre documento', 'lista': lista_2}
+        'listas_extra': [{'titulo': 'Mis permisos', 'lista': lista_1},
+                         {'titulo': 'Mis permisos sobre documento', 'lista': lista_2}
                         ],
         'editar_url': 'editar_rol',
         'fotoPerfil': obtenerFotoPerfil(request)
@@ -552,36 +554,42 @@ def soporteTecnico(request):
 
 # Vistas de los tipos de usuario
 def crear_Tipo_Usuario(request):
-    if request.method == 'GET':
-        contexto = {
-            'titulo': 'Añadir tipo de cliente',
-            'form': Formulario_tipo_usuario,
-            'fotoPerfil': obtenerFotoPerfil(request)}
-        return render(request, 'formulario.html', contexto)
-    else:
-        if(Tipo_Usuarios.objects.filter(descr=request.POST['descr']).exists()):
-            mensaje = "Error el tipo de cliente ya existe"
-            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
-            return redirect('crear_tipo_usuario')
+    if request.user.has_perm('sat.dev_crear_tipo_cliente'):
+        if request.method == 'GET':
+            contexto = {
+                'titulo': 'Añadir tipo de cliente',
+                'form': Formulario_tipo_usuario,
+                'fotoPerfil': obtenerFotoPerfil(request)}
+            return render(request, 'formulario.html', contexto)
         else:
-            nuevoRegistro = Tipo_Usuarios(
-                descr=request.POST['descr']
-            )
-            nuevoRegistro.save()
-            return redirect('listar_tipos_usuarios')
-
+            if(Tipo_Usuarios.objects.filter(descr=request.POST['descr']).exists()):
+                mensaje = "Error el tipo de cliente ya existe"
+                messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+                return redirect('crear_tipo_usuario')
+            else:
+                nuevoRegistro = Tipo_Usuarios(
+                    descr=request.POST['descr']
+                )
+                nuevoRegistro.save()
+                return redirect('listar_tipos_usuarios')
+    else:
+        raise PermissionDenied
 
 def listar_Tipo_Usuarios(request):
-    lista = Tipo_Usuarios.objects.all().exclude(descr__icontains='empleado')
-    return render(request, 'plantilla_lista.html', {'titulo': 'Tipo de usuarios',
-                                                    'object_list': lista,
-                                                    'actualizar_url': 'editar_tipo_usuario',
-                                                    'borrar_url': 'eliminar_tipo_usuario',
-                                                    'fotoPerfil': obtenerFotoPerfil(request)})
+    if request.user.has_perm("sat.dev_ver_tipo_cliente"):
+        lista = Tipo_Usuarios.objects.all().exclude(descr__icontains='empleado')
+        return render(request, 'plantilla_lista.html', {'titulo': 'Tipo de usuarios',
+                                                        'object_list': lista,
+                                                        'actualizar_url': 'editar_tipo_usuario',
+                                                        'borrar_url': 'eliminar_tipo_usuario',
+                                                        'fotoPerfil': obtenerFotoPerfil(request)})
+    else:
+        raise PermissionDenied
 
 
-class editar_Tipo_usuario(UpdateView):
+class editar_Tipo_usuario(PermissionRequiredMixin,UpdateView):
     model = Tipo_Usuarios
+    permission_required = 'sat.dev_editar_tipo_cliente'
     form_class = Formulario_tipo_usuario
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_tipos_usuarios')
@@ -592,8 +600,9 @@ class editar_Tipo_usuario(UpdateView):
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
 
-class eliminar_Tipo_usuario(DeleteView):
+class eliminar_Tipo_usuario(PermissionRequiredMixin,DeleteView):
     model = Tipo_Usuarios
+    permission_required = 'sat.dev_eliminar_tipo_cliente'
     template_name = 'borrar.html'
     success_url = reverse_lazy('listar_tipos_usuarios')
     

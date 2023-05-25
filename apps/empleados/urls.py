@@ -27,6 +27,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     # urls CRUD usuarios
     path('registro/',views.registro,name='registro'),
     path('lista_cuentas_usuario/', views.Listar_Usuarios.as_view(), name="listar_cuentas_usuario"),
+    path('detalle-cuenta-usuario/<pk>',views.detalle_cuenta_usuario,name="detalle_cuenta_usuario"),
     path('eliminar_usuario/<pk>', views.Usuario_Delete.as_view(), name="eliminar_usuario"),
     path('actualizar_usuario/<pk>', views.usuario_Update.as_view(), name="actualizar_usuario"),
     path('actualizar_contrasenia_usuario/<pk>', views.usuario_contrasenia_Update.as_view(), name="actualizar_contrasenia_usuario"),

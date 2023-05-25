@@ -204,7 +204,7 @@
           </li>
           {% endif %}
 
-          {% if user.is_staff %}
+          {% if user.is_staff  or user.has_perm_tipo_cliente%}
           <li class="nav-item h7 d-flex justify-content-between align-items-center px-3  mb-2  ">
             <a class="fw-normal text-decoration-none text-black"  href="{% url 'listar_tipos_usuarios' %}">
              <img src="{% static 'img/nav/icons8-revista-94.png' %}"  width="25" class="bg-dark-subtle rounded-2 mx-auto p-1">
