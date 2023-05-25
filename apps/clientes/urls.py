@@ -27,21 +27,21 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('registrar_telefono/<pk>', views.Registrar_Telefono.as_view(), name="registrar_telefono"),
     path('lista_telefono/<per_id>', views.listar_telefonos, name="listar_telefonos"),
     path('actualizar_telefono/<pk>', views.editar_Telefono, name="actualizar_telefono"),
-    path('eliminar_telefono/<pk>', views.eliminar_Telefono, name="eliminar_telefono"),
+    path('eliminar_telefono/<pk>', views.eliminar_Telefono.as_view(), name="eliminar_telefono"),
 
     path('directorio/', views.Directorio, name="directorio"),
 
     path('registrar_direccion/<pk>', views.Registrar_Direccion.as_view(), name="registrar_direccion"),
     path('lista_direcciones/<per_id>', views.listar_Direcciones, name="listar_direcciones"),
     path('actualizar_direccion/<pk>', views.editar_Direccion, name="actualizar_direccion"),
-    path('eliminar_direccion/<pk>', views.eliminar_Direccion, name="eliminar_direccion"),
+    path('eliminar_direccion/<pk>', views.eliminar_Direccion.as_view(), name="eliminar_direccion"),
 
     path('registrar_cuenta/<pk>', views.Registrar_Cuenta.as_view(), name="registrar_cuenta"),
     path('lista_cuenta/<per_id>', views.listar_Cuentas, name="listar_cuentas"),
     path('actualizar_cuenta/<pk>', views.editar_Cuenta, name="actualizar_cuenta"),
     path('ver_cuenta/<pk>', views.editar_Cuenta, name="ver_cuenta"),
     path('autenticar/<clienteID>/<cuentaID>', views.autenticarParaVerPassword, name="autenticar"),
-    path('eliminar_cuenta/<pk>', views.eliminar_Cuenta, name="eliminar_cuenta"),
+    path('eliminar_cuenta/<pk>', views.eliminar_Cuenta.as_view(), name="eliminar_cuenta"),
 
     path('subir_documento', views.subir_archivo.as_view(), name="subir_documento"),
     #path('lista_documento/', views.listar_archivos, name="listar_todos_documentos"),

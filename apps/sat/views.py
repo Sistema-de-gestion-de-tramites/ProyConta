@@ -25,6 +25,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.models import Permission, Group,User
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import ProtectedError
 from django.contrib.auth.decorators import login_required,permission_required
 from django.core.mail import send_mail
 """   #Antiguas importaciones 
@@ -129,6 +130,14 @@ class Estado_Delete(DeleteView):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            mensaje = "Error el ESTADO esta asignado a algun(os) ARCHIVO(S). Por favor elimina primero los objectos relacionados"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+            return redirect('eliminar_estado',self.kwargs['pk'])
 
 # Vistas de los Comentarios
 def crear_Comentario(request):
@@ -336,7 +345,8 @@ def editar_Rol(request,pk):
 def eliminar_Rol(request, pk):
     registro = get_object_or_404(Group, id=pk)
     if request.method == "GET":
-        contexto = {'nombre':registro.name}
+        contexto = {'nombre':registro.name,
+                    'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request,'borrar.html',contexto)
     else:
         if registro.name != 'Administrador':
@@ -468,6 +478,14 @@ class TipoDocumento_Delete(DeleteView):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            mensaje = "Error el TIPO DE DOCUMENTO esta asignado a algun(os) ARCHIVO(S). Por favor elimina primero los objectos relacionados"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
 
 # Buscador
 def buscar(request):
@@ -546,11 +564,16 @@ def crear_Tipo_Usuario(request):
             'fotoPerfil': obtenerFotoPerfil(request)}
         return render(request, 'formulario.html', contexto)
     else:
-        nuevoRegistro = Tipo_Usuarios(
-            descr=request.POST['descr']
-        )
-        nuevoRegistro.save()
-        return redirect('listar_tipos_usuarios')
+        if(Tipo_Usuarios.objects.filter(descr=request.POST['descr']).exists()):
+            mensaje = "Error el tipo de cliente ya existe"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+            return redirect('crear_tipo_usuario')
+        else:
+            nuevoRegistro = Tipo_Usuarios(
+                descr=request.POST['descr']
+            )
+            nuevoRegistro.save()
+            return redirect('listar_tipos_usuarios')
 
 
 def listar_Tipo_Usuarios(request):
@@ -578,3 +601,11 @@ class eliminar_Tipo_usuario(DeleteView):
     model = Tipo_Usuarios
     template_name = 'borrar.html'
     success_url = reverse_lazy('listar_tipos_usuarios')
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            mensaje = "Error el TIPO DE CLIENTE esta asignado a algun(os) CLIENTE(S). Por favor elimina primero los objectos relacionados"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])

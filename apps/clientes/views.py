@@ -25,6 +25,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required,login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
+from django.db.models import ProtectedError
 from django.core.exceptions import PermissionDenied
 
 from .forms import *   #{IMPORTA LOS METODOS DE LA CLASE FORM}
@@ -157,6 +158,14 @@ class Cliente_Delete(PermissionRequiredMixin,DeleteView):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            mensaje = "Error el CLIENTE esta asignado a algun(os) TELEFONO(S),DIRECCION(ES),CUENTA(S),ARCHIVO(S). Por favor elimina primero los objectos relacionados"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
 
 class Cliente_Update(PermissionRequiredMixin,UpdateView):
     permission_required = 'sat.dev_editar_clientes'
@@ -224,12 +233,20 @@ def listar_telefonos(request, per_id):
                                                     'valor_fk': per_id,
                                                     'fotoPerfil': obtenerFotoPerfil(request),})
 
-def eliminar_Telefono(request, pk):
-    registro = get_object_or_404(Telefonos, id=pk)
-    per_id = registro.persona_id
-    registro.delete()
-    return redirect('detalle_persona', pk=per_id)
-
+class eliminar_Telefono(DeleteView):
+    model = Telefonos
+    template_name = 'borrar.html'
+    
+    def get_success_url(self):
+        obj = self.object
+        success_url = reverse('detalle_persona', kwargs={'pk': obj.persona_id})
+        return success_url
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
+    
 def editar_Telefono(request, pk):
     modelo = get_object_or_404(Telefonos, pk=pk)
     if request.method == 'POST':
@@ -282,11 +299,27 @@ def listar_Direcciones(request, per_id):
                                                     'valor_fk': per_id,
                                                     'fotoPerfil': obtenerFotoPerfil(request)})
 
-def eliminar_Direccion(request, pk):
-    registro = get_object_or_404(Direcciones, id=pk)
-    per_id = registro.persona_id
-    registro.delete()
-    return redirect('detalle_persona', pk=per_id)
+class eliminar_Direccion(DeleteView):
+    model = Direcciones
+    template_name = 'borrar.html'
+    
+    def get_success_url(self):
+        obj = self.object
+        success_url = reverse('detalle_persona', kwargs={'pk': obj.persona_id})
+        return success_url
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            mensaje = "Error la DIRECCION esta asignado a algun(os) DIRECCION(ES) EXTRA(S). Por favor elimina primero los objectos relacionados"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
 
 def editar_Direccion(request, pk):
     modelo = get_object_or_404(Direcciones, pk=pk)
@@ -344,12 +377,21 @@ def listar_Cuentas(request, per_id):
                                                     'valor_fk': per_id,
                                                     'fotoPerfil': obtenerFotoPerfil(request)})
 
-@permission_required('sat.dev_eliminar_cuentas')
-def eliminar_Cuenta(request, pk):
-    registro = get_object_or_404(Cuentas, id=pk)
-    per_id = registro.persona_id
-    registro.delete()
-    return redirect('detalle_persona', pk=per_id)
+class eliminar_Cuenta(PermissionRequiredMixin,DeleteView):
+    permission_required = 'sat.dev_eliminar_cuentas'
+    model = Cuentas
+    template_name = 'borrar.html'
+    
+    def get_success_url(self):
+        obj = self.object
+        success_url = reverse('detalle_persona', kwargs={'pk': obj.persona_id})
+        return success_url
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
+    
 
 def editar_Cuenta(request, pk):
     titulo = ''
@@ -565,18 +607,23 @@ def eliminar_archivo(request, pk):
     registro = get_object_or_404(Entrega_Doc, id=pk)
     nombreDocumento = str(registro.tipo_doc.nombre)
     if request.user.has_perm("admin.doc_edicion_"+nombreDocumento):
-        try:
-            file_path = os.path.join(settings.MEDIA_ROOT, str(registro.direccion))
-            default_storage.delete(file_path)
-        except SuspiciousFileOperation:
-            # Manejar la excepción de operación de archivo sospechosa
-            messages.error(request, 'La ruta del archivo no es válida.')
-        except OSError:
-            # Manejar la excepción de sistema de archivos
-            messages.error(request, 'No se pudo borrar el archivo.')
+        if request.method == "GET":
+            contexto = {'fotoPerfil':obtenerFotoPerfil(request),
+                        'object':registro}
+            return render(request,'borrar.html',contexto)
+        else:
+            try:
+                file_path = os.path.join(settings.MEDIA_ROOT, str(registro.direccion))
+                default_storage.delete(file_path)
+            except SuspiciousFileOperation:
+                # Manejar la excepción de operación de archivo sospechosa
+                messages.error(request, 'La ruta del archivo no es válida.')
+            except OSError:
+                # Manejar la excepción de sistema de archivos
+                messages.error(request, 'No se pudo borrar el archivo.')
 
-        registro.delete()
-        return redirect('listar_documentos')
+            registro.delete()
+            return redirect('listar_documentos')
     else:
         raise PermissionDenied
         

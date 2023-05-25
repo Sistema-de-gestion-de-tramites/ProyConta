@@ -106,7 +106,7 @@ class Personas(models.Model):
     rfc = models.CharField(validators=[validar_RFC], max_length=13, unique=True, verbose_name="RFC")
     curp = models.CharField(validators=[validar_CURP], max_length=28, verbose_name="CURP")
     fecha_reg = models.DateField(verbose_name="Fecha de registro")
-    tipo_usuario = models.ForeignKey(Tipo_Usuarios, on_delete=models.CASCADE, verbose_name="Tipo de usuario")
+    tipo_usuario = models.ForeignKey(Tipo_Usuarios, on_delete=models.PROTECT, verbose_name="Tipo de usuario")
     foto_perfil = models.ImageField(upload_to='fotos_perfil/',null=True,blank=True, verbose_name="Foto de perfil")
     
     class Meta:
@@ -146,7 +146,7 @@ class Personas(models.Model):
         return self.nombre + " " + self.ap_paterno + " " + self.ap_materno
 
 class Telefonos(models.Model):
-    persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Persona")
+    persona = models.ForeignKey(Personas, on_delete=models.PROTECT, verbose_name="Persona")
     descr = models.CharField(max_length=30, verbose_name="Descripción")
     telefono = models.CharField(validators=[validar_telefono], max_length=10, unique=True, verbose_name="Telefono")
 
@@ -179,7 +179,7 @@ class Telefonos(models.Model):
         return self.descr
 
 class Direcciones(models.Model):
-    persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Persona")
+    persona = models.ForeignKey(Personas, on_delete=models.PROTECT, verbose_name="Persona")
     num_ext = models.IntegerField(verbose_name="Num. Ext.")
     calle = models.CharField(max_length=40, verbose_name="Calle")
     colonia = models.CharField(max_length=40, verbose_name="Colonia")
@@ -209,11 +209,14 @@ class Direcciones(models.Model):
                 fields.append((field.verbose_name, getattr(self, field.name)))
         return fields
 
+    def nombre_principal(self):
+        return 'Calle ' + self.calle + ' #' + str(self.num_ext) + ', Col. ' + self.colonia + ', ' + self.municipio + ', ' + self.estado
+    
     def __str__(self):
         return 'Calle ' + self.calle + ' #' + str(self.num_ext) + ', Col. ' + self.colonia + ', ' + self.municipio + ', ' + self.estado
 
 class Ext_Direcciones(models.Model):
-    direccion = models.ForeignKey(Direcciones, on_delete=models.CASCADE, verbose_name="Dirección")
+    direccion = models.ForeignKey(Direcciones, on_delete=models.PROTECT, verbose_name="Dirección")
     num_int = models.IntegerField(verbose_name="Num. Int.")
 
     class Meta:
@@ -222,12 +225,16 @@ class Ext_Direcciones(models.Model):
         verbose_name_plural = "Direcciones"
         db_table = "ext_direcciones"
 
+    def nombre_principal(self):
+        return "Direccion:" + str(self.direccion.nombre_principal())
+    
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Ext_Direcciones._meta.fields]
 
 class Cuentas(models.Model):
-    persona = models.ForeignKey(Personas, on_delete=models.CASCADE, verbose_name="Cliente")
-    cuenta = models.CharField(max_length=30, verbose_name="Cuenta")
+    persona = models.ForeignKey(Personas, on_delete=models.PROTECT, verbose_name="Cliente")
+    descripcion =  models.CharField(max_length=300, verbose_name="Descripion de la cuenta")
+    cuenta = models.CharField(max_length=100, verbose_name="Usuario")
     contra = models.CharField(max_length=1000, verbose_name="Contraseña")
 
     class Meta:
@@ -239,6 +246,9 @@ class Cuentas(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Cuentas._meta.fields]
 
+    def nombre_principal(self):
+        return "Cliente: " + str(self.persona.nombre) + ", Descripcion: " +str(self.descripcion)
+    
     def __str__(self):
         return self.cuenta
 
@@ -273,14 +283,17 @@ class Comentarios(models.Model):
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Comentarios._meta.fields]
 
+    def nombre_principal(self):
+        return self.descr
+    
     def __str__(self):
         return self.descr
 
 class Entrega_Doc(models.Model):
-    cliente = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="cliente", verbose_name="Cliente")
-    empleado = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="empleado", verbose_name="Empleado")
-    tipo_doc = models.ForeignKey(Tipo_Documentos, on_delete=models.CASCADE, verbose_name="Tipo de documento")
-    estado = models.ForeignKey(Estados, on_delete=models.CASCADE, verbose_name="Estado")
+    cliente = models.ForeignKey(Personas, on_delete=models.PROTECT, related_name="cliente", verbose_name="Cliente")
+    empleado = models.ForeignKey(Personas, on_delete=models.PROTECT, related_name="empleado", verbose_name="Empleado")
+    tipo_doc = models.ForeignKey(Tipo_Documentos, on_delete=models.PROTECT, verbose_name="Tipo de documento")
+    estado = models.ForeignKey(Estados, on_delete=models.PROTECT, verbose_name="Estado")
     comentario = models.CharField(max_length=100, verbose_name="Comentario")
     fecha = models.DateTimeField(verbose_name="Fecha")
     direccion = models.FileField(verbose_name="Documento")
@@ -302,12 +315,15 @@ class Entrega_Doc(models.Model):
                 fields.append((field.verbose_name, getattr(self, field.name)))
         return fields
 
+    def nombre_principal(self):
+        return "Archivo de:" + str(self.cliente.nombre) + ", Documento: " + str(self.tipo_doc.nombre)
+    
     def __str__(self):
         return self.cliente.__str__() + ': ' + self.tipo_doc.__str__()
 
 class Usuario_empleado(models.Model):
-    empleado = models.ForeignKey(Personas, on_delete=models.CASCADE, related_name="empleado_id", verbose_name="Empleado")
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="usuario_id", verbose_name="Usuario")
+    empleado = models.ForeignKey(Personas, on_delete=models.PROTECT, related_name="empleado_id", verbose_name="Empleado")
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name="usuario_id", verbose_name="Usuario")
 
     class Meta:
         managed = True
@@ -315,5 +331,6 @@ class Usuario_empleado(models.Model):
         verbose_name_plural = "usuarios empleados"
         db_table = "usuario_empleado"
 
+    
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Usuario_empleado._meta.fields]

@@ -6,6 +6,16 @@
     Advertencia
 {% endblock %}
 {% block cuerpo %}
+{% if messages %}
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-dark">Mensajes</span>
+            </h4>
+            <div class="messages">
+                {% for message in messages %}
+                <p {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
 <form method="POST">
     <div class="px-4 pt-5 my-1 text-center bg-danger-subtle p-3 rounded-4">
         {% csrf_token %}

@@ -16,6 +16,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.models import Permission, Group,User
+from django.db.models import ProtectedError
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import permission_required
 from django.utils.text import slugify
@@ -76,6 +77,14 @@ class Empleado_Delete(PermissionRequiredMixin,DeleteView):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            mensaje = "Error el EMPLEADO esta asignado a algun(os) TELEFONO(S),DIRECCION(ES),CUENTA(S),ARCHIVO(S),CUENTA(S) DE USUARIO(S). Por favor elimina primero los objectos relacionados"
+            messages.add_message(request=request,level=messages.ERROR,message=mensaje,extra_tags='danger')
+            return redirect('eliminar_tipo_usuario',self.kwargs['pk'])
 
 class Empleado_Update(PermissionRequiredMixin,UpdateView):
     permission_required = 'sat.dev_editar_empleados'
