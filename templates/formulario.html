@@ -2,6 +2,14 @@
 {% load static %}
 
 {% block contenido %}
+{% if comentariosPredeterminados %}
+  <datalist id="comentarios">
+    {% for comentario in comentariosPredeterminados %}
+      <option value="{{comentario}}">
+    {% endfor %}
+  </datalist> 
+{% endif %}
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

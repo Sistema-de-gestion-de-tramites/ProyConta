@@ -15,6 +15,8 @@ from tkinter import E
 from django.http import HttpResponseRedirect, HttpResponse, Http404, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
+
+from apps.sat.models import Comentarios
 from .models import *
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -333,6 +335,7 @@ def eliminar_Cuenta(request, pk):
     return redirect('detalle_persona', pk=per_id)
 
 def editar_Cuenta(request, pk):
+    titulo = ''
     modelo = get_object_or_404(Cuentas, pk=pk)
     if request.method == 'POST':
         formulario = CuentasForm(request.POST, instance=modelo)
@@ -350,6 +353,7 @@ def editar_Cuenta(request, pk):
         if request.resolver_match.url_name == "actualizar_cuenta":
             if  not request.user.has_perm('sat.dev_editar_cuentas'):
                 raise PermissionDenied
+            titulo = 'Editar cuenta'
             formulario = CuentasForm(instance=modelo, initial=datosIniciales)
             verCuenta = False
         else:
@@ -358,10 +362,11 @@ def editar_Cuenta(request, pk):
                 request.user.user_permissions.remove(permisoVerContrasenia)
                 raise PermissionDenied
             verCuenta =True
+            titulo = 'Detalle de cuenta'
             formulario = CuentasFormView(instance=modelo, initial=datosIniciales)
             request.user.user_permissions.remove(permisoVerContrasenia)
         
-    return render(request, 'formulario.html', {'titulo': 'Editar cuenta',
+    return render(request, 'formulario.html', {'titulo': titulo,
                                                'form': formulario,
                                                'fotoPerfil': obtenerFotoPerfil(request),
                                                'verCuenta':verCuenta})
@@ -435,7 +440,10 @@ class subir_archivo(CreateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        listaComentariosPredeterminados = list(Comentarios.objects.all().values_list('descr',flat=True))
+        print(listaComentariosPredeterminados)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        context['comentariosPredeterminados'] = listaComentariosPredeterminados
         return context
 
 def listar_archivos(request):

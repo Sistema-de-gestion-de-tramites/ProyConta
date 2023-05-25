@@ -115,6 +115,7 @@ class Formulario_Documento(forms.ModelForm):
     fecha = forms.DateField(disabled=True, initial=datetime.date.today)
     queryClientes = Personas.objects.all().exclude(tipo_usuario__descr__icontains='empleado')
     cliente = forms.ModelChoiceField(queryClientes)
+    comentario = forms.CharField(widget=forms.TextInput(attrs={'list':'comentarios'}))
     
     class Meta:
         model = Entrega_Doc
