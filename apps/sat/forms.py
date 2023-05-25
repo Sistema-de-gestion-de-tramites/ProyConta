@@ -9,7 +9,7 @@ from django import forms
 from .templatetags.poll_extras import get_verbose_name
 from django.contrib.auth.models import Group,Permission
 
-from .models import Tipo_Documentos, Estados, Comentarios, Tipo_Archivos
+from .models import Tipo_Documentos, Estados, Comentarios, Tipo_Archivos, Tipo_Usuarios
 #Formulario Persona
 """
 #{--------------------------------------------------------------------------------}
@@ -132,5 +132,11 @@ class FormularioEmail(forms.Form):
     asunto = forms.CharField(label="Asunto")
     texto = forms.CharField(label="cuerpo",widget=forms.Textarea)
 
+class Formulario_tipo_usuario(forms.ModelForm):
+    class Meta:
+        model = Tipo_Usuarios
 
+        fields = [
+            'descr',
+        ]
 

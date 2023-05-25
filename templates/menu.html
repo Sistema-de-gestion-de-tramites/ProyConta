@@ -3,34 +3,37 @@
 
 {% block title %}
 
-    {% if titulo == 'inicio' %}
+    {% if 'inicio' in titulo|lower %}
         <img class="bi me-2 " src="{% static 'img/nav/icons8-casa-94.png' %}" height="50px">
         Inicio
-    {% elif 'fichero' in titulo %}
+    {% elif 'fichero' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-paquete-94.png' %}" height="50px">
         Fichero
-    {% elif 'rol' in titulo %}
+    {% elif 'rol' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-escudo-de-pregunta-94.png' %}" height="50px" >
         Roles
-    {% elif 'comentario' in titulo %}
+    {% elif 'comentario' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-comentarios-94.png' %}" height="50px" >
         Comentarios
-    {% elif 'archivos' in titulo %}
+    {% elif 'archivos' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-documento-94.png' %}" height="50px">
         Archivos
-    {% elif 'documento' in titulo %}
+    {% elif 'documento' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
         Documentos
-    {% elif 'estado' in titulo %}
+    {% elif 'estado' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-aprobación-94.png' %}" height="50px">
         Estados
-    {% elif titulo == 'directorio' %}
+    {% elif 'tipo de' in titulo|lower %}
+        <img class="bi me-2" src="{% static 'img/nav/icons8-revista-94.png' %}" height="50px">
+        Tipos de clientes
+    {% elif 'directorio' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-contactos-94.png' %}" height="50px">
         Directorio
-    {% elif 'cliente' in titulo %}
+    {% elif 'cliente' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
         Clientes
-    {% elif 'empleado' in titulo or titulo == 'Cuentas de usuario' %}
+    {% elif 'empleado' in titulo|lower or 'cuentas de usuario' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
         Empleados
     {% endif %}

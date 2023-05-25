@@ -32,6 +32,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from apps.sat.models import Usuario_empleado
+from datetime import date
 
 def obtenerFotoPerfil(request):
     empleado = obtenerEmpleadoDeCuentaUsuario(request.user)
@@ -86,6 +87,10 @@ class Empleado_Update(PermissionRequiredMixin,UpdateView):
 
     def form_valid(self, form):
         registro = form.save(commit=False)
+        if (date.today().year - registro.fecha_nac.year) < 18:
+            messages.add_message(request=self.request, level=messages.ERROR, message="No es mayor de edad",
+                                 extra_tags='danger')
+            return super().form_invalid(form)
         try:
             tipoEmpleado = Tipo_Usuarios.objects.filter(descr__icontains="Empleado").first()
             registro.tipo_usuario_id = tipoEmpleado.pk
@@ -292,6 +297,7 @@ def PerfilEmpleado(request):
                             {'titulo': 'Mis permisos', 'lista': informacionPermisos}
                             ],
             'fotoPerfilForm': formularioFoto,
+            'fotoPerfil_2': fotoPerfil,
             'fotoPerfil': fotoPerfil
             
         }

@@ -62,6 +62,10 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     #URL soporte tecnico
     path('enviar-email',views.soporteTecnico, name="enviar_email"),
     path('busqueda/', views.buscar, name="busqueda"),
+    # URL del modelo Tipo_Usuario
+    path('crear-tipo-usuario', views.crear_Tipo_Usuario, name="crear_tipo_usuario"),
+    path('editar-tipo-usuario/<pk>', views.editar_Tipo_usuario.as_view(), name="editar_tipo_usuario"),
+    path('listar-tipo-usuario', views.listar_Tipo_Usuarios, name="listar_tipos_usuarios"),
+    path('eliminar-tipo-usuario/<pk>', views.eliminar_Tipo_usuario.as_view(), name="eliminar_tipo_usuario"),
 ]
 #{----------------------------------------------------------------------------------------------}
-# , 'actualizar_url': '', 'borrar_url':''})
