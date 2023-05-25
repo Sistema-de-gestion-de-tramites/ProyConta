@@ -106,25 +106,32 @@ def detalle_Persona(request, pk):
     lista_2 = Telefonos.objects.filter(persona_id=pk)
     lista_3 = Cuentas.objects.filter(persona_id=pk)
 
-    if objeto.tipo_usuario == Tipo_Usuarios.objects.get(descr__icontains="Empleado"):
-        titulo = 'Empleados'
-        url_editar = 'actualizar_empleado'
-    else:
-        titulo = 'Clientes'
-        url_editar = 'actualizar_cliente'
-
     context = {
-        'titulo': titulo,
+        'titulo': 'CLientes',
         'obj': objeto,
         'listas_extra': [{'titulo': 'Direccion', 'lista': lista_1,  'nuevo_url': 'registrar_direccion', 'borrar_url': 'eliminar_direccion', 'actualizar_url':'actualizar_direccion',},
                          {'titulo': 'Telefonos', 'lista': lista_2,  'nuevo_url': 'registrar_telefono',  'borrar_url': 'eliminar_telefono',  'actualizar_url':'actualizar_telefono',},
                          {'titulo': 'Cuentas',   'lista': lista_3,  'nuevo_url': 'registrar_cuenta',    'borrar_url': 'eliminar_cuenta',    'actualizar_url':'actualizar_cuenta','ver_url':'autenticar'},
                          ],
         'archivos_url': 'listar_documentos',
-        'editar_url': url_editar,
+        'editar_url': 'actualizar_cliente',
         'fotoPerfil': obtenerFotoPerfil(request),
         'clienteID': pk
     }
+    if objeto.tipo_usuario == Tipo_Usuarios.objects.get(descr__icontains="Empleado"):
+        context['titulo'] = 'Empleados'
+        context['url_editar'] = 'actualizar_empleado'
+        user = Usuario_empleado.objects.get(empleado_id = pk).usuario
+        infoCuentaUsuario = [("Nombre de usuario: " + str(user.username)),
+                                    ("Ultimo acceso: " + str(user.last_login)),
+                                    ("Fecha de creacion: " + str(user.date_joined))]
+        infoRoles = user.groups.all
+        context['listas_extra'].extend([
+                                {'titulo': 'Información de cuenta', 'lista': infoCuentaUsuario},
+                                {'titulo': 'Mis roles', 'lista': infoRoles},
+                            ])
+        context['fotoPerfil'] = objeto.foto_perfil
+
     return render(request, 'plantilla_detalle.html', context)
 
 class Cliente_Delete(PermissionRequiredMixin,DeleteView):
