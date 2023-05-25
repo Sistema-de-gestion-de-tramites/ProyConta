@@ -254,14 +254,16 @@ def crear_Rol(request):
 
 
 def guardarPermisos(modeloGroup,post):
-    rol = Group.objects.get(id=modeloGroup.id)
+    rol = get_object_or_404(Group,id=modeloGroup.id)
     permisos = []
     for campo in post:
         if(post[campo]=='1'):
-            permisos.append(Permission.objects.get(codename=campo))
+            permiso = get_object_or_404(Permission,codename=campo)
+            permisos.append(permiso)
         elif(campo=='permisos'):
             for permisoID in post.getlist(campo, default=[]):
-                permisos.append(Permission.objects.get(id=permisoID))
+                permiso = get_object_or_404(Permission,id=permisoID)
+                permisos.append(permiso)
     rol.permissions.set(permisos)
     modeloGroup.save()
 
@@ -366,7 +368,7 @@ def crearTipoDocumento(request):
                 nuevoTipoArchivo = form.save(commit=False)
                 nuevoTipoArchivo.save()
                 form.save_m2m()
-                cont_type = ContentType.objects.get(id=1)
+                cont_type = get_object_or_404(ContentType,id=1)
                 permisoEditar = Permission(name="Edicion "+request.POST['nombre'],codename="doc_edicion_"+request.POST['nombre'],content_type=cont_type)
                 permisoEditar.save()
                 permisoVer = Permission(name="Ver "+request.POST['nombre'],codename="doc_ver_"+request.POST['nombre'],content_type=cont_type)
@@ -398,7 +400,7 @@ def listar_tipoDocumento(request):
    return render(request, 'plantilla_lista.html', contexto)
 
 def detalle_tipoDocumento(request, pk):
-    objeto = Tipo_Documentos.objects.get(id=pk)
+    objeto = get_object_or_404(Tipo_Documentos,id=pk)
     lista_1 = objeto.archivos.all()
     context = {
         'titulo': 'Documento',
