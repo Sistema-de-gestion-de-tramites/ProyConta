@@ -517,7 +517,7 @@ def soporteTecnico(request):
     
     if request.method == 'GET':
         form = FormularioEmail
-        contexto = {'form':form,'titulo':'correo a soporte tecnico'}
+        contexto = {'form':form,'titulo':'Correo a soporte técnico'}
         return render(request,'formulario.html',contexto)
     else:
         form = FormularioEmail(request.POST)

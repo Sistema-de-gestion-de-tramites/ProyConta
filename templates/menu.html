@@ -33,6 +33,9 @@
     {% elif 'cliente' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-usuario-femenino-94.png' %}" height="50px">
         Clientes
+    {% elif 'correo a soporte técnico' in titulo|lower %}
+        <img class="bi me-2" src="{% static 'img/icons/icons8-auriculares-100.png' %}" height="50px">
+        Asistencia
     {% elif 'empleado' in titulo|lower or 'cuentas de usuario' in titulo|lower %}
         <img class="bi me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
         Empleados
@@ -42,20 +45,49 @@
 
 {% block cuerpo %}
     {% if titulo == 'inicio' %}
-      <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-          <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Bienvenido</h1>
-             <p class="lead text-muted">
-               texto
-             </p>
-             <p>
-               <a href="#" class="btn btn-primary my-2">Opción 1</a>
-               <a href="#" class="btn btn-secondary my-2">Opción 2</a>
-            </p>
-          </div>
+    <style>
+         .background {
+          background-color:hsla(0,0%,0%,1);
+          background-image:
+          radial-gradient(at 0% 50%, hsla(50,100%,55%,0.15) 0px, transparent 50%),
+          radial-gradient(at 80% 50%, hsla(128,100%,52%,0.07) 0px, transparent 50%),
+          radial-gradient(at 80% 100%, hsla(240,100%,70%,0.2) 0px, transparent 50%),
+          radial-gradient(at 0% 0%, hsla(343,100%,51%,0.15) 0px, transparent 50%);
+          height:100%;
+          width: 100%;
+      }
+    </style>
+       <div class="p-4 mb-3 rounded-4 text-bg-dark background shadow-sm">
+           <div class="row gx-5 align-items-center justify-content-center">
+               <div class="col-lg-8 col-xl-7 col-xxl-6">
+                   <div class="my-5 text-center text-xl-start">
+                       <h1 class="display-5 fw-bolder text-white mb-2">¡Hola de nuevo, {{user.username}}!</h1>
+                   </div>
+               </div>
+               <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+                   <img class="object-fit-contain my-5 " src="{% static 'img/ilustraciones/business-3d-seated-businessman-in-dark-blue-suit-with-laptop.png' %}" height="200px" width="200px" alt="...">
+               </div>
+           </div>
+      </div>
+    <div class="row align-items-md-stretch g-3 mb-4">
+      <div class="col-md-6 ">
+        <div class="h-100 p-5  text-bg-dark rounded-4 shadow-sm">
+          <h1 class="display-5 fw-bold">SA-TRA</h1>
+          <p class="fs-5">Facilita la forma en que se archivan y recuperan documentos</p>
         </div>
-      </section>
+      </div>
+      <div class="col-md-6">
+        <div class="h-100 p-5 bg-body-tertiary border rounded-4 shadow-sm">
+          <h2 class="display-5">Información</h2>
+          <p class="text-muted">
+              Nombre: SA-TRA<br>
+              Versión: 3.1<br>
+              © 2023 SA-TRA, Inc.
+          </p>
+          <a class="btn btn-lg rounded-pill btn-dark"> Contactanos</a>
+        </div>
+      </div>
+    </div>
     {% endif %}
     {% if titulo == 'documentos' %}{% endif %}
     {% if titulo == 'archivos' %}{% endif %}
