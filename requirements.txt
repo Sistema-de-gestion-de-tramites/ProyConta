@@ -1,2 +1,4 @@
 Django -- version:
 cryptography -- version:  -- install: pip install cryptography
+pip install django-crispy-forms
+pip install crispy-bootstrap5

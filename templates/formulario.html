@@ -1,4 +1,5 @@
 {% extends 'menu.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block contenido %}
@@ -10,77 +11,95 @@
   </datalist> 
 {% endif %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% if form.errors %}
-    <ul>
-      {% for field_name, field_errors in form.errors.items %}
-        <li>{{ field_name }}:
-          <ul>
-            {% for error in field_errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-<div class="card rounded-4 ">
-    <div class="card-header">
+<div class="card rounded-4 bg-body-tertiary">
+    <div class="card-header bg-dark-subtle rounded-top-5">
     </div>
      <div class="card-body">
-    <h5 class="card-title"> {{titulo}}</h5>
-    <h6 class="card-subtitle mb-2 text-body-secondary">{{titulo}}</h6>
+    <p class="card-title px-3 fs-3 fw-bold text-dark text-muted text-aling-center">
+         <img class="bi " src="{% static '/img/icons/icons8-editar-94.png' %}" height="25px">
+        {{titulo}}
+    </p>
     <div class="card-text">
-        A continuación agrega la información
-        <hr>
-        <form class="my-form" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
 
-        {% for field in form %}
-        <p>
-         {% if listaFieldsM2M and  field.widget_type == 'checkboxselectmultiple'%}
-            {% for fieldName,URL in listaFieldsM2M %}
-                {% if fieldName == field.name %}
-                {{field.label}} : <a href="{% url URL %}" class="btn btn-warning btn-sm">Crear</a>
-                {% endif %}
-            {% endfor %}
-         {% else %}
-         <!-- Tags para roles -->
-            {% if esRoles %}
-                {% if field.widget_type == 'checkboxselectmultiple' %}
-                    {{field.label}} : {{field}}<br>
-                {% endif %}
-            {% endif %}
-            {% if esEmpleado %}
-                {% if field.name != 'tipo_usuario' %}
-                    {{field.label}} : {{field}} <br>
-                {% endif %}
-            {% elif field.label == "" %}
-                {{field}}
-            {% else %}
-                {{field.label}} : {{field}}
-            {% endif %}
-            <!-- -->
-         {% endif %}
-        </p>
-        {% endfor %}
-        {% if verCuenta %}
-          <input type="button" value="Regresar" onClick="history.go(-1);" class="btn btn-sm btn-danger btn-lg">
-        {% else %}
-          <div class="d-grid gap-2 col-3 mx-auto">
-              <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
-              <input type="button" value="Cancelar" onClick="history.go(-1);" class="btn btn-sm btn-danger btn-lg">
-          </div>
-        {% endif %}
-        </form>
+        <div class="row g-5">
+        <div class="col">
+            <form class="my-form px-3" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
 
+                {% for field in form %}
+                <p>
+                 {% if listaFieldsM2M and  field.widget_type == 'checkboxselectmultiple'%}
+                    {% for fieldName,URL in listaFieldsM2M %}
+                        {% if fieldName == field.name %}
+                        {{field.label}} : <a href="{% url URL %}" class="btn rounded-pill btn-danger">Crear</a>
+                        {% endif %}
+                    {% endfor %}
+                 {% else %}
+                 <!-- Tags para roles -->
+                    {% if esRoles %}
+                        {% if field.widget_type == 'checkboxselectmultiple' %}
+                            {{field|as_crispy_field}}
+                        {% endif %}
+                    {% endif %}
+                    {% if esEmpleado %}
+                        {% if field.name != 'tipo_usuario' %}
+                             {{field|as_crispy_field}}
+                        {% endif %}
+                    {% elif field.label == "" %}
+                        {{field|as_crispy_field}}
+                    {% else %}
+                         {{field|as_crispy_field}}
+                    {% endif %}
+                    <!-- -->
+                 {% endif %}
+                </p>
+                {% endfor %}
+
+                {% if verCuenta %}
+                  <input type="button" value="Regresar" onClick="history.go(-1);" class="btn btn-sm btn-danger btn-lg">
+                {% else %}
+                  <div class="d-flex gap-2 col-3 mx-auto">
+                      <button type="submit" class="btn rounded-pill btn-dark">Registrar</button>
+                      <input type="button" value="Cancelar" onClick="history.go(-1);" class="btn rounded-pill btn-danger ">
+                  </div>
+                {% endif %}
+            </form>
+        </div>
+
+            {% if form.errors %}
+            <div class=" col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-danger">Errores</span>
+                  <span class="badge bg-danger rounded-pill">!</span>
+                </h4>
+                <ul class="list-group mb-3">
+                  {% for field_name, field_errors in form.errors.items %}
+                    <li class="list-group-item d-flex rounded-5 justify-content-between lh-sm my-1" style="background-color: #e2e3e5;">
+
+                       <div>
+                         <h6 class="my-0 text-uppercase">{{ field_name }}</h6>
+                        {% for error in field_errors %}
+                           <small class="text-body-secondary">{{ error }}</small>
+                        {% endfor %}
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+             </div>
+            {% endif %}
+
+            {% if messages %}
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-dark">Mensajes</span>
+            </h4>
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+        </div>
     </div>
   </div>
 </div>
