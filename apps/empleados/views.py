@@ -117,7 +117,7 @@ def registro(request):
                 sinRegistros=False
             else:
                 sinRegistros=True 
-            return render(request,'registro.html',{'titulo':'empleados',
+            return render(request,'registro.html',{'titulo':'Cuentas de usuario',
                                                     'form':form,
                                                    'sinResgistros':sinRegistros,
                                                    'fotoPerfil': obtenerFotoPerfil(request),})
