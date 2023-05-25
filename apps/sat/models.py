@@ -259,7 +259,7 @@ class Estados(models.Model):
         return self.nombre
 
 class Comentarios(models.Model):
-    descr = models.CharField(max_length=100, verbose_name="Descripción")  # Descripcion
+    descr = models.CharField(max_length=100, verbose_name="Descripción", )  # Descripcion
 
     class Meta:
         managed = True
