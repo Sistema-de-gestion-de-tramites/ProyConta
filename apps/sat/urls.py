@@ -54,7 +54,7 @@ urlpatterns =[  #{LISTA DE URLS CON LOS ARCHIVOS HTML A DESPLEGAR}
     path('detalle-roles/<pk>',views.detalle_roles, name="detalle_roles"),
     path('eliminar-rol/<pk>', views.eliminar_Rol, name="eliminar_rol"),
     # URL del modelo tipo documento
-    path('crear-tipo-documento', views.crearTipoDocumento, name="crear_tipo_documento"),
+    path('crear-tipo-documento', views.crearTipoDocumento.as_view(), name="crear_tipo_documento"),
     path('listar-tipo-documentos', views.listar_tipoDocumento, name="listar_tipo_documento"),
     path('detalle-tipo-documento/<pk>', views.detalle_tipoDocumento, name="detalle_tipo_documento"),
     path('editar-tipo-documento/<pk>', views.editar_tipoDocumento.as_view(), name="editar_tipo_documento"),

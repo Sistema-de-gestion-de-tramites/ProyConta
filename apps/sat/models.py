@@ -233,7 +233,7 @@ class Ext_Direcciones(models.Model):
 
 class Cuentas(models.Model):
     persona = models.ForeignKey(Personas, on_delete=models.PROTECT, verbose_name="Cliente")
-    descripcion =  models.CharField(max_length=300, verbose_name="Descripion de la cuenta")
+    descripcion = models.CharField(max_length=300, verbose_name="Descripion de la cuenta")
     cuenta = models.CharField(max_length=100, verbose_name="Usuario")
     contra = models.CharField(max_length=1000, verbose_name="Contraseña")
 
@@ -250,7 +250,7 @@ class Cuentas(models.Model):
         return "Cliente: " + str(self.persona.nombre) + ", Descripcion: " +str(self.descripcion)
     
     def __str__(self):
-        return self.cuenta
+        return self.descripcion
 
 class Estados(models.Model):
     nombre = models.CharField(max_length=50, verbose_name="Nombre")

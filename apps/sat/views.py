@@ -366,37 +366,32 @@ def actualizarPermisosEnUsuarios():
         listaIdDeRoles = usuario.groups.all().values_list('id',flat=True)
         guardarPermisosDeUsuario(usuario,listaIdDeRoles)        
 # vista de documento
+class crearTipoDocumento(CreateView):
+    model = Tipo_Documentos
+    form_class = Formulario_tipoDocumento
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('listar_tipo_documento')
+    extra_context = {'titulo': 'Registrar documento'}
 
-def crearTipoDocumento(request):
-    if request.method == 'POST':
-        form = Formulario_tipoDocumento(request.POST)
-        if form.is_valid():
-            if(Tipo_Documentos.objects.filter(nombre= request.POST['nombre']).exists()):
-                messages.add_message(request=request,level=messages.ERROR,message="Error el documento ya existe",extra_tags='danger')
-                return redirect('crear_tipo_documento')
-            else:
-                nuevoTipoArchivo = form.save(commit=False)
-                nuevoTipoArchivo.save()
-                form.save_m2m()
-                cont_type = get_object_or_404(ContentType,id=1)
-                permisoEditar = Permission(name="Edicion "+request.POST['nombre'],codename="doc_edicion_"+request.POST['nombre'],content_type=cont_type)
-                permisoEditar.save()
-                permisoVer = Permission(name="Ver "+request.POST['nombre'],codename="doc_ver_"+request.POST['nombre'],content_type=cont_type)
-                permisoVer.save()
-            return redirect('listar_tipo_documento')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fotoPerfil'] = obtenerFotoPerfil(self.request)
+        return context
+
+    def form_valid(self, form, **kwargs):
+        if (Tipo_Documentos.objects.filter(nombre=self.request.POST['nombre']).exists()):
+            messages.add_message(request=self.request,level=messages.ERROR,message="Error el documento ya existe",extra_tags='danger')
+            return super().form_invalid(form)
         else:
-         mensajeErrorFormulario ="Complete correctamente el formulario"
-         messages.add_message(request=request,level=messages.ERROR,message=mensajeErrorFormulario,extra_tags='danger')
-         return redirect('crear_tipo_documento')
-    else:
-        contexto = {'titulo': 'Registrar documento',
-                    'form': Formulario_tipoDocumento,
-                    'fotoPerfil': obtenerFotoPerfil(request)}
-    if(Tipo_Archivos.objects.all().count()==0):
-        mensajeErrorFormulario= "No existen tipos de archivos registrados, por favor crearlos primero"
-        messages.add_message(request=request,level=messages.WARNING,message=mensajeErrorFormulario)
-        contexto.update({'listaFieldsM2M': [('archivos','crear_tipo_archivos')]})
-    return render(request,'formulario.html',contexto)
+            nuevoTipoArchivo = form.save(commit=False)
+            nuevoTipoArchivo.save()
+            form.save_m2m()
+            cont_type = get_object_or_404(ContentType,id=1)
+            permisoEditar = Permission(name="Edicion "+self.request.POST['nombre'],codename="doc_edicion_"+self.request.POST['nombre'],content_type=cont_type)
+            permisoEditar.save()
+            permisoVer = Permission(name="Ver "+self.request.POST['nombre'],codename="doc_ver_"+self.request.POST['nombre'],content_type=cont_type)
+            permisoVer.save()
+        return super().form_valid(form)
 
 def listar_tipoDocumento(request):
    lista = Tipo_Documentos.objects.all()
@@ -437,17 +432,17 @@ class editar_tipoDocumento(UpdateView):
     def form_valid(self, form, **kwargs):
         registro = form.save(commit=False)
         try:
-            nombreAntiguo =  str(Tipo_Documentos.objects.get(id=self.object.id).nombre)
+            nombreAntiguo = str(Tipo_Documentos.objects.get(id=self.object.id).nombre)
         except Tipo_Documentos.DoesNotExist:
             mensajeError ="Error al obtener el objecto.Por favor vuelve a intentarlo o reporta el error"
             messages.add_message(request=self.request,level=messages.WARNING,message=mensajeError,extra_tags='danger')
-            return redirect('editar_tipo_documento',self.object.id)
+            return super().form_invalid(form)
         try:    
             permisoEdicion = Permission.objects.get(codename='doc_edicion_' + nombreAntiguo)
         except Permission.DoesNotExist:
             mensajeError ="Error al actualizar los permisos.Por favor vuelve a intentarlo o reporta el error"
             messages.add_message(request=self.request,level=messages.WARNING,message=mensajeError,extra_tags='danger')
-            return redirect('editar_tipo_documento',self.object.id)
+            return super().form_invalid(form)
         permisoEdicion.name = "Edicion "+ self.request.POST['nombre']
         permisoEdicion.codename = 'doc_edicion_' + self.request.POST['nombre']
         permisoEdicion.save()
@@ -456,7 +451,7 @@ class editar_tipoDocumento(UpdateView):
         except Permission.DoesNotExist:
             mensajeError ="Error al actualizar los permisos.Por favor vuelve a intentarlo o reporta el error"
             messages.add_message(request=self.request,level=messages.WARNING,message=mensajeError,extra_tags='danger')
-            return redirect('editar_tipo_documento',self.object.id)
+            return super().form_invalid(form)
         permisoVer.name = "Ver " + self.request.POST['nombre']
         permisoVer.codename = 'doc_ver_' + self.request.POST['nombre']
         permisoVer.save()
