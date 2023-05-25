@@ -1,19 +1,29 @@
 {% extends 'menu.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
 
 {% block contenido %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}
-<div class="my-3 p-3 bg-body rounded-4 shadow-sm">
-    <div class="modal-header border-bottom-0">
-        <h1 class="modal-title fs-5">{{titulo}}</h1>
+
+<div class="card rounded-4 bg-body-tertiary">
+    <div class="card-header bg-dark-subtle rounded-top-5">
     </div>
-    <div class="d-flex text-muted pt-3">
-        <form method="POST" enctype="multipart/form-data">
+     <div class="card-body">
+    <p class="card-title px-3 fs-3 fw-bold text-dark text-muted text-aling-center py-3">
+         <img class="bi " src="{% static '/img/icons/icons8-editar-94.png' %}" height="25px">
+        {{titulo}}
+    </p>
+    <div class="card-text">
+
+        <div class="row g-5">
+        <div class="col">
+        <form method="POST" class="px-3" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{form.as_p}}
@@ -41,13 +51,15 @@
             <br><br>
         {% endfor %}
 
-        <div class="d-grid gap-2 col-3 mx-auto">
-            <button type="submit" class="btn btn-sm btn-primary btn-lg">Registrar</button>
-            <a  class="btn btn-sm btn-danger btn-lg" href="{% url 'listar_roles' %}">Cancelar</a>
+        <div class="d-flex gap-2 col-3 mx-auto">
+            <button type="submit" class="btn rounded-pill btn-dark">Registrar</button>
+            <a  class="btn rounded-pill btn-danger" href="{% url 'listar_roles' %}">Cancelar</a>
         </div>
         </form>
+        </div>
+   </div>
     </div>
-
   </div>
-
+</div>
+<br>
 {% endblock %}
