@@ -11,6 +11,21 @@
   </datalist> 
 {% endif %}
 
+{% if messages %}
+            <h4 class="d-flex justify-content-between align-items-center ">
+                  <span class="text-danger">Mensajes</span>
+            </h4>
+            <div class="messages">
+                {% for message in messages %}
+
+                <p {% if message.tags %} class="rounded-4 bg-danger text-align-center text-white alert alert-{{ message.tags }}"{% endif %}>
+                    <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
+                    {{ message }}
+                </p>
+                {% endfor %}
+            </div>
+{% endif %}
+
 <div class="card rounded-4 bg-body-tertiary">
     <div class="card-header bg-dark-subtle rounded-top-5">
     </div>
@@ -88,16 +103,7 @@
              </div>
             {% endif %}
 
-            {% if messages %}
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                  <span class="text-dark">Mensajes</span>
-            </h4>
-            <div class="messages">
-                {% for message in messages %}
-                <p {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</p>
-                {% endfor %}
-            </div>
-            {% endif %}
+
 
         </div>
     </div>
