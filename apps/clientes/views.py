@@ -143,12 +143,7 @@ def detalle_Persona(request, pk):
                                 {'titulo': 'Información de cuentas', 'lista': infoCuentaUsuario},
                                 {'titulo': 'Mis roles', 'lista': infoRoles},
                             ])
-<<<<<<< HEAD
         context['fotoPerfil_2'] = objeto.foto_perfil if str(objeto.foto_perfil) != '' else False
-=======
-        context['fotoPerfil'] = objeto.foto_perfil
-        #print(context)
->>>>>>> eric
 
     return render(request, 'plantilla_detalle.html', context)
 
