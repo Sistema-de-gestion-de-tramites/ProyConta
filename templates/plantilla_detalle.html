@@ -23,6 +23,12 @@
                 {{ titulo }}
             </a>
             {% endif %}
+            {% if 'fichero' in titulo|lower %}
+            <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
+                <img class="me-2" src="{% static 'img/nav/icons8-paquete-94.png.png' %}" height="50px">
+                {{ titulo }}
+            </a>
+            {% endif %}
             {% if 'documento' in titulo|lower %}
             <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_tipo_documento' %}">
                 <img class=" me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
@@ -53,11 +59,12 @@
 {% if 'mpleado' in titulo or 'erfil' in titulo %}
     <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
     {% if fotoPerfil_2 %}
-        <img src="{{fotoPerfil_2.url}}" class="img-fluid img-thumbnail mt-4 mb-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 110px;height:110px; z-index: 1">
+        <img src="{{fotoPerfil_2.url}}" class="object-fit-contain rounded-circle flex-shrink-0 bg-white  mt-4 mb-2" width="110" height="110" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 110px; height:110px; z-index: 1">
     {% else %}
         <img src="{% static 'img/icons/icons8-foto-750.png' %}" class="object-fit-contain img-thumbnail mt-4 mb-2" style="width: 110px; height:110px; z-index: 1">
     {% endif %}
-        <button class="btn btn-sm btn-outline-dark rounded-pill"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 110px; height:110px; z-index: 1">Cambiar</button>
+
+        <button class="btn btn-sm  btn-outline-dark rounded-pill z-3"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 110px; height:110px; z-index: 1">Cambiar</button>
     </div>
     {% if fotoPerfilForm %}
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
