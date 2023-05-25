@@ -8,18 +8,18 @@
 {% block contenido %}
 {% if titulo == 'Cuentas de usuario' %}<!--lista usuarios-->
     {% if object_list %} 
-        <br>
+
         <ul class="list-group">
         {% for obj in object_list %}
-            <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-2" style="background-color: #e2e3e5;">
+            <li class="list-group-item d-flex text-muted pt-3 rounded-5 mb-2 py-3 shadow-sm" style="background-color: #e2e3e5;">
                 {% if obj.empleado.foto_perfil%}
                     <img src="{{obj.empleado.foto_perfil.url}}" alt="twbs" width="40" height="40" class="rounded-circle flex-shrink-0">
                 {% else %}
                     <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#808080"></rect><text x="50%" y="50%" fill="#A9a9a9" dy=".3em">:-)</text></svg>
                 {% endif %}
-                <div class="ms-2 me-auto">
+                <div class="ms-2 me-auto fw-5">
 
-                        <span class="d-block ">
+                        <span class="d-block">
                             <div class="d-inline  ">
                                 <strong>Nombre de usuario:</strong>
                             </div>
@@ -81,7 +81,7 @@
 {% else %} <!--lista general-->
     {% if object_list %}
 
-        <div class="rounded-4 pt-5 pb-5 bg-body-secondary border">
+        <div class="rounded-5 pt-5 pb-5 bg-body-secondary border shadow-sm">
         <ul class="list-group">
         {% for obj in object_list %}
 
@@ -175,7 +175,7 @@
         <br><br>
         {% empty %}
                 <div class="pt-3">
-                    <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5">
+                    <div class="alert alert-danger rounded-5 shadow-sm bg-danger text-light rounded-5">
                         <img src="{% static 'img/icons8-box-important-100.png' %}" height="25px">
                         No hay registros
                     </div>
@@ -188,7 +188,7 @@
 
     {% else %}
         <div class="pt-1">
-            <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-4 opacity-45">
+            <div class="alert alert-danger rounded-5 shadow-sm bg-danger text-light rounded-4 opacity-45">
                 <img src="{% static 'img/icons/icons8-alta-prioridad-94.png' %} " class="bg-danger-subtle rounded-circle p-1 bg-opacity-10" height="25px">
                 No hay registros
             </div>

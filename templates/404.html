@@ -1,6 +1,9 @@
-{% extends 'menu.html' %}
-
-{% block contenido %}
+{% extends 'base/index.html' %}
+{% block title %}
+<img class="bi me-2 " src="{% static 'img/icons/icons8-alta-prioridad-94.png' %}" height="50px">
+    Advertencia
+{% endblock %}
+{% block cuerpo %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -273,7 +276,7 @@
             La página que buscas no existe. Cómo llegaste aquí es un misterio.
             Pero puede hacer clic en el botón de abajo para volver a la página de inicio.
           </p>
-          <a href="{% url 'inicio' %}" class="btn btn-primary my-2">ir al inicio</a>
+          <a href="{% url 'inicio' %}" class="btn btn-lg rounded-pill btn-dark my-2">Ir al inicio</a>
         </div>
       </div>
     </div>

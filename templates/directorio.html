@@ -8,7 +8,7 @@
 {% block contenido %}
 
 {% regroup object_list by persona as object_group %}  {# Agrupar los registros usando el nombre #}
-<div class="table-responsive rounded-5 pt-5 pb-5" style="background-color: #e2e3e5;">
+<div class="table-responsive rounded-5 pt-5 pb-5 shadow-sm" style="background-color: #e2e3e5;">
     <table class="table table-secondary  align-middle mb-0 ">
         {% with first_obj=object_group.0.list.0 %}  {# Titulos de las columnas #}
         <thead>
@@ -31,7 +31,7 @@
                             <td rowspan="{{obj_g.list|length}}" class="px-3">
                                 <div class="d-flex align-items-center">
                                 <img src="{% static 'img/icons/icons8-usuario-100.png' %}" height="30">
-                                    <a class="px-3 mb-1 text-decoration-none text-dark h6" href="{% url detalle_url obj_g.grouper.id %}">
+                                    <a class="px-2 mb-1 text-decoration-none text-dark h6" href="{% url detalle_url obj_g.grouper.id %}">
                                         {{obj_g.grouper}}
                                     </a>
                                 </div>

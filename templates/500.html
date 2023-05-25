@@ -1,6 +1,12 @@
-{% extends 'menu.html' %}
+{% extends 'base/index.html' %}
+{% load static %}
 
-{% block contenido %}
+{% block title %}
+<img class="bi me-2 " src="{% static 'img/icons/icons8-alta-prioridad-94.png' %}" height="50px">
+    Advertencia
+{% endblock %}
+
+{% block cuerpo %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -343,15 +349,16 @@
       </g>
     </svg>
   
-    <h1 class="error-title" align="center">
-      Oops! <br>Algo salio mal :(
+    <h1 class="display-6 fw-normal fw-bold" align="center">
+      Oops! <br>
     </h1>
-    <h2 class="error-subtitle" align="center">
-     Por favor vuelve a intentarlo o reporta el error...
-    </h2>
+  <h1 align="center">Algo salio mal :(</h1>
+    <p align="center">
+     Por favor vuelve a intentarlo o reporta el error.
+    </p>
     <div align="center">
-    <a href="{% url 'inicio' %}" class="btn btn-primary my-2">ir al inicio</a>
-    <a href="{% url 'enviar_email' %}" class="btn btn-danger my-2">Reportar</a>
+    <a href="{% url 'inicio' %}" class="btn btn-lg rounded-pill btn-dark my-2">Ir al inicio</a>
+    <a href="{% url 'enviar_email' %}" class="btn btn-lg rounded-pill btn-warning my-2">Reportar</a>
     </div>
   </div>
 

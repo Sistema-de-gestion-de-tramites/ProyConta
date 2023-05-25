@@ -3,13 +3,19 @@
 
 {% block title %}
 
-  <ol class="breadcrumb mb-0">
-    <li class="breadcrumb-item">
+  <ol class="breadcrumb mb-0 text-align-center">
+    <li class="breadcrumb-item ">
             {% if titulo == 'Perfil' %}
             <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
                 <img class="me-2" src="{% static 'img/nav/icons8-smiling-face-with-smiling-eyes-100.png' %}" height="50px">
                 {{ titulo }}
             </a>
+            {% endif %}
+            {% if titulo == 'Empleados' %}
+                <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
+                    <img class="me-2" src="{% static 'img/nav/icons8-maletín-94.png' %}" height="50px">
+                    {{ titulo }}
+                </a>
             {% endif %}
             {% if titulo == 'Clientes' %}
             <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_clientes' %}">
@@ -17,7 +23,7 @@
                 {{ titulo }}
             </a>
             {% endif %}
-            {% if titulo == 'Documentos' %}
+            {% if titulo == 'Documento' %}
             <a class="d-flex align-items-center text-dark text-decoration-none" href="{% url 'listar_tipo_documento' %}">
                 <img class=" me-2" src="{% static 'img/nav/icons8-documentos-94.png' %}" height="50px">
                 {{ titulo }}
@@ -39,28 +45,49 @@
 
 <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col ">
-        <div class="card rounded-top-4 rounded-bottom-4">
-          <div class="rounded-top-4 d-flex flex-row bg-dark mb-5" style="height:150px;">
+        <div class="card rounded-top-5 rounded-bottom-5 shadow-sm">
+          <div class="rounded-top-5 d-flex flex-row bg-dark mb-4" style="height:150px;">
 
 <!--foto perfil usuario-->
 {% if fotoPerfilForm %}
-    <div class="ms-3 mt-5 d-flex flex-column" style="width: 150px;">
+    <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
     {% if fotoPerfil %}
-        <img src="{{fotoPerfil.url}}" alt="twbs" class="img-fluid img-thumbnail mt-4 mb-2"
-                style="width: 150px; z-index: 1">
+        <img src="{{fotoPerfil.url}}" class="img-fluid img-thumbnail mt-4 mb-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 110px;height:110px; z-index: 1">
     {% else %}
-        <img src="{% static 'img/icons/icons8-foto-750.png' %}" alt="twbs" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 100px; z-index: 1">
+        <img src="{% static 'img/icons/icons8-foto-750.png' %}" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 100px; height:100px; z-index: 1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     {% endif %}
-    <form class="my-form" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{fotoPerfilForm.as_p}}
-        <button type="submit" class="btn btn-sm btn-outline-dark rounded-pill" data-mdb-ripple-color="dark" style="width: 100px; z-index: 1">Actualizar</button>
-    </form>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-5 shadow">
+            <div class="modal-header rounded-top-5 bg-dark-subtle"></div>
+            <form class="my-form" method="POST" enctype="multipart/form-data">
+              <div class="modal-body p-4 text-center">
+                <h1 class="fw-bold mb-0 fs-2">Actualizar foto del perfil</h1>
+                 {% if fotoPerfil %}
+                    <img src="{{fotoPerfil.url}}" class="img-fluid img-thumbnail user-select-none mt-4 mb-2" data-bs-toggle="modal" >
+                {% else %}
+                    <img src="{% static 'img/icons/icons8-foto-750.png' %}" class="rounded-5 mx-auto user-select-none d-block mt-4 mb-2">
+                {% endif %}
+                  <hr class="my-4">
+                  <h2 class="fs-5 fw-bold mb-3">Seleccionar archivo</h2>
+                  {% csrf_token %}
+                  {{fotoPerfilForm.as_p}}
+                <div>
+                </div>
+              </div>
+          <div class="modal-footer bg-body-secondary rounded-bottom-5 flex-nowrap p-0">
+            <button type="submit" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end text-dark"><strong>Actualizar</strong></button>
+            <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 text-dark" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+            </form>
+        </div>
+      </div>
     </div>
 {% endif %}
 <!--fin foto perfil usuario-->
-            <div class="ms-5" style="margin-top: 90px;">
-              <h5 class="fs-1 fw-bold text-white">{{ obj.nombre_principal }}</h5>
+            <div class="ms-4 overflow-x-auto" style="margin-top: 90px;">
+              <h1 class="fs-3 fw-bold text-white text-uppercase">{{ obj.nombre_principal }}</h1>
             </div>
           </div>
 
@@ -81,7 +108,7 @@
               <div class="p-4 bg-body-secondary rounded-4">
                 {% for key, val in obj.get_fields_and_values %}
                     {% if key != 'ID' %}
-                            <p class="mb-0 ">
+                            <p class="mb-1">
                                 <b class="fw-medium ">
                                     {{ key}}:
                                 </b>
@@ -189,10 +216,10 @@
         </div>
       </div>
     </div>
-
+    <br>
 {% else %}
     <div class="pt-1">
-        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-4 opacity-45">
+        <div class="alert alert-danger rounded shadow-sm bg-danger text-light rounded-5 opacity-45">
             <img src="{% static 'img/icons/icons8-alta-prioridad-94.png' %} " class="bg-danger-subtle rounded-circle p-1 bg-opacity-10" height="25px">
              No hay registros
         </div>
