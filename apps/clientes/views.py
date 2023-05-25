@@ -120,7 +120,7 @@ def detalle_Persona(request, pk):
     }
     if objeto.tipo_usuario == Tipo_Usuarios.objects.get(descr__icontains="Empleado"):
         context['titulo'] = 'Empleados'
-        context['url_editar'] = 'actualizar_empleado'
+        context['editar_url'] = 'actualizar_empleado'
         user = Usuario_empleado.objects.get(empleado_id = pk).usuario
         infoCuentaUsuario = [("Nombre de usuario: " + str(user.username)),
                                     ("Ultimo acceso: " + str(user.last_login)),
@@ -131,6 +131,7 @@ def detalle_Persona(request, pk):
                                 {'titulo': 'Mis roles', 'lista': infoRoles},
                             ])
         context['fotoPerfil'] = objeto.foto_perfil
+        print(context)
 
     return render(request, 'plantilla_detalle.html', context)
 

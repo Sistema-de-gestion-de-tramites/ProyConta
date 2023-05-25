@@ -82,7 +82,7 @@ class Empleado_Update(PermissionRequiredMixin,UpdateView):
     form_class = PersonaForm
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_empleados')
-    extra_context = {'esEmpleado': True, 'titulo': 'empleados'}
+    extra_context = {'esEmpleado': True, 'titulo': 'Editar empleado'}
 
     def form_valid(self, form):
         registro = form.save(commit=False)

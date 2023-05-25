@@ -111,10 +111,9 @@ class CuentasFormView(forms.ModelForm):
         ]
 
 class Formulario_Documento(forms.ModelForm):
-    queryEmpleado = Personas.objects.filter(tipo_usuario=1)
-    empleado = forms.ModelChoiceField(queryEmpleado,required=True,label="", disabled=True,widget=forms.HiddenInput)
+    empleado = forms.ModelChoiceField(Personas.objects.filter(tipo_usuario=1),required=True,label="Empleado", disabled=True)
     fecha = forms.DateField(disabled=True, initial=datetime.date.today)
-    queryClientes = Personas.objects.all().exclude(tipo_usuario__id='1')
+    queryClientes = Personas.objects.all().exclude(tipo_usuario__descr__icontains='empleado')
     cliente = forms.ModelChoiceField(queryClientes)
     
     class Meta:
