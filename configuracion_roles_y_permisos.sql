@@ -40,6 +40,16 @@ UPDATE auth_permission SET codename= "dev_editar_cuentas" WHERE codename= "chang
 UPDATE auth_permission SET name="Eliminar cuentas" WHERE codename= "delete_cuentas";
 UPDATE auth_permission SET codename= "dev_eliminar_cuentas" WHERE codename= "delete_cuentas";
 
+-- permisos tipo cliente
+UPDATE auth_permission SET name="Crear Tipo de cliente" WHERE codename= "add_tipo_usuarios";
+UPDATE auth_permission SET codename= "dev_crear_tipo_cliente" WHERE codename= "add_tipo_usuarios";
+UPDATE auth_permission SET name="Ver Tipo de cliente" WHERE codename= "view_tipo_usuarios";
+UPDATE auth_permission SET codename= "dev_ver_tipo_cliente" WHERE codename= "view_tipo_usuarios";
+UPDATE auth_permission SET name="Editar Tipo de cliente" WHERE codename= "change_tipo_usuarios";
+UPDATE auth_permission SET codename= "dev_editar_tipo_cliente" WHERE codename= "change_tipo_usuarios";
+UPDATE auth_permission SET name="Eliminar Tipo de cliente" WHERE codename= "delete_tipo_usuarios";
+UPDATE auth_permission SET codename= "dev_eliminar_tipo_cliente" WHERE codename= "delete_tipo_usuarios";
+
 -- crear permiso para ver contraseña de cuentas
 INSERT INTO auth_permission (name,content_type_id,codename) VALUES("Ver contraseña",11,"auth_ver_password");
 

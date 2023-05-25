@@ -5,6 +5,8 @@ import re
 # Tablas de personas
 # --------------------------------------------------------------------------
 from django.db.models import ForeignKey
+from django.contrib import auth
+
 
 def validar_CURP(value):
     patron = r"^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$"
@@ -334,3 +336,13 @@ class Usuario_empleado(models.Model):
     
     def get_fields_and_values(self):
         return [(field.verbose_name, field.value_to_string(self)) for field in Usuario_empleado._meta.fields]
+ 
+#metodo que se añadira al modelo User que maneja Django    
+def has_perm_tipo_cliente(self):
+    if self.has_perm("sat.dev_crear_tipo_cliente") or self.has_perm("sat.dev_ver_tipo_cliente"):
+        return True
+    else:
+        return False  
+
+#aqui se añade el metodo
+auth.models.User.add_to_class('has_perm_tipo_cliente', has_perm_tipo_cliente)

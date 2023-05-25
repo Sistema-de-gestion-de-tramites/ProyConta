@@ -186,12 +186,38 @@ class Listar_Usuarios(PermissionRequiredMixin,ListView):
     template_name = 'plantilla_lista.html'
     extra_context={'titulo':'Cuentas de usuario',
                    'actualizar_url': 'actualizar_usuario',
-                   'borrar_url':'eliminar_usuario'}
+                   'borrar_url':'eliminar_usuario',
+                   'detalle_url': 'detalle_cuenta_usuario'}
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fotoPerfil'] = obtenerFotoPerfil(self.request)
         return context
+
+@permission_required('auth.dev_ver_usuario')
+def detalle_cuenta_usuario(request,pk):
+    objeto = get_object_or_404(User,id=pk)
+    empleado = get_object_or_404(Usuario_empleado,usuario=objeto).empleado
+    lista_1 = list(objeto.groups.all().values_list('name',flat=True))
+    lista_2 = list(objeto.user_permissions.all().values_list('name',flat=True))
+    informacionObjecto = [
+        ('Nombre de usuario',objeto.username),
+        ('Empleado propietario',empleado.nombre_principal()),
+        ('Correo electronico',objeto.email),
+        ('Ultimo acceso',objeto.last_login),
+        ('Fecha de creacion',objeto.date_joined)
+    ]
+    context = {
+        'titulo': 'Usuario',
+        'obj': objeto,
+        'informacionObjecto': informacionObjecto,
+        'listas_extra': [{'titulo': 'Mis roles', 'lista': lista_1},
+                         {'titulo': 'Mis permisos', 'lista': lista_2}
+                        ],
+        'editar_url': 'actualizar_usuario',
+        'fotoPerfil': obtenerFotoPerfil(request)
+    }
+    return render(request, 'plantilla_detalle.html', context)
 
 #eliminar usuario
 class Usuario_Delete(PermissionRequiredMixin,DeleteView):
