@@ -253,14 +253,14 @@
               <img src="{% static 'img/nav/icons8-añadir-100.png' %}" width="24" height="24"  class="feather feather-plus-circle align-text-bottom" >
             </a>
           </li>
-
-          <li class="px-2 my-4 w-100">
+          <li class="border-top my-2"></li>
+          <li class="px-2 my-2 w-100">
             {% if user.is_authenticated %}
-              <a type="button" class="btn btn-outline-danger rounded-5 w-100 fw-normal  text-align-center" href="{% url 'logout' %}">
+              <a type="button" class="btn btn-outline-danger rounded-5 w-100 fw-normal btn-sm text-align-center" href="{% url 'logout' %}">
                 Cerrar sesión
               </a>
             {% else %}
-              <a type="button" class="btn btn-outline-dark rounded-5 w-100"  href="{% url 'login' %}">
+              <a type="button" class="btn btn-outline-dark rounded-5 w-100 btn-sm text-align-center"  href="{% url 'login' %}">
                 Iniciar sesión
               </a>
             {% endif %}

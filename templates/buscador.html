@@ -49,7 +49,7 @@
                                 <td class="col-2">
                                     {% if lista.titulo == 'Documentos' %}
 
-                                        <a class="btn btn-sm rounded-pill btn-dark href="{% url lista.lista_url %}?doc={{val.id}}">
+                                        <a class="btn btn-sm rounded-pill btn-dark" href="{% url lista.lista_url %}?doc={{val.id}}">
                                             Examinar
                                         </a>
                                     {% else %}
