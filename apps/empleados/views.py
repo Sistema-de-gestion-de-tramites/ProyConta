@@ -55,9 +55,10 @@ class Listar_Empleados(PermissionRequiredMixin,ListView):
     permission_required = 'sat.dev_ver_empleados'
     queryset = Personas.objects.filter(tipo_usuario__descr="Empleado")
     template_name = 'plantilla_lista.html'
-    extra_context={'titulo':'empleados',
+    extra_context={'titulo': 'empleados',
                    'actualizar_url': 'actualizar_empleado',
-                   'borrar_url':'eliminar_empleado',}
+                   'borrar_url': 'eliminar_empleado',
+                   'detalle_url': 'detalle_persona'}
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -81,7 +82,7 @@ class Empleado_Update(PermissionRequiredMixin,UpdateView):
     form_class = PersonaForm
     template_name = 'formulario.html'
     success_url = reverse_lazy('listar_empleados')
-    extra_context = {'esEmpleado': True, 'titulo': 'empleados'}
+    extra_context = {'esEmpleado': True, 'titulo': 'Editar empleado'}
 
     def form_valid(self, form):
         registro = form.save(commit=False)
@@ -285,7 +286,8 @@ def PerfilEmpleado(request):
         context = {
             'titulo': 'Perfil',
             'obj': informacionEmpleado,
-            'listas_extra': [{'titulo': 'Informacion de cuenta', 'lista': informacionCuentaUsuario},
+            'listas_extra': [
+                            {'titulo': 'Informacion de cuenta', 'lista': informacionCuentaUsuario},
                             {'titulo': 'Mis roles', 'lista': informacionRoles},
                             {'titulo': 'Mis permisos', 'lista': informacionPermisos}
                             ],
